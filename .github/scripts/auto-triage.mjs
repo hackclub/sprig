@@ -5,17 +5,28 @@ import {
 	addLabels,
 	ensureReviewLabels,
 	getIssueLabels,
+	getMetadataValue,
 	getRepository,
 	githubPaginated,
 	githubRequest,
 	hasLabel,
+	parseTags,
 	readGitHubEvent,
 	removeLabel,
 	setStateLabel,
 	upsertBotComment,
 } from "./review-utils.mjs";
 import { buildSubmissionManifest } from "./submission-manifest.mjs";
-import { autoReviewLabelChanges } from "./review-state.mjs";
+import {
+	DUPLICATE_LABEL,
+	DUPLICATE_NOTICE_MARKER,
+	buildLatestWarning,
+	buildOlderCheckDetail,
+	buildOlderNotice,
+	findDuplicateGroup,
+	parseOlderNotice,
+} from "./duplicate-detection.mjs";
+import { autoReviewLabelChanges, reconcileReviewStatus } from "./review-state.mjs";
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
@@ -25,6 +36,7 @@ let event = readGitHubEvent();
 let pullRequest = event.pull_request || event.issue;
 // keep it in this order pls or the entire thing explodes and fails. thanks
 let cachedOpenPulls = null;
+let duplicateGroupNumbers = new Set();
 
 let reviewers = new Set();
 try {
@@ -77,29 +89,53 @@ if (event.action === "unassigned") {
 	process.exit(0);
 }
 
-if (event.review && event.action === "submitted") {
-	const reviewState = event.review.state.toLowerCase();
+if (event.review) {
+	if (event.action !== "submitted" && event.action !== "dismissed") {
+		console.log(`Review action is ${event.action}, ignoring.`);
+		process.exit(0);
+	}
+
 	const reviewerLogin = event.review.user?.login;
 	const authorLogin = pullRequest.user?.login;
 
 	if (reviewerLogin && authorLogin && reviewerLogin === authorLogin) {
-		console.log(`Review submitted by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
+		console.log(`Review ${event.action} by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
 		process.exit(0);
 	}
 
 	if (!reviewerLogin || !reviewers.has(reviewerLogin)) {
-		console.log(`Review submitted by ${reviewerLogin ?? "unknown reviewer"}. Ignoring state change because reviewer is not listed.`);
+		console.log(`Review ${event.action} for ${reviewerLogin ?? "unknown reviewer"}. Ignoring because reviewer is not listed.`);
 		process.exit(0);
 	}
-	
-	if (reviewState === "changes_requested") {
+
+	const reviewState = event.review.state?.toLowerCase();
+	if (event.action === "submitted" && reviewState !== "approved" && reviewState !== "changes_requested") {
+		console.log(`Review state is ${reviewState}, ignoring.`);
+		process.exit(0);
+	}
+
+	const reviewStatus = await getLatestReviewStatus({
+		owner,
+		repo,
+		token,
+		prNumber,
+		reviewers,
+		authorLogin: pullRequest.user?.login,
+		headSha: pullRequest.head?.sha,
+	});
+	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
+
+	if (reviewStatus === "changes_requested") {
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
 		console.log(`Review requested changes, set "Needs Author".`);
-	} else if (reviewState === "approved") {
+	} else if (reviewStatus === "approved") {
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Maintainer" });
 		console.log(`Review approved, set "Ready for Maintainer".`);
+	} else if (reviewStatus === "none" && hasLabel(currentLabels, "Ready for Maintainer")) {
+		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Playtest" });
+		console.log(`Approval dismissed and no active review remains, set "Ready for Playtest".`);
 	} else {
-		console.log(`Review state is ${reviewState}, ignoring.`);
+		console.log(`Review ${event.action}; review state is ${reviewStatus}, leaving labels unchanged.`);
 	}
 	process.exit(0);
 }
@@ -114,19 +150,7 @@ const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber 
 const isLabeledSubmission = hasLabel(labels, "Submission");
 
 const body = pullRequest.body ?? "";
-const touchesNonGamePaths = pullFiles.some((f) =>
-	!f.filename.toLowerCase().startsWith("games/") &&
-	(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
-);
-const addedJsFiles = pullFiles.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
-const bodyLooksLikeSubmission =
-	/what is your game about|how do you play your game/i.test(body) ||
-	/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
-const isMisplacedGameSubmission = !touchesNonGamePaths &&
-	addedJsFiles.length > 0 &&
-	(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*@title:/m.test(f.patch ?? "")));
-
-const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
+const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission(pullFiles, body);
 
 if (!isSubmissionPR) {
 	console.log("Not a submission PR (no games/ files, no Submission label, and not a misplaced game submission); skipping.");
@@ -135,6 +159,8 @@ if (!isSubmissionPR) {
 
 try {
 	await materializeSubmittedGameFiles(pullRequest, pullFiles, workspace);
+	const duplicates = await detectDuplicateSubmissions(pullFiles);
+	duplicateGroupNumbers = new Set(duplicates.group?.duplicates ?? []);
 	const result = await validateSubmission({
 		pullRequest,
 		pullFiles,
@@ -142,9 +168,11 @@ try {
 		reviewBaseUrl,
 		owner,
 		repo,
+		duplicates,
 	});
 
 	await applyLabels(result);
+	await applyDuplicateActions(duplicates);
 	await upsertBotComment({
 		owner,
 		repo,
@@ -211,6 +239,97 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	}
 }
 
+function isMisplacedGameSubmission(files, body) {
+	const touchesNonGamePaths = files.some((f) =>
+		!f.filename.toLowerCase().startsWith("games/") &&
+		(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
+	);
+	const addedJsFiles = files.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
+	const bodyLooksLikeSubmission =
+		/what is your game about|how do you play your game/i.test(body) ||
+		/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
+	return !touchesNonGamePaths &&
+		addedJsFiles.length > 0 &&
+		(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*(?:\*\s*)?@title:/m.test(f.patch ?? "")));
+}
+
+function addsGame(files, body) {
+	return files.some((f) => f.status === "added" && /^games\/.+\.js$/i.test(f.filename)) ||
+		isMisplacedGameSubmission(files, body);
+}
+
+async function detectDuplicateSubmissions(pullFiles) {
+	const login = pullRequest.user?.login;
+	if (!login || reviewers.has(login) || !addsGame(pullFiles, pullRequest.body ?? "")) return { group: null };
+	try {
+		const openPulls = await getOpenPulls();
+		const targetLogin = login.toLowerCase();
+		const siblings = openPulls
+			.filter((pr) => pr.number !== prNumber && pr.user?.login?.toLowerCase() === targetLogin && !pr.draft)
+			.slice(0, 20);
+
+		const siblingNumbers = [];
+		for (const pr of siblings) {
+			const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
+			if (addsGame(prFiles, pr.body ?? "")) siblingNumbers.push(pr.number);
+		}
+
+		const group = findDuplicateGroup(prNumber, siblingNumbers);
+		return { group: group.duplicates.length ? group : null };
+	} catch (error) {
+		console.warn(`Duplicate detection failed, continuing without it: ${error.message}`);
+		return { group: null, failed: true };
+	}
+}
+
+async function applyDuplicateActions({ group, failed }) {
+	if (failed) return;
+	if (!group) {
+		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: DUPLICATE_LABEL });
+		await removeOlderNotice(prNumber);
+		return;
+	}
+
+	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: [DUPLICATE_LABEL] });
+	if (!group.isLatest) {
+		await syncOlderNotice({ issueNumber: prNumber, latestNumber: group.latestNumber, restart: event.action === "reopened" });
+		return;
+	}
+
+	for (const olderNumber of group.older) {
+		try {
+			await addLabels({ owner, repo, token, issueNumber: olderNumber, labels: [DUPLICATE_LABEL] });
+			await syncOlderNotice({ issueNumber: olderNumber, latestNumber: prNumber, restart: false });
+		} catch (error) {
+			console.warn(`Could not notify duplicate PR #${olderNumber}: ${error.message}`);
+		}
+	}
+}
+
+async function removeOlderNotice(issueNumber) {
+	const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
+	for (const comment of comments) {
+		if (comment.user?.type === "Bot" && comment.body?.includes(DUPLICATE_NOTICE_MARKER)) {
+			await githubRequest(token, "DELETE", `/repos/${owner}/${repo}/issues/comments/${comment.id}`);
+		}
+	}
+}
+
+async function syncOlderNotice({ issueNumber, latestNumber, restart }) {
+	const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
+	const existing = comments.find((comment) => comment.body?.includes(DUPLICATE_NOTICE_MARKER));
+	if (!restart && parseOlderNotice(existing?.body)?.latestNumber === latestNumber) return;
+
+	await upsertBotComment({
+		owner,
+		repo,
+		token,
+		issueNumber,
+		marker: DUPLICATE_NOTICE_MARKER,
+		body: buildOlderNotice({ number: issueNumber, latestNumber, since: new Date().toISOString() }),
+	});
+}
+
 async function getOpenPulls() {
 	if (!cachedOpenPulls) {
 		cachedOpenPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
@@ -218,7 +337,7 @@ async function getOpenPulls() {
 	return cachedOpenPulls;
 }
 
-async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
+async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo, duplicates }) {
 	const checks = [];
 	const problems = [];
 	const warnings = [];
@@ -233,19 +352,21 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 	const bodyChecks = validatePullRequestBody(pullRequest.body ?? "");
 	for (const check of bodyChecks.checks) addCheck(check.name, check.ok, check.detail);
 
-	const submitterLogin = pullRequest.user?.login;
-	if (submitterLogin) {
-		const openPulls = await getOpenPulls();
-		const duplicatePR = openPulls.find(
-			(pr) => pr.number !== prNumber && pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission")
-		);
+	if (duplicates.group && !duplicates.group.isLatest) {
 		addCheck(
 			"No duplicate open submission",
-			!duplicatePR,
-			duplicatePR
-				? `You already have an open submission (PR #${duplicatePR.number}). Please close one of them.`
-				: "No other open submissions from this user."
+			false,
+			buildOlderCheckDetail({ number: prNumber, latestNumber: duplicates.group.latestNumber })
 		);
+	} else {
+		addCheck(
+			"No duplicate open submission",
+			true,
+			duplicates.group ? "This is your newest open submission PR." : "No other open submission PRs from you."
+		);
+		if (duplicates.group?.older.length) {
+			warnings.push(buildLatestWarning({ older: duplicates.group.older }));
+		}
 	}
 
 	let gameFile = null;
@@ -411,12 +532,13 @@ async function validateMetadata(content, filename, workspace) {
 	}
 
 	const parsedTags = parseTags(values.tags);
+	const tagsValid = Boolean(parsedTags.tags && parsedTags.tags.length > 0);
 	add(
 		"Metadata tags parse",
-		parsedTags.tags !== undefined && parsedTags.tags.length > 0,
-		parsedTags.tags !== undefined && parsedTags.tags.length > 0
-			? "Tags are a non-empty array."
-			: `Set \`@tags:\` to a non-empty array, for example \`@tags: ['maze']\`.\nReason: ${parsedTags.issue}`
+		tagsValid,
+		tagsValid
+			? "Tags are formatted correctly."
+			: `Format \`@tags:\` as a list of tags in quotes and brackets, for example \`@tags: ['maze', 'puzzle']\`.\nReason: ${parsedTags.issue ?? "Tags list cannot be empty."}`
 	);
 
 	checkMetadataDate(values.addedOn, add);
@@ -452,41 +574,17 @@ async function validateMetadata(content, filename, workspace) {
 			: "Game does not appear to be an unmodified tutorial."
 	);
 
+	const safeTitle = values.title ? values.title.replace(/`/g, "'") : "";
 	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
 	add(
 		"Unique game title",
 		!titleConflict,
 		titleConflict
-			? `Game title \`${values.title}\` already appears in \`${titleConflict}\`; choose a unique title.`
+			? `Game title \`${safeTitle}\` already appears in \`${titleConflict}\`; choose a unique title.`
 			: "Game title appears unique."
 	);
 
 	return { checks, values: { ...values, tags: parsedTags.tags ?? values.tags } };
-}
-
-function getMetadataValue(content, key) {
-	const match = content.match(new RegExp(String.raw`@${key}:\s*([\s\S]*?)(?=\n\s*@|\n\s*\*\/)`));
-	return match?.[1]?.trim() ?? "";
-}
-
-function parseTags(raw) {
-	if (!raw?.trim()) return { issue: "is empty (expected a JSON-ish array like ['maze','puzzle'])." };
-
-	try {
-		const parsed = JSON.parse(raw.replaceAll("'", '"'));
-		if (!Array.isArray(parsed)) return { issue: "must be an array (example: ['maze','puzzle'])." };
-		if (parsed.some((tag) => typeof tag !== "string")) {
-			return { issue: "must be an array of strings (example: ['maze','puzzle'])." };
-		}
-
-		return { tags: parsed };
-	} catch (error) {
-		if (error instanceof SyntaxError) {
-			return { issue: "is not valid JSON (example: ['maze','puzzle'])." };
-		}
-
-		return { issue: "could not be parsed." };
-	}
 }
 
 async function findTitleConflict(title, filename, workspace) {
@@ -503,7 +601,7 @@ async function findTitleConflict(title, filename, workspace) {
 	const openPulls = await getOpenPulls();
 	const submissionPRs = openPulls.filter((pr) => pr.labels?.some((l) => l.name === "Submission"));
 	for (const pr of submissionPRs) {
-		if (pr.number === prNumber) continue;
+		if (pr.number === prNumber || duplicateGroupNumbers.has(pr.number)) continue;
 		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
 		for (const file of prFiles) {
 			if (file.filename.startsWith("games/") && file.filename.endsWith(".js")) {
@@ -526,13 +624,16 @@ function normalize(value) {
 function findMostSimilarGame(content, submittedFilename, workspace) {
 	const gamesDir = path.join(workspace, "games");
 	const gameFiles = readdirSync(gamesDir).filter((file) => file.endsWith(".js"));
+	const c1 = chunks(analyze(content));
+	if (!c1.size) return { score: 0, match: null };
+
 	let best = { score: 0, match: null };
 	for (const gameFile of gameFiles) {
 		const relativePath = `games/${gameFile}`;
 		if (relativePath === submittedFilename) continue;
 		const other = readFileSafe(path.join(gamesDir, gameFile));
 		if (!other) continue;
-		const score = checkSimilarity(content, other);
+		const score = compareChunks(c1, other);
 		if (score > best.score) best = { score, match: relativePath };
 	}
 	return best;
@@ -553,22 +654,26 @@ function stripComments(code) {
 	return code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "");
 }
 
-function checkSimilarity(a, b) {
-	const s1 = analyze(a);
-	const s2 = analyze(b);
-	const chunks = (value) => {
-		const set = new Set();
-		for (let i = 0; i <= value.length - 10; i += 1) set.add(value.slice(i, i + 10));
-		return set;
-	};
-	const c1 = chunks(s1);
-	const c2 = chunks(s2);
-	if (!c1.size || !c2.size) return 0;
+function chunks(value) {
+	const set = new Set();
+	for (let i = 0; i <= value.length - 10; i += 1) set.add(value.slice(i, i + 10));
+	return set;
+}
+
+function compareChunks(c1, code) {
+	if (!c1.size) return 0;
+	const c2 = chunks(analyze(code));
+	if (!c2.size) return 0;
 	let overlap = 0;
 	for (const chunk of c1) {
 		if (c2.has(chunk)) overlap += 1;
 	}
 	return (2 * overlap) / (c1.size + c2.size);
+}
+
+function checkSimilarity(a, b) {
+	const c1 = chunks(analyze(a));
+	return compareChunks(c1, b);
 }
 
 function readFileSafe(filePath) {
@@ -579,23 +684,48 @@ function readFileSafe(filePath) {
 	}
 }
 
+async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha }) {
+	if (!reviewers || reviewers.size === 0) return "unknown";
+	try {
+		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
+		return reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha });
+	} catch (e) {
+		console.warn("Unable to fetch reviews; skipping review reconciliation:", e.message);
+		return "unknown";
+	}
+}
+
 async function applyLabels(result) {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Submission"] });
 	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
-	const changes = autoReviewLabelChanges({ labels: currentLabels, validationOk: result.ok, eventAction: event.action });
+	const reviewStatus = await getLatestReviewStatus({
+		owner,
+		repo,
+		token,
+		prNumber,
+		reviewers,
+		authorLogin: pullRequest.user?.login,
+		headSha: pullRequest.head?.sha,
+	});
+	const changes = autoReviewLabelChanges({
+		labels: currentLabels,
+		validationOk: result.ok,
+		eventAction: event.action,
+		reviewStatus,
+	});
 
 	if (result.ok) {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Verified"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: changes.state });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Failed" });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Needs Author" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
+		if (changes.state !== "Ready for Maintainer") {
+			await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
+		}
 	} else {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Failed"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Verified" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Playtest" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
 	}
 
 	if (result.similarity.score >= 0.5) {
@@ -725,19 +855,25 @@ function formatPercent(value) {
 }
 
 function checkMetadataDate(addedOn, add) {
-	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
-	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
+	const validFormat = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
+	const parsedDate = validFormat ? new Date(`${addedOn}T00:00:00Z`) : null;
+	const isRealDate = Boolean(
+		validFormat &&
+		parsedDate &&
+		!Number.isNaN(parsedDate.getTime()) &&
+		parsedDate.toISOString().slice(0, 10) === addedOn
+	);
 	const now = new Date();
-	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	const ok = validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld;
+	const tooOld = isRealDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
+	const ok = isRealDate && !tooOld;
 	let detail = "Date looks current.";
 	if (!ok) {
-		if (validDate && tooOld) {
+		if (isRealDate && tooOld) {
 			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
 		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
 			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
 		} else {
-			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format.";
+			detail = "Set `@addedOn:` to a valid recent date in `YYYY-MM-DD` format.";
 		}
 	}
 	add("Metadata date", ok, detail);
