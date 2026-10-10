@@ -14,7 +14,7 @@
 	"dependencies": {
 		"@astrojs/preact": "5.1.2",
 		"@astrojs/svelte": "8.0.4",
-		"@astrojs/vercel": "^10.0.7",
+		"@astrojs/vercel": "^11.0.13",
 		"@codemirror/commands": "^6.10.3",
 		"@codemirror/lang-javascript": "^6.2.5",
 		"@codemirror/language": "^6.12.3",
@@ -27,7 +27,7 @@
 		"@preact/signals": "2.9.0",
 		"@sendgrid/mail": "^8.1.6",
 		"@types/react": "^19.2.15",
-		"astro": "6.1.10",
+		"astro": "^7.3.8",
 		"bcryptjs": "^3.0.3",
 		"cross-env": "^10.1.0",
 		"dotenv": "^17.4.2",
