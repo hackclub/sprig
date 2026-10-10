@@ -463,6 +463,7 @@ onInput("j", () => {
         sprite.remove()
       }
     }
+	  setMap(levels[0])
     
     // Clear old food sprite
     let foodTile = getFirst(food)
