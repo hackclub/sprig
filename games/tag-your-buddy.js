@@ -230,7 +230,7 @@ e......................e.`
 ];
 
 
-currentLevel = 0
+let currentLevel = 0
 setMap(levels[currentLevel]);
 
 setSolids([ player1, player3]);

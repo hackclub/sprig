@@ -126,6 +126,7 @@ let gameStarted = false;
 let stepsSurvived = 0;
 let abilityAvailable = false;
 let instruct = false;
+let bulletInterval, obstacleInterval, collisionInterval, bulletMoveInterval;
 
 function showStartScreen() {
   addText("Your name is", { x: 2, y: 1, color: color`3` });

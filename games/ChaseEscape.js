@@ -195,6 +195,7 @@ onInput("k", () => { // difficulty
 
 
 let timer;
+let interval;
 
 function startGame() {
   playTune(startsound);
