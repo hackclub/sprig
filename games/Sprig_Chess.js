@@ -3,7 +3,7 @@
 @description: Its Chess. Play against a friend, passing the Sprig (or keyboard) between the two of you.
 @author: EtMU11
 @tags: ['chess', 'board', '2-player']
-@addedOn: 2026-10-10
+@addedOn: 2026-10-11
 */
 //About-Game: A classic game of Chess, brought to Sprig! Challenge a friend to a battle of strategy and skill, taking turns to outsmart each other. Play as either white or black, plan your moves carefully, and try to checkmate your opponent. Includes "music" (more like noise) to keep you company while you play!
 //Controls: W,A,S, and D,: Selector Movement, J: Start Game, Piece Selector, and Piece Placer MUSIC CONTROLS: I: Skip, K: Stop Audio, L: Start Audio
