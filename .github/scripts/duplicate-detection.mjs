@@ -1,4 +1,5 @@
 export const DUPLICATE_LABEL = "Multiple Submissions";
+// ponytail: temporary alias for legacy "Potential Duplicate" label on pre-existing PRs; remove once all PRs opened before October 2026 are closed
 export const LEGACY_DUPLICATE_LABEL = "Potential Duplicate";
 export const DUPLICATE_NOTICE_MARKER = "<!-- sprig-duplicate-notice -->";
 export const DUPLICATE_CLOSE_AFTER_DAYS = 3;
