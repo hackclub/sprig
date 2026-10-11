@@ -36,7 +36,7 @@ You have multiple open submission PRs (newer: **#${latestNumber}**).
 - You may only have one open submission PR at a time.
 - If both PRs are for the same game: you do not need a new PR to update your game. Pushing commits or editing files in your existing PR updates it automatically. Usually, your newer PR (**#${latestNumber}**) contains your latest changes, but please check which PR has your best version, keep that one, and close the other.
 - If these are different games: you still must choose only one game to submit at a time. Pick which game you want reviewed first, keep that PR open, and close the other. You can submit your next game after this one is merged or closed.
-- If no action is taken and both remain open, this older PR will close automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days. If you prefer to keep this older PR instead, close #${latestNumber}. Leaving a comment does not stop the timer; you must close the other PR.`;
+- If no action is taken and both remain open, this older PR will close automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days. If you prefer to keep this older PR instead, close #${latestNumber}.`;
 }
 
 export function buildLatestWarning({ older }) {
