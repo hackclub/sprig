@@ -23,7 +23,7 @@ export function parseOlderNotice(body) {
 }
 
 export function buildOlderCheckDetail({ number, latestNumber }) {
-	return `You have multiple open submission PRs (newer: #${latestNumber}). We suggest keeping #${latestNumber} and closing this one (#${number}), but you can keep whichever PR you prefer (just close the others). If no action is taken, this older PR will be closed automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days.`;
+	return `You have multiple open submission PRs (newer: #${latestNumber}). Each author may only have one open submission. If this is the same game, keep the PR with your best version and close the other. If these are different games, keep the one you want reviewed first and close the other. If no action is taken, this older PR will close automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days.`;
 }
 
 export function buildOlderNotice({ number, latestNumber, since }) {
@@ -33,13 +33,13 @@ ${olderMarker(latestNumber, since)}
 
 You have multiple open submission PRs (newer: **#${latestNumber}**).
 
-- Each author should only have one open submission PR at a time.
-- You don't need a new PR to update your game: pushing commits (or editing files) in an existing PR updates it automatically.
-- We suggest keeping your newest PR (**#${latestNumber}**) and closing this one (**#${number}**), but you can keep whichever PR you prefer — just close the other one(s).
-- If no action is taken and both remain open, this older PR will be closed automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days. If you'd rather keep this one, close #${latestNumber} instead (or leave a comment if you need help).`;
+- You may only have one open submission PR at a time.
+- If both PRs are for the same game: you do not need a new PR to update your game. Pushing commits or editing files in your existing PR updates it automatically. Usually, your newer PR (**#${latestNumber}**) contains your latest changes, but please check which PR has your best version, keep that one, and close the other.
+- If these are different games: you still must choose only one game to submit at a time. Pick which game you want reviewed first, keep that PR open, and close the other. You can submit your next game after this one is merged or closed.
+- If no action is taken and both remain open, this older PR will close automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days. If you prefer to keep this older PR instead, close #${latestNumber}. Leaving a comment does not stop the timer; you must close the other PR.`;
 }
 
 export function buildLatestWarning({ older }) {
 	const list = older.map((n) => `#${n}`).join(", ");
-	return `You have older open PRs (${list}) labeled "${DUPLICATE_LABEL}". We suggest keeping this PR and closing older ones, but you can keep whichever PR you prefer. Older inactive duplicates will be closed automatically after ${DUPLICATE_CLOSE_AFTER_DAYS} days.`;
+	return `You have older open PRs (${list}) labeled "${DUPLICATE_LABEL}". Each author may only submit one game at a time. If these are for the same game, check which PR has your best version, keep that one, and close the others. If these are different games, keep only the game you want reviewed first and close the others. Older inactive duplicates will close automatically after ${DUPLICATE_CLOSE_AFTER_DAYS} days.`;
 }
