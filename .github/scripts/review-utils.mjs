@@ -46,10 +46,10 @@ export const LABELS = {
 		description: "Reviewer needs author to explain AI usage",
 		aliases: ["review:ai-concern"],
 	},
-	"Potential Duplicate": {
+	"Multiple Submissions": {
 		color: "8250df",
 		description: "Author has more than one open submission PR",
-		aliases: ["potential-duplicate"],
+		aliases: ["multiple-submissions", "Potential Duplicate", "potential-duplicate"],
 	},
 	"Keep Open": {
 		color: "8c959f",

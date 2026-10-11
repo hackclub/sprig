@@ -1,4 +1,5 @@
-export const DUPLICATE_LABEL = "Potential Duplicate";
+export const DUPLICATE_LABEL = "Multiple Submissions";
+export const LEGACY_DUPLICATE_LABEL = "Potential Duplicate";
 export const DUPLICATE_NOTICE_MARKER = "<!-- sprig-duplicate-notice -->";
 export const DUPLICATE_CLOSE_AFTER_DAYS = 3;
 

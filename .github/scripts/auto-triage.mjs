@@ -19,6 +19,7 @@ import {
 import { buildSubmissionManifest } from "./submission-manifest.mjs";
 import {
 	DUPLICATE_LABEL,
+	LEGACY_DUPLICATE_LABEL,
 	DUPLICATE_NOTICE_MARKER,
 	buildLatestWarning,
 	buildOlderCheckDetail,
@@ -236,10 +237,12 @@ async function applyDuplicateActions({ group, failed }) {
 	if (failed) return;
 	if (!group) {
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: DUPLICATE_LABEL });
+		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: LEGACY_DUPLICATE_LABEL });
 		await removeOlderNotice(prNumber);
 		return;
 	}
 
+	await removeLabel({ owner, repo, token, issueNumber: prNumber, label: LEGACY_DUPLICATE_LABEL });
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: [DUPLICATE_LABEL] });
 	if (!group.isLatest) {
 		await syncOlderNotice({ issueNumber: prNumber, latestNumber: group.latestNumber, restart: event.action === "reopened" });
@@ -248,6 +251,7 @@ async function applyDuplicateActions({ group, failed }) {
 
 	for (const olderNumber of group.older) {
 		try {
+			await removeLabel({ owner, repo, token, issueNumber: olderNumber, label: LEGACY_DUPLICATE_LABEL });
 			await addLabels({ owner, repo, token, issueNumber: olderNumber, labels: [DUPLICATE_LABEL] });
 			await syncOlderNotice({ issueNumber: olderNumber, latestNumber: prNumber, restart: false });
 		} catch (error) {

@@ -55,6 +55,7 @@ describe("older notice", () => {
 		expect(checkDetail).toContain("Each author may only have one open submission");
 
 		const warning = buildLatestWarning({ older: [4244, 4245] });
+		expect(warning).toContain('labeled "Multiple Submissions"');
 		expect(warning).toContain("Each author may only submit one game at a time");
 		expect(warning).toContain("check which PR has your best version, keep that one, and close the others");
 	});

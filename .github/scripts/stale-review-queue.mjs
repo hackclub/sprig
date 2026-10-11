@@ -4,6 +4,7 @@ import path from "node:path";
 import {
 	DUPLICATE_CLOSE_AFTER_DAYS,
 	DUPLICATE_LABEL,
+	LEGACY_DUPLICATE_LABEL,
 	DUPLICATE_NOTICE_MARKER,
 	parseOlderNotice,
 } from "./duplicate-detection.mjs";
@@ -40,13 +41,22 @@ const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?st
 
 const closedDuplicateNumbers = new Set();
 
+function hasDuplicateState(labels) {
+	return hasLabel(labels, DUPLICATE_LABEL) || hasLabel(labels, LEGACY_DUPLICATE_LABEL);
+}
+
+async function removeDuplicateLabels(issueNumber) {
+	await removeLabel({ owner, repo, token, issueNumber, label: DUPLICATE_LABEL });
+	await removeLabel({ owner, repo, token, issueNumber, label: LEGACY_DUPLICATE_LABEL });
+}
+
 for (const pullRequest of openPulls) {
 	const issueNumber = pullRequest.number;
 	const labels = await getIssueLabels({ owner, repo, token, issueNumber });
 	if (!hasLabel(labels, "Submission")) continue;
 	if (hasLabel(labels, "Keep Open")) continue;
 
-	if (hasLabel(labels, DUPLICATE_LABEL) && (await handleOlderDuplicate(pullRequest, labels))) continue;
+	if (hasDuplicateState(labels) && (await handleOlderDuplicate(pullRequest, labels))) continue;
 
 	if (hasLabel(labels, "Needs Author") || hasLabel(labels, "Failed")) {
 		await handleNeedsAuthor(pullRequest, labels);
@@ -77,10 +87,10 @@ async function handleOlderDuplicate(pullRequest, labels) {
 				pr.number !== pullRequest.number &&
 				!closedDuplicateNumbers.has(pr.number) &&
 				pr.user?.login?.toLowerCase() === authorLogin &&
-				pr.labels?.some((label) => label.name === DUPLICATE_LABEL)
+				pr.labels?.some((label) => label.name === DUPLICATE_LABEL || label.name === LEGACY_DUPLICATE_LABEL)
 		);
 		if (!hasOlderDuplicates) {
-			await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: DUPLICATE_LABEL });
+			await removeDuplicateLabels(pullRequest.number);
 		}
 		return false;
 	}
@@ -88,7 +98,7 @@ async function handleOlderDuplicate(pullRequest, labels) {
 
 	const latest = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls/${latestNumber}`).catch(() => null);
 	if (!latest || latest.state !== "open" || latest.draft) {
-		await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: DUPLICATE_LABEL });
+		await removeDuplicateLabels(pullRequest.number);
 		return false;
 	}
 
@@ -115,10 +125,10 @@ async function handleOlderDuplicate(pullRequest, labels) {
 			pr.number !== latestNumber &&
 			!closedDuplicateNumbers.has(pr.number) &&
 			pr.user?.login?.toLowerCase() === authorLogin &&
-			pr.labels?.some((label) => label.name === DUPLICATE_LABEL)
+			pr.labels?.some((label) => label.name === DUPLICATE_LABEL || label.name === LEGACY_DUPLICATE_LABEL)
 	);
 	if (!stillDuplicated) {
-		await removeLabel({ owner, repo, token, issueNumber: latestNumber, label: DUPLICATE_LABEL });
+		await removeDuplicateLabels(latestNumber);
 	}
 	return true;
 }
