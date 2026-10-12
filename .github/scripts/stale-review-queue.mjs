@@ -185,7 +185,7 @@ async function handleReadyForMaintainer(pullRequest) {
 	await commentOnce({
 		issueNumber: pullRequest.number,
 		marker: MAINTAINER_REMINDER_MARKER,
-		body: `Friendly ping! This submission has been ready for maintainer review for 7 days. ${pings}, could one of you take a look?`,
+		body: `This submission has been ready for maintainer review for 7 days. ${pings}, could one of you take a look?`,
 	});
 }
 
