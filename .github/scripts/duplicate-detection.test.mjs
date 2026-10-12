@@ -46,17 +46,17 @@ describe("older notice", () => {
 
 	it("frames keeping the newest PR as a suggestion rather than an absolute requirement", () => {
 		const notice = buildOlderNotice({ number: 4245, latestNumber: 4248, since: "2026-09-30T10:00:00.000Z" });
-		expect(notice).toContain("Usually, your newer PR (**#4248**) contains your latest changes");
+		expect(notice).toContain("Usually your newer PR (**#4248**) has your latest changes");
 		expect(notice).toContain("check which PR has your best version, keep that one, and close the other");
 		expect(notice).toContain("close #4248");
 
 		const checkDetail = buildOlderCheckDetail({ number: 4245, latestNumber: 4248 });
 		expect(checkDetail).toContain("keep the PR with your best version and close the other");
-		expect(checkDetail).toContain("Each author may only have one open submission");
+		expect(checkDetail).toContain("each author can only have one open submission at a time");
 
 		const warning = buildLatestWarning({ older: [4244, 4245] });
 		expect(warning).toContain('labeled "Multiple Submissions"');
-		expect(warning).toContain("Each author may only submit one game at a time");
+		expect(warning).toContain("please keep only one game submission open at a time");
 		expect(warning).toContain("check which PR has your best version, keep that one, and close the others");
 	});
 
