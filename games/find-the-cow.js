@@ -1,12 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Invisible-cow
 @author: Xhand98
 @description: Find the cow in an invisible field
-@tags: [puzzle, funny]
-@addedOn: 2026-01-24
+@tags: ["puzzle", "funny"]
+@addedOn: 2026-05-26
 */
 
 const player = "p"
