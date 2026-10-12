@@ -114,7 +114,7 @@ async function handleOlderDuplicate(pullRequest, labels) {
 	await commentOnce({
 		issueNumber: pullRequest.number,
 		marker: "<!-- sprig-duplicate-auto-close -->",
-		body: `Closing this older submission so your newer PR (#${latestNumber}) can move forward. If you would rather keep this game instead, simply reopen this PR and close #${latestNumber}.`,
+		body: `Closing this older submission so your newer PR (#${latestNumber}) can move forward. If you would rather keep this game instead, close #${latestNumber} and ask a reviewer to reopen this PR.`,
 	});
 	await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, { state: "closed" });
 	closedDuplicateNumbers.add(pullRequest.number);
@@ -166,7 +166,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: `<!-- sprig-stale-reminder-${cycle} -->`,
-			body: "Just checking in! This submission has been waiting for updates for 7 days. Whenever you have time, push your fixes so we can get your game reviewed. If there is no response after 14 days, the PR will close automatically, but you can always reopen it whenever you are ready!",
+			body: "Just checking in! This submission has been waiting for updates for 7 days. Whenever you have time, push your fixes so we can get your game reviewed. If there is no response after 14 days, the PR will close automatically, but you can always ask a reviewer to reopen it whenever you are ready!",
 		});
 	} else if (hasLabel(labels, "Stale")) {
 		await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Stale" });
