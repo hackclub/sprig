@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Ellis's Emerald
+@title: The-Ellis-Emerald
 @description: All the other miners laughed at you saying that Ellis's Emerald was just a myth. They said that an emerald that grants you luck could never exist. Your goal is to find the emerald by mining deeper and deeper. Each layer has rarer and rarer materials.
 @author: Quinton
 @tags: ['idle', 'grind']
-@addedOn: 2025-00-00
+@addedOn: 2026-10-12
 */
 
 const cursor = "1"
@@ -734,7 +734,7 @@ let shopSelection = 0;
 let goDeeperCost = 500
 let droneStrengthCost = 200
 let droneCost = 50;
-let money = 10000000000
+let money = 0
 let floor = 0
 let shopPage = 1
 let smelterCost = 1000
