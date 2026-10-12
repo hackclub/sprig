@@ -783,7 +783,7 @@ function buildComment(result) {
 	return `${REVIEW_BOT_MARKER}
 ### ${status}
 
-${result.ok ? "This submission is ready for human playtest." : "This submission needs author fixes before normal review."}
+${result.ok ? "All automated checks passed! Your game is ready for a reviewer to playtest." : "Thanks for submitting! There are just a few quick fixes needed before we can playtest your game."}
 
 #### Submission
 - Game: ${metadata.title ? `\`${metadata.title}\`` : "unknown"}
@@ -796,7 +796,7 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.\n If you are in trouble, don't hesitate to ask for help in the #sprig channel on Slack or ping @LucasHT22 here.`}
+${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: you can update your game right here ([edit file](${editUrl})) or push new commits. Once you do, these checks will rerun automatically! If you get stuck or have questions, ask in the #sprig channel on Slack or ping @LucasHT22 here.`}
 `;
 }
 
