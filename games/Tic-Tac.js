@@ -2,8 +2,8 @@
 @title: Tic-Tac
 @description: classic two-player tic-tac-toe. Line up three X's or O's to win.
 @author: @Developer-Vini(Marcinho)
-@tags: [titactoe, game, sprig]
-@addedOn: 2025-00-00
+@tags: ["titactoe", "game", "sprig", "puzzle game"]
+@addedOn: 2025-11-05
 */
 
 const cursor = "c"
