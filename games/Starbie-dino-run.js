@@ -3,6 +3,7 @@
 @description: One-button Sprig dinosaur runner with score, hazards, and increasing speed.
 @author: Patrick Draghina
 @tags: ['arcade', 'endless', 'runner']
+@addedOn: 2026-10-12
 */
 const D="d", C="c", R="r", B="b", F="f", O="o", H="h", G="g", K="k", Q="q", U="u";
 setLegend(
