@@ -32,7 +32,7 @@
 		"cross-env": "^10.1.0",
 		"dotenv": "^17.4.2",
 		"firebase-admin": "^11.11.1",
-		"js-beautify": "^1.15.4",
+		"js-beautify": "^2.0.3",
 		"js-levenshtein": "^1.1.6",
 		"loops": "^6.3.0",
 		"markdown-it": "^14.1.1",
