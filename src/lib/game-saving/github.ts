@@ -452,41 +452,60 @@ export async function findGamePullRequest(
 	}
 
 	const closedQuery = encodeURIComponent(`repo:${owner}/${repo} is:pr is:closed is:unmerged author:${author}`);
-	try {
-		const closedSearchResponse = await fetchWithRetry(
-			`https://api.github.com/search/issues?q=${closedQuery}&sort=updated&order=desc&per_page=10`,
-			{
-				headers: getAuthHeaders(accessToken),
-			}
-		);
-		const closedResults = await handleResponse(closedSearchResponse);
-		for (const item of closedResults.items ?? []) {
-			try {
-				const pullResponse = await fetchWithRetry(
-					`https://api.github.com/repos/${owner}/${repo}/pulls/${item.number}`,
-					{
-						headers: getAuthHeaders(accessToken),
-					}
-				);
-				const pullRequest = await handleResponse(pullResponse);
-				if (!isEditorPullRequest(pullRequest, author, true)) continue;
-
-				const filesResponse = await fetchWithRetry(
-					`https://api.github.com/repos/${owner}/${repo}/pulls/${item.number}/files?per_page=100`,
-					{
-						headers: getAuthHeaders(accessToken),
-					}
-				);
-				const files = await handleResponse(filesResponse);
-				if (files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
-					return { pullRequest, files };
-				}
-			} catch (err) {
-				console.warn(`Skipping closed pull request #${item.number}:`, err);
-			}
+	const closedSearchResponse = await fetchWithRetry(
+		`https://api.github.com/search/issues?q=${closedQuery}&sort=updated&order=desc&per_page=100`,
+		{
+			headers: getAuthHeaders(accessToken),
 		}
-	} catch (err) {
-		console.warn("Could not search closed pull requests:", err);
+	);
+	const closedResults = await handleResponse(closedSearchResponse);
+
+	if (closedResults.incomplete_results) {
+		throw new Error("GitHub PR search timed out or returned incomplete results. Please try again.");
+	}
+
+	let closedSkippedCount = 0;
+	for (const item of closedResults.items ?? []) {
+		let pullRequest;
+		try {
+			const pullResponse = await fetchWithRetry(
+				`https://api.github.com/repos/${owner}/${repo}/pulls/${item.number}`,
+				{
+					headers: getAuthHeaders(accessToken),
+				}
+			);
+			pullRequest = await handleResponse(pullResponse);
+		} catch (error: any) {
+			if (error?.status !== 404 && !error?.message?.includes("404")) {
+				closedSkippedCount++;
+			}
+			console.warn(`Skipping closed pull request #${item.number} while looking for this game's pull request:`, error);
+			continue;
+		}
+
+		if (!isEditorPullRequest(pullRequest, author, true)) continue;
+
+		try {
+			const filesResponse = await fetchWithRetry(
+				`https://api.github.com/repos/${owner}/${repo}/pulls/${item.number}/files?per_page=100`,
+				{
+					headers: getAuthHeaders(accessToken),
+				}
+			);
+			const files = await handleResponse(filesResponse);
+			if (files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
+				return { pullRequest, files };
+			}
+		} catch (error: any) {
+			if (error?.status !== 404 && !error?.message?.includes("404")) {
+				closedSkippedCount++;
+			}
+			console.warn(`Skipping files for closed pull request #${item.number}:`, error);
+		}
+	}
+
+	if (closedSkippedCount > 0) {
+		throw new Error(`Failed to check all closed pull requests (${closedSkippedCount} failed to load). Please try again.`);
 	}
 
 	return null;
