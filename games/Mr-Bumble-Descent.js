@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Mr Bumble's Descent
 @description: You play as Mr Bumble, a gentleman who falls through skies with the help of his trusty umbrella
-@author: Me, Devank Arolkar
-@tags: ['tag1', 'tag2']
+@author: Devank Arolkar
+@tags: []
 @addedOn: 2026-10-12
 */
 
