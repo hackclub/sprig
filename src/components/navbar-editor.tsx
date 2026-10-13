@@ -40,7 +40,7 @@ import beautifier from "js-beautify";
 import { collapseRanges } from "../lib/codemirror/util";
 import { foldAllTemplateLiterals, onRun} from "./big-interactive-pages/editor";
 import { showKeyBinding } from '../lib/state';
-import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequest, EDITOR_BRANCH_PREFIX } from "../lib/game-saving/github";
+import { validateGitHubToken, forkRepository, createBranch, createCommit, fetchLatestCommitSha, createTreeAndCommit, createPullRequest, fetchForkedRepository, updateBranch, createBlobForImage, findGamePullRequest, recordGamePullRequest, fetchCommitTreeSha, updatePullRequest, EDITOR_BRANCH_PREFIX, delay } from "../lib/game-saving/github";
 
 const saveName = throttle(500, async (gameId: string, newName: string) => {
 	try {
@@ -322,7 +322,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
     const publishError = useSignal(false);
 	const publishErrorMessage = useSignal<string | null>(null);
 	const githubPRUrl = useSignal<string | null>(null);
-	const publishOutcome = useSignal<"new" | "updated" | "unchanged">("new");
+	const publishOutcome = useSignal<"new" | "updated" | "unchanged" | "reopened" | "closed_updated">("new");
 	const publishFormTitle = useSignal<string | null>(null);
 	const publishFormAuthor = useSignal<string | null>(null);
 	const publishFormDescription = useSignal("");
@@ -676,7 +676,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					}
 				}
 
-				const latestCommitSha = await fetchLatestCommitSha(accessToken, "hackclub", "sprig", forkedRepo.default_branch);
+				const latestCommitSha = await fetchLatestCommitSha(accessToken, "hackclub", "sprig", "main");
 				if (!latestCommitSha) {
 					trackFailure("github_publish.failure.commit_sha");
 					throw new Error("Failed to fetch the latest commit SHA.");
@@ -685,9 +685,20 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				const newBranchName = `${EDITOR_BRANCH_PREFIX}${Date.now()}`;
 				try {
 					await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
-				} catch (error) {
-					trackFailure("github_publish.failure.branch");
-					throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
+				} catch (error: any) {
+					if (error?.status === 404 || error?.message?.includes("404")) {
+						console.warn("Branch creation returned 404, repository may still be provisioning. Retrying after delay...");
+						await delay(3000);
+						try {
+							await createBranch(accessToken, forkedRepo.owner.login, forkedRepo.name, newBranchName, latestCommitSha);
+						} catch (retryError) {
+							trackFailure("github_publish.failure.branch");
+							throw new Error("Failed to create branch: " + (retryError instanceof Error ? retryError.message : String(retryError)));
+						}
+					} else {
+						trackFailure("github_publish.failure.branch");
+						throw new Error("Failed to create branch: " + (error instanceof Error ? error.message : String(error)));
+					}
 				}
 
 				repoOwner = forkedRepo.owner.login;
@@ -764,7 +775,22 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				const titleChanged = pullRequest.title !== prTitle;
 				const normalizeBody = (body?: string | null) => (body ?? "").replace(/\r\n/g, "\n").trim();
 				const bodyChanged = Boolean(prBody && normalizeBody(pullRequest.body) !== normalizeBody(prBody));
-				if (titleChanged || bodyChanged) {
+				let isReopened = false;
+				let closedNeedsReviewer = false;
+
+				if (pullRequest.state === "closed") {
+					try {
+						await updatePullRequest(accessToken, "hackclub", "sprig", pullRequest.number, {
+							state: "open",
+							...(titleChanged ? { title: prTitle } : {}),
+							...(bodyChanged ? { body: prBody } : {}),
+						});
+						isReopened = true;
+					} catch (err: any) {
+						console.warn("Could not automatically reopen closed pull request:", err);
+						closedNeedsReviewer = true;
+					}
+				} else if (titleChanged || bodyChanged) {
 					try {
 						await updatePullRequest(accessToken, "hackclub", "sprig", pullRequest.number, {
 							title: prTitle,
@@ -787,7 +813,13 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 
 				rememberPullRequest(pullRequest.html_url);
 				const prUpdated = codeChanged || titleChanged || bodyChanged;
-				publishOutcome.value = prUpdated ? "updated" : "unchanged";
+				if (isReopened) {
+					publishOutcome.value = "reopened";
+				} else if (closedNeedsReviewer) {
+					publishOutcome.value = "closed_updated";
+				} else {
+					publishOutcome.value = prUpdated ? "updated" : "unchanged";
+				}
 				reportMetric("github_publish.success");
 				reportMetric(prUpdated ? "github_publish.success.updated_pr" : "github_publish.success.unchanged_pr");
 
@@ -1186,6 +1218,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											new: "Your game has been successfully published to GitHub.",
 											updated: "Your open pull request for this game was updated with this version.",
 											unchanged: "Your pull request is already up to date with this version.",
+											reopened: "Your pull request was updated and reopened on GitHub.",
+											closed_updated: `Your game was updated in pull request #${openPR?.pullRequest?.number}. Because it was closed by a reviewer, ask a reviewer to reopen it when you're ready!`,
 										}[publishOutcome.value]}
 									</p>
 									<Button onClick={() => { githubPRUrl.value && window.open(githubPRUrl.value, "_blank") }}>

@@ -1,4 +1,4 @@
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export class GitHubApiError extends Error {
 	status: number;
@@ -142,7 +142,7 @@ export async function fetchGitHubUser(accessToken: string): Promise<any> {
 export async function validateGitHubToken(
 	accessToken: string
 ): Promise<boolean> {
-	const response = await fetchWithRetry("https://api.github.com/", {
+	const response = await fetchWithRetry("https://api.github.com/user", {
 		headers: getAuthHeaders(accessToken),
 	});
 
@@ -195,7 +195,7 @@ export async function createBranch(
 		`https://api.github.com/repos/${owner}/${repo}/git/refs`, // GitHub API endpoint to create a branch
 		{
 			method: "POST",
-			headers: getAuthHeaders(accessToken),
+			headers: getJsonHeaders(accessToken),
 			body: JSON.stringify({
 				ref: `refs/heads/${branchName}`,
 				sha: sha,
@@ -219,7 +219,7 @@ export async function createCommit(
 		`https://api.github.com/repos/${owner}/${repo}/git/commits`, // GitHub API endpoint to create a commit
 		{
 			method: "POST",
-			headers: getAuthHeaders(accessToken),
+			headers: getJsonHeaders(accessToken),
 			body: JSON.stringify({
 				message: message,
 				tree: treeSha,
@@ -253,7 +253,7 @@ export async function createPullRequest(
 			`https://api.github.com/repos/${owner}/${repo}/pulls`, // GitHub API endpoint for creating pull requests
 			{
 				method: "POST",
-				headers: getAuthHeaders(accessToken),
+				headers: getJsonHeaders(accessToken),
 				body: JSON.stringify({
 					title: title,
 					head: fullHead,
@@ -328,11 +328,12 @@ export async function recordGamePullRequest(
 export const EDITOR_BRANCH_PREFIX = "Automated-PR-";
 export const EDITOR_BRANCH_REGEX = /^Automated-PR-\d+$/;
 
-function isEditorPullRequest(pullRequest: any, author: string): boolean {
+export function isEditorPullRequest(pullRequest: any, author: string, allowClosed = false): boolean {
+	const validState = pullRequest?.state === "open" || (allowClosed && pullRequest?.state === "closed" && !pullRequest?.merged_at);
 	return (
-		pullRequest?.state === "open" &&
-		pullRequest.head?.repo?.owner?.login?.toLowerCase() === author.toLowerCase() &&
-		EDITOR_BRANCH_REGEX.test(pullRequest.head?.ref ?? "")
+		Boolean(validState) &&
+		pullRequest?.head?.repo?.owner?.login?.toLowerCase() === author.toLowerCase() &&
+		EDITOR_BRANCH_REGEX.test(pullRequest?.head?.ref ?? "")
 	);
 }
 
@@ -375,7 +376,7 @@ export async function findGamePullRequest(
 	if (saved) {
 		try {
 			const found = await fetchPullRequestWithFiles(accessToken, owner, repo, Number(saved[1]));
-			if (isEditorPullRequest(found.pullRequest, author)) return found;
+			if (isEditorPullRequest(found.pullRequest, author, true)) return found;
 		} catch (error: any) {
 			if (error?.status === 404 || error?.message?.includes("404")) {
 				console.warn(`Saved pull request #${saved[1]} not found (404). Falling through to search.`);
@@ -442,6 +443,44 @@ export async function findGamePullRequest(
 		throw new Error(`Failed to check all open pull requests (${skippedCount} failed to load). Please try again.`);
 	}
 
+	const closedQuery = encodeURIComponent(`repo:${owner}/${repo} is:pr is:closed author:${author}`);
+	try {
+		const closedSearchResponse = await fetchWithRetry(
+			`https://api.github.com/search/issues?q=${closedQuery}&sort=updated&order=desc&per_page=10`,
+			{
+				headers: getAuthHeaders(accessToken),
+			}
+		);
+		const closedResults = await handleResponse(closedSearchResponse);
+		for (const item of closedResults.items ?? []) {
+			try {
+				const pullResponse = await fetchWithRetry(
+					`https://api.github.com/repos/${owner}/${repo}/pulls/${item.number}`,
+					{
+						headers: getAuthHeaders(accessToken),
+					}
+				);
+				const pullRequest = await handleResponse(pullResponse);
+				if (!isEditorPullRequest(pullRequest, author, true)) continue;
+
+				const filesResponse = await fetchWithRetry(
+					`https://api.github.com/repos/${owner}/${repo}/pulls/${item.number}/files?per_page=100`,
+					{
+						headers: getAuthHeaders(accessToken),
+					}
+				);
+				const files = await handleResponse(filesResponse);
+				if (files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
+					return { pullRequest, files };
+				}
+			} catch (err) {
+				console.warn(`Skipping closed pull request #${item.number}:`, err);
+			}
+		}
+	} catch (err) {
+		console.warn("Could not search closed pull requests:", err);
+	}
+
 	return null;
 }
 
@@ -469,7 +508,7 @@ export async function updatePullRequest(
 	owner: string,
 	repo: string,
 	pullNumber: number,
-	updates: { title?: string; body?: string }
+	updates: { title?: string; body?: string; state?: "open" | "closed" }
 ): Promise<any> {
 	const response = await fetchWithRetry(
 		`https://api.github.com/repos/${owner}/${repo}/pulls/${pullNumber}`,
@@ -540,8 +579,27 @@ export async function fetchForkedRepository(
 	repo: string,
 	yourGithubUsername: string
 ): Promise<any> {
+	if (yourGithubUsername) {
+		try {
+			const directResponse = await fetchWithRetry(
+				`https://api.github.com/repos/${yourGithubUsername}/${repo}`,
+				{
+					headers: getAuthHeaders(accessToken),
+				}
+			);
+			if (directResponse.ok) {
+				const repoData = await handleResponse(directResponse);
+				if (repoData?.fork) {
+					return repoData;
+				}
+			}
+		} catch {
+			// Fall back to listing forks if direct access fails (e.g., custom fork repo name)
+		}
+	}
+
 	const response = await fetchWithRetry(
-		`https://api.github.com/repos/${owner}/${repo}/forks`, // GitHub API endpoint to fetch forks
+		`https://api.github.com/repos/${owner}/${repo}/forks?per_page=100`, // GitHub API endpoint to fetch forks
 		{
 			headers: getAuthHeaders(accessToken),
 		}
@@ -549,7 +607,7 @@ export async function fetchForkedRepository(
 
 	const forks = await handleResponse(response);
 	const forkedRepo = forks.find(
-		(fork: any) => fork.owner.login === yourGithubUsername // Find the fork created by the current user
+		(fork: any) => fork.owner.login?.toLowerCase() === yourGithubUsername.toLowerCase() // Find the fork created by the current user
 	);
 	if (!forkedRepo) {
 		throw new Error("Forked repository not found.");
