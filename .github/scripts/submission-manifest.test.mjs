@@ -137,4 +137,30 @@ describe("validateImageFiles", () => {
 			"Add exactly one game file in `games/` so the image filename can match it."
 		);
 	});
+
+	it("handles dots and special characters in game title cleanly", () => {
+		const checks = validateImageFiles({
+			imageFiles: [{ filename: "games/img/dr. mario.png" }],
+			gameBase: "dr. mario",
+		});
+
+		const nameCheck = checks.find((c) => c.name === "Optional image name");
+		expect(nameCheck?.ok).toBe(false);
+		expect(nameCheck?.detail).toBe(
+			"Both your game file and image filename must match and use only letters, numbers, '-', and '_'. For example, rename to `games/dr_mario.js` and `games/img/dr_mario.png`."
+		);
+	});
+
+	it("falls back to 'game' when gameBase has no alphanumeric characters", () => {
+		const checks = validateImageFiles({
+			imageFiles: [{ filename: "games/img/@#$.png" }],
+			gameBase: "@#$",
+		});
+
+		const nameCheck = checks.find((c) => c.name === "Optional image name");
+		expect(nameCheck?.ok).toBe(false);
+		expect(nameCheck?.detail).toBe(
+			"Both your game file and image filename must match and use only letters, numbers, '-', and '_'. For example, rename to `games/game.js` and `games/img/game.png`."
+		);
+	});
 });

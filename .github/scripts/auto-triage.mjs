@@ -877,7 +877,7 @@ function validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck
 	if (imageFiles.length > 0 && pullRequest?.head?.sha) {
 		const matchingImage = gameBase ? imageFiles.find((file) => file.filename === `games/img/${gameBase}.png`) : null;
 		const image = matchingImage ?? imageFiles[0];
-		return `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${image.filename}`;
+		return `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${encodeURI(image.filename)}`;
 	}
 	return null;
 }
@@ -902,7 +902,9 @@ async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 	}
 
 	const safeFilename = /^[a-zA-Z0-9_-]+\.js$/.test(filename);
-	const suggestedFilename = filename.replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_.-]/g, "");
+	const base = path.basename(filename, ".js");
+	const suggestedBase = base.trim().replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_-]/g, "") || "game";
+	const suggestedFilename = `${suggestedBase}.js`;
 	addCheck(
 		"Filename uses safe characters",
 		safeFilename,
