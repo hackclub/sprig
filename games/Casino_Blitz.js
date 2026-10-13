@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @description: Just a basic Slot Machine game with a payout table, and simple game mechanics
 @author: Dionysus
 @tags: ['casino', 'casino', 'endless']
-@addedOn: 2025-10-12
+@addedOn: 2026-10-12
 */
 const FG = "1";
 
