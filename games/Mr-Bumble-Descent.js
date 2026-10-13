@@ -6,7 +6,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @description: You play as Mr Bumble, a gentleman who falls through skies with the help of his trusty umbrella
 @author: Me, Devank Arolkar
 @tags: ['tag1', 'tag2']
-@addedOn: 2026-02-25
+@addedOn: 2026-10-12
 */
 
 const player = "p"
