@@ -803,6 +803,16 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 					} catch (err: any) {
 						console.warn("Could not automatically reopen closed pull request:", err);
 						closedNeedsReviewer = true;
+						if (titleChanged || bodyChanged) {
+							try {
+								await updatePullRequest(accessToken, "hackclub", "sprig", pullRequest.number, {
+									...(titleChanged ? { title: prTitle } : {}),
+									...(bodyChanged ? { body: prBody } : {}),
+								});
+							} catch (updateErr) {
+								console.warn("Failed to update closed pull request metadata:", updateErr);
+							}
+						}
 					}
 				} else if (titleChanged || bodyChanged) {
 					try {
@@ -829,7 +839,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				const prUpdated = codeChanged || titleChanged || bodyChanged;
 				if (isReopened) {
 					publishOutcome.value = "reopened";
-				} else if (closedNeedsReviewer) {
+				} else if (closedNeedsReviewer && prUpdated) {
 					publishOutcome.value = "closed_updated";
 				} else {
 					publishOutcome.value = prUpdated ? "updated" : "unchanged";

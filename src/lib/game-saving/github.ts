@@ -373,10 +373,14 @@ export async function findGamePullRequest(
 	}
 
 	const saved = savedPullRequestUrl?.match(new RegExp(`^https://github\\.com/${owner}/${repo}/pull/(\\d+)`));
+	let closedSavedPR: { pullRequest: any; files: any[] } | null = null;
 	if (saved) {
 		try {
 			const found = await fetchPullRequestWithFiles(accessToken, owner, repo, Number(saved[1]));
-			if (isEditorPullRequest(found.pullRequest, author, true)) return found;
+			if (isEditorPullRequest(found.pullRequest, author, false)) return found;
+			if (isEditorPullRequest(found.pullRequest, author, true)) {
+				closedSavedPR = found;
+			}
 		} catch (error: any) {
 			if (error?.status === 404 || error?.message?.includes("404")) {
 				console.warn(`Saved pull request #${saved[1]} not found (404). Falling through to search.`);
@@ -441,6 +445,10 @@ export async function findGamePullRequest(
 
 	if (skippedCount > 0) {
 		throw new Error(`Failed to check all open pull requests (${skippedCount} failed to load). Please try again.`);
+	}
+
+	if (closedSavedPR) {
+		return closedSavedPR;
 	}
 
 	const closedQuery = encodeURIComponent(`repo:${owner}/${repo} is:pr is:closed is:unmerged author:${author}`);
