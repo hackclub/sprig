@@ -641,27 +641,41 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				try {
 					baseSha = await fetchLatestCommitSha(accessToken, repoOwner, repoName, branchName);
 				} catch (error) {
-					trackFailure("github_publish.failure.commit_sha");
-					throw new Error("Failed to fetch the pull request's latest commit: " + (error instanceof Error ? error.message : String(error)));
+					if (openPR.pullRequest.state === "closed") {
+						console.warn(`Branch ${branchName} not found on closed PR #${pullNumber}, creating new PR instead.`);
+						openPR = null;
+					} else {
+						trackFailure("github_publish.failure.commit_sha");
+						throw new Error("Failed to fetch the pull request's latest commit: " + (error instanceof Error ? error.message : String(error)));
+					}
 				}
 
-				if (!openPR.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
+				if (openPR && !openPR.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
 					const addedGames = openPR.files.filter((file: any) => file.status === "added" && /^games\/[^/]+\.js$/.test(file.filename));
 					if (addedGames.length !== 1 || openPR.pullRequest.head.sha !== baseSha) {
-						throw new Error(`Couldn't match this game to pull request #${pullNumber}. Try again in a moment, or update it on GitHub.`);
+						if (openPR.pullRequest.state === "closed") {
+							console.warn(`Game mismatch on closed PR #${pullNumber}, creating new PR instead.`);
+							openPR = null;
+						} else {
+							throw new Error(`Couldn't match this game to pull request #${pullNumber}. Try again in a moment, or update it on GitHub.`);
+						}
 					}
-					const oldName = addedGames[0].filename.slice("games/".length, -".js".length);
-					if (!window.confirm(`This renames your game in pull request #${pullNumber} from "${oldName}" to "${sanitizedGameTitle}". Continue?`)) {
-						reportMetric("github_publish.cancel_rename");
-						readyPublish.value = true;
-						return;
+					if (openPR) {
+						const oldName = addedGames[0].filename.slice("games/".length, -".js".length);
+						if (!window.confirm(`This renames your game in pull request #${pullNumber} from "${oldName}" to "${sanitizedGameTitle}". Continue?`)) {
+							reportMetric("github_publish.cancel_rename");
+							readyPublish.value = true;
+							return;
+						}
+						renamedFrom = {
+							game: addedGames[0],
+							image: openPR.files.find((file: any) => file.status === "added" && file.filename === `games/img/${oldName}.png`),
+						};
 					}
-					renamedFrom = {
-						game: addedGames[0],
-						image: openPR.files.find((file: any) => file.status === "added" && file.filename === `games/img/${oldName}.png`),
-					};
 				}
-			} else {
+			}
+
+			if (!openPR) {
 				let forkedRepo;
 				try {
 					forkedRepo = await forkRepository(accessToken, "hackclub", "sprig");
@@ -1219,7 +1233,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											updated: "Your open pull request for this game was updated with this version.",
 											unchanged: "Your pull request is already up to date with this version.",
 											reopened: "Your pull request was updated and reopened on GitHub.",
-											closed_updated: `Your game was updated in pull request #${openPR?.pullRequest?.number}. Because it was closed by a reviewer, ask a reviewer to reopen it when you're ready!`,
+											closed_updated: `Your game was updated in pull request #${githubPRUrl.value?.match(/\/pull\/(\d+)/)?.[1] ?? ""}. Because it was closed by a reviewer, ask a reviewer to reopen it when you're ready!`,
 										}[publishOutcome.value]}
 									</p>
 									<Button onClick={() => { githubPRUrl.value && window.open(githubPRUrl.value, "_blank") }}>

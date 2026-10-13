@@ -443,7 +443,7 @@ export async function findGamePullRequest(
 		throw new Error(`Failed to check all open pull requests (${skippedCount} failed to load). Please try again.`);
 	}
 
-	const closedQuery = encodeURIComponent(`repo:${owner}/${repo} is:pr is:closed author:${author}`);
+	const closedQuery = encodeURIComponent(`repo:${owner}/${repo} is:pr is:closed is:unmerged author:${author}`);
 	try {
 		const closedSearchResponse = await fetchWithRetry(
 			`https://api.github.com/search/issues?q=${closedQuery}&sort=updated&order=desc&per_page=10`,
