@@ -27,10 +27,10 @@ describe("buildSubmissionManifest", () => {
 
 describe("getImageCountCheck", () => {
 	it.each([
-		[[], true],
-		[[{ filename: "games/img/a.png" }], true],
-		[[{ filename: "games/img/a.png" }, { filename: "games/img/b.png" }], false],
-	])("handles %i images (ok: %s)", (files, ok) => {
+		{ count: 0, files: [], ok: true },
+		{ count: 1, files: [{ filename: "games/img/a.png" }], ok: true },
+		{ count: 2, files: [{ filename: "games/img/a.png" }, { filename: "games/img/b.png" }], ok: false },
+	])("handles $count images (ok: $ok)", ({ files, ok }) => {
 		const check = getImageCountCheck(files);
 		expect(check.ok).toBe(ok);
 		if (!ok) {
