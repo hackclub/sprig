@@ -86,6 +86,18 @@ describe("autoReviewLabelChanges", () => {
 		expect(changes.approvalInvalidated).toBe(true);
 	});
 
+	it("resets Needs Author to Ready for Playtest on synchronize when reviewStatus is none", () => {
+		const changes = autoReviewLabelChanges({
+			labels: ["Submission", "Verified", "Needs Author"],
+			validationOk: true,
+			eventAction: "synchronize",
+			reviewStatus: "none",
+		});
+		expect(changes.state).toBe("Ready for Playtest");
+		expect(changes.add).toContain("Ready for Playtest");
+		expect(changes.remove).toContain("Needs Author");
+	});
+
 	it("removes Ready for Maintainer and sets Needs Author on failed validation", () => {
 		const changes = autoReviewLabelChanges({
 			labels: ["Submission", "Verified", "Ready for Maintainer"],
@@ -111,12 +123,21 @@ describe("reconcileReviewStatus", () => {
 		expect(status).toBe("changes_requested");
 	});
 
-	it("returns changes_requested even when changes were requested on an earlier commit", () => {
+	it("returns none when changes were requested on an earlier commit", () => {
 		const reviews = [
 			{ user: { login: "SSoggyTacoMan" }, state: "CHANGES_REQUESTED", commit_id: "olderSha", submitted_at: "2026-10-04T09:00:00Z" },
 		];
 		const status = reconcileReviewStatus({ reviews, reviewers, authorLogin: "author1", headSha });
-		expect(status).toBe("changes_requested");
+		expect(status).toBe("none");
+	});
+
+	it("returns approved when approval is on headSha and changes were requested on an earlier commit", () => {
+		const reviews = [
+			{ user: { login: "SSoggyTacoMan" }, state: "CHANGES_REQUESTED", commit_id: "olderSha", submitted_at: "2026-10-04T09:00:00Z" },
+			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: headSha, submitted_at: "2026-10-04T09:05:00Z" },
+		];
+		const status = reconcileReviewStatus({ reviews, reviewers, authorLogin: "author1", headSha });
+		expect(status).toBe("approved");
 	});
 
 	it("prioritizes changes_requested over approval from another reviewer", () => {
