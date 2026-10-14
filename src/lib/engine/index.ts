@@ -1,16 +1,22 @@
-import { playTune } from './tune'
 import { normalizeGameError } from './error'
-import { bitmaps, type NormalizedError } from '../state'
+import type { NormalizedError } from '../state'
 import type { PlayTuneRes } from '../../../engine/src/api'
 import { baseEngine, textToTune } from '../../../engine/src/base'
 import { webEngine } from '../../../engine/src/web'
+import { playTune } from '../../../engine/src/web/tune'
 import * as Babel from "@babel/standalone"
 import TransformDetectInfiniteLoop, { BuildDuplicateFunctionDetector, dissallowBackticksInDoubleQuotes } from '../custom-babel-transforms'
-import {logInfo} from "../../components/popups-etc/help";
+import { extractLegendBitmaps } from './legend-extractor'
 
 interface RunResult {
 	error: NormalizedError | null
 	cleanup: () => void
+}
+
+interface RunGameOptions {
+	onConsole?: (entry: { args: any[], nums: number[], isErr: boolean }) => void
+	onBitmaps?: (bitmaps: [string, string][]) => void
+	isMuted?: () => boolean
 }
 
 function getErrorObject(): Error {
@@ -57,11 +63,12 @@ export function _performSyntaxCheck(code: string): { error: NormalizedError | nu
 	return { error: transformAndThrowErrors(code, engineAPIKeys, () => {}), cleanup: () => void 0 };
 }
 
-export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (error: NormalizedError) => void): RunResult | undefined {
+export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (error: NormalizedError) => void, options: RunGameOptions = {}): RunResult | undefined {
 	const game = webEngine(canvas)
 	const tunes: PlayTuneRes[] = []
 	const timeouts: number[] = []
 	const intervals: number[] = []
+	let currentBitmaps: [string, string][] = []
 
 	const errorListener = (event: ErrorEvent) => {
 		onPageError(normalizeGameError({ kind: 'page', error: event.error }))
@@ -93,14 +100,21 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 			// @ts-ignore
 			if(JSON.stringify(_bitmaps) === "[null]") {
 				// @ts-ignore
-				bitmaps.value = [[]];
+				currentBitmaps = [[]];
 				throw new Error('The sprites passed into setLegend each need to be in square brackets, like setLegend([player, bitmap`...`]).')
 			} else {
-				bitmaps.value = _bitmaps;
+				currentBitmaps = _bitmaps;
 			}
-			return game.api.setLegend(...bitmaps.value)
+			options.onBitmaps?.(currentBitmaps)
+			return game.api.setLegend(...currentBitmaps)
 		},
 		playTune: (text: string, n: number) => {
+			if (options.isMuted?.()) {
+				return {
+					end() {},
+					isPlaying() { return false }
+				}
+			}
 			const tune = textToTune(text)
 			const playTuneRes = playTune(tune, n)
 			tunes.push(playTuneRes)
@@ -112,60 +126,34 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 				console.log(...args)
 				const err = getErrorObject();
 				const nums = parseErrorStack(err);
-				logInfo.value = [...logInfo.value, {
+				const entry = {
 					args: args,
 					nums: nums as number[],
 					isErr: false
-				}]
+				}
+				options.onConsole?.(entry)
 			},
 			error: (...args: any[]) => {
 				console.error(...args)
 				const err = getErrorObject();
 				const nums = parseErrorStack(err);
-				logInfo.value = [...logInfo.value, {
+				const entry = {
 					args: args,
 					nums: nums as number[],
 					isErr: true
-				}]
+				}
+				options.onConsole?.(entry)
 			}
 		}
 	}
 
     const engineAPIKeys = Object.keys(api);
 	return { error: transformAndThrowErrors(code, engineAPIKeys, (transformedCode) => {
-		logInfo.value = [];
 		const fn = new Function(...engineAPIKeys, transformedCode.code!)
 		fn(...Object.values(api))
 	}), cleanup };
 }
 
 export function runGameHeadless(code: string): void {
-	const game = webEngine(document.createElement('canvas'))
-
-	const api = {
-		...game.api,
-		setTimeout: () => {},
-		setInterval: () => {},
-		setLegend: (..._bitmaps: [string, string][]) => {
-			// this is bad; but for some reason i could not do _bitmaps === [undefined]
-			if(JSON.stringify(_bitmaps) === "[null]") {
-				// @ts-ignore
-				bitmaps.value = [[]];
-				throw new Error('The sprites passed into setLegend each need to be in square brackets, like setLegend([player, bitmap`...`]).');
-			} else
-				bitmaps.value = _bitmaps
-			return game.api.setLegend(..._bitmaps)
-		},
-		playTune: () => {}
-	}
-
-	code = `"use strict";\n${code}`
-	try {
-		const fn = new Function(...Object.keys(api), code)
-		fn(...Object.values(api))
-	} catch (error: any) {
-		normalizeGameError({ kind: 'runtime', error })
-	}
-
-	game.cleanup()
+	extractLegendBitmaps(code)
 }

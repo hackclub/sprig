@@ -1,7 +1,7 @@
-import { codeMirror, editors, openEditor, type EditorKind } from '../../lib/state'
+import { bitmaps, codeMirror, editors, openEditor, type EditorKind } from '../../lib/state'
 import BitmapPreview from '../design-system/bitmap-preview'
 import styles from './open-button.module.css'
-import { runGameHeadless } from '../../lib/engine'
+import { extractLegendBitmaps } from '../../lib/engine/legend-extractor'
 
 interface OpenButtonProps {
 	kind: EditorKind
@@ -19,9 +19,8 @@ export default function OpenButton(props: OpenButtonProps) {
 
 
 				if (editors[props.kind].needsBitmaps) {
-					// Run the game headless to update bitmaps
 					const code = codeMirror.value?.state.doc.toString() ?? ''
-					runGameHeadless(code)
+					bitmaps.value = extractLegendBitmaps(code)
 				}
 
 				openEditor.value = {
