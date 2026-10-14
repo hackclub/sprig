@@ -461,13 +461,17 @@ export const TAG_KEYWORDS = [
 export function cleanGameTitle(rawTitle) {
 	if (!rawTitle) return "";
 	let title = rawTitle
-		.replace(/^\[(?:sprig app|sprig|game|submission)\]\s*/i, "")
-		.replace(/^(?:add|upload)?\s*(?:files?\s+via\s+upload|uploaded\s+files?)\s*/i, "")
+		.replace(/^(?:\[|\()\s*sprig\s*(?:app|game|submission)?\s*[\]\)]\s*[:\-–—]?\s*/i, "")
+		.replace(/^sprig\s+(?:app|game|submission)\s*[:\-–—]?\s*/i, "")
+		.replace(/^sprig\s*[:\-–—]\s*/i, "")
+		.replace(/^(?:add|upload)?\s*(?:files?\s+via\s+upload|uploaded\s+files?)\s*[:\-–—]?\s*/i, "")
 		.replace(/^(?:add|create|new game:?)\s+/i, "")
 		.replace(/\.js$/i, "")
 		.replace(/[-_]v\d+.*$/i, "")
 		.replace(/[-–—]\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+$/g, "")
-		.replace(/["'`]/g, "")
+		.replace(/["`]/g, "")
+		.replace(/^'+|'+$/g, "")
+		.replace(/^[:\-–—\s]+/, "")
 		.trim();
 
 	if (/^[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+$/.test(title)) {

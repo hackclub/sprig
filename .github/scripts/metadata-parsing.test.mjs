@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
 	buildMetadataSnippet,
+	cleanGameTitle,
 	getMetadataValue,
 	inferSubmissionMetadata,
 	parseTags,
@@ -322,6 +323,39 @@ Objective: Push the block (b) onto the target tile (g).`,
 		expect(inferred.tags).toContain("runner");
 	});
 });
+
+describe("cleanGameTitle", () => {
+	it("strips [Sprig App] and related variations cleanly", () => {
+		expect(cleanGameTitle("[Sprig App] warios")).toBe("warios");
+		expect(cleanGameTitle("[SPRIG APP] warios")).toBe("warios");
+		expect(cleanGameTitle("[Sprig app] - warios")).toBe("warios");
+		expect(cleanGameTitle("[Sprig App]: warios")).toBe("warios");
+		expect(cleanGameTitle("(Sprig App) warios")).toBe("warios");
+		expect(cleanGameTitle("Sprig App: warios")).toBe("warios");
+		expect(cleanGameTitle("Sprig App - warios")).toBe("warios");
+		expect(cleanGameTitle("Sprig App warios")).toBe("warios");
+		expect(cleanGameTitle("[Sprig Game] warios")).toBe("warios");
+		expect(cleanGameTitle("[Sprig] warios")).toBe("warios");
+		expect(cleanGameTitle("Sprig - warios")).toBe("warios");
+		expect(cleanGameTitle("Sprig: warios")).toBe("warios");
+	});
+
+	it("preserves legitimate titles that start with the Sprig character name", () => {
+		expect(cleanGameTitle("Sprig Click")).toBe("Sprig Click");
+		expect(cleanGameTitle("Sprig Adventure")).toBe("Sprig Adventure");
+		expect(cleanGameTitle("Sprig's Quest")).toBe("Sprig's Quest");
+	});
+
+	it("cleans GitHub web upload prefixes, version suffixes, and file extensions", () => {
+		expect(cleanGameTitle("Add files via upload warios")).toBe("warios");
+		expect(cleanGameTitle("Create the_cube.js")).toBe("the cube");
+		expect(cleanGameTitle("Beat-Drop-v1")).toBe("Beat Drop");
+		expect(cleanGameTitle("Retro space shooter- Michael Qu")).toBe("Retro space shooter");
+		expect(cleanGameTitle("The-Ellis-Emerald")).toBe("The Ellis Emerald");
+		expect(cleanGameTitle('Add "A Long Fall" game')).toBe("A Long Fall game");
+	});
+});
+
 
 
 
