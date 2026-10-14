@@ -10,6 +10,7 @@ import {
 import {
 	MAINTAINER_REMINDER_MARKER,
 	STALE_REMINDER_MARKER,
+	addLabels,
 	daysBetween,
 	ensureReviewLabels,
 	getIssueLabels,
@@ -18,7 +19,6 @@ import {
 	githubRequest,
 	hasLabel,
 	removeLabel,
-	setStateLabel,
 } from "./review-utils.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -48,7 +48,7 @@ for (const pullRequest of openPulls) {
 
 	if (hasLabel(labels, DUPLICATE_LABEL) && (await handleOlderDuplicate(pullRequest, labels))) continue;
 
-	if (hasLabel(labels, "Needs Author") || hasLabel(labels, "Failed") || hasLabel(labels, "Stale")) {
+	if (hasLabel(labels, "Needs Author") || hasLabel(labels, "Failed")) {
 		await handleNeedsAuthor(pullRequest, labels);
 		continue;
 	}
@@ -63,7 +63,7 @@ for (const pullRequest of openPulls) {
 		continue;
 	}
 
-	await handleUntouchedSubmission(pullRequest);
+	await handleUntouchedSubmission(pullRequest, labels);
 }
 
 async function handleOlderDuplicate(pullRequest, labels) {
@@ -127,8 +127,6 @@ async function handleNeedsAuthor(pullRequest, labels) {
 	const needsAuthorTime = await latestLabelTime(pullRequest.number, "Needs Author");
 	const failedTime = await latestLabelTime(pullRequest.number, "Failed");
 	let since = newestDate([needsAuthorTime, failedTime].filter(Boolean));
-
-	if (!since && hasLabel(labels, "Stale")) since = await latestLabelTime(pullRequest.number, "Stale");
 	if (!since) return;
 
 	const authorLogin = pullRequest.user?.login;
@@ -154,12 +152,14 @@ async function handleNeedsAuthor(pullRequest, labels) {
 	}
 
 	if (age >= 7) {
-		await setStateLabel({ owner, repo, token, issueNumber: pullRequest.number, state: "Stale" });
+		await addLabels({ owner, repo, token, issueNumber: pullRequest.number, labels: ["Stale"] });
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: `<!-- sprig-stale-reminder-${cycle} -->`,
 			body: "This submission has been waiting on author changes for 7 days. Please push fixes soon, or it may be closed after 14 days of no response.",
 		});
+	} else if (hasLabel(labels, "Stale")) {
+		await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Stale" });
 	}
 }
 
@@ -198,9 +198,22 @@ async function handleClaimed(pullRequest) {
 	});
 }
 
-async function handleUntouchedSubmission(pullRequest) {
+async function handleUntouchedSubmission(pullRequest, labels) {
+	if (hasLabel(labels, "Stale")) {
+		const authorLogin = pullRequest.user?.login;
+		const lastAuthorActivity = await latestAuthorCommentTime(pullRequest.number, authorLogin);
+		const staleTime = await latestLabelTime(pullRequest.number, "Stale");
+		if (lastAuthorActivity && staleTime && new Date(lastAuthorActivity).getTime() > new Date(staleTime).getTime()) {
+			await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Stale" });
+			if (!hasLabel(labels, "Ready for Playtest")) {
+				await addLabels({ owner, repo, token, issueNumber: pullRequest.number, labels: ["Ready for Playtest"] });
+			}
+		}
+		return;
+	}
+
 	if (daysBetween(pullRequest.updated_at) >= 30) {
-		await setStateLabel({ owner, repo, token, issueNumber: pullRequest.number, state: "Stale" });
+		await addLabels({ owner, repo, token, issueNumber: pullRequest.number, labels: ["Stale"] });
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: STALE_REMINDER_MARKER,
