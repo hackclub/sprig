@@ -642,7 +642,7 @@ function buildComment(result) {
 			});
 			const snippet = buildMetadataSnippet(inferred);
 
-			checksSection += `> [!TIP]\n> **How to fix metadata:**\n> Click **[Edit Game File](${editUrl})** and paste this block at the very top (line 1) of \`${result.gameFile}\`:\n> \`\`\`javascript\n> ${snippet.split("\n").join("\n> ")}\n> \`\`\`\n\n`;
+			checksSection += `> [!TIP]\n> **How to fix metadata:**\n> Click **[Edit Game File](${editUrl})** and paste this block at the very top (line 1) of \`${result.gameFile}\`.\n>\n> *Note: We generated this header automatically from your PR details to help you out. Please review it and update any details (like your title, description, or tags) to make sure they match your game before committing!*\n> \`\`\`javascript\n> ${snippet.split("\n").join("\n> ")}\n> \`\`\`\n\n`;
 		}
 	}
 
