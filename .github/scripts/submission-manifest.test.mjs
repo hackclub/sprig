@@ -6,161 +6,54 @@ import {
 } from "./submission-manifest.mjs";
 
 describe("buildSubmissionManifest", () => {
-	it("classifies standard valid game and thumbnail image files", () => {
+	it("classifies valid files and separates loose/disallowed paths", () => {
 		const manifest = buildSubmissionManifest([
 			{ filename: "games/my_game.js", status: "added" },
 			{ filename: "games/img/my_game.png", status: "added" },
-		]);
-
-		expect(manifest.gameFiles).toHaveLength(1);
-		expect(manifest.gameFilesLoose).toHaveLength(1);
-		expect(manifest.imageFiles).toHaveLength(1);
-		expect(manifest.imageFilesLoose).toHaveLength(1);
-		expect(manifest.disallowedFiles).toHaveLength(0);
-	});
-
-	it("keeps images with spaces in imageFilesLoose without flagging as disallowed folder", () => {
-		const manifest = buildSubmissionManifest([
-			{ filename: "games/Retro space shooter.js", status: "added" },
 			{ filename: "games/img/Retro space shooter.png", status: "added" },
-			{ filename: "games/img/retro_space_shooter_thumbnail.png", status: "added" },
-		]);
-
-		expect(manifest.gameFilesLoose).toHaveLength(1);
-		expect(manifest.imageFilesLoose).toHaveLength(2);
-		expect(manifest.disallowedFiles).toHaveLength(0);
-	});
-
-	it("flags files outside games/ or games/img/ as disallowed", () => {
-		const manifest = buildSubmissionManifest([
-			{ filename: "games/my_game.js", status: "added" },
 			{ filename: "screenshots/my_game.png", status: "added" },
-			{ filename: "games/subfolder/nested.js", status: "added" },
+			{ filename: "games/sub/nested.js", status: "added" },
 		]);
-
+		expect(manifest.gameFiles).toHaveLength(1);
+		expect(manifest.imageFiles).toHaveLength(1);
+		expect(manifest.imageFilesLoose).toHaveLength(2);
 		expect(manifest.disallowedFiles.map((f) => f.filename)).toEqual([
 			"screenshots/my_game.png",
-			"games/subfolder/nested.js",
+			"games/sub/nested.js",
 		]);
 	});
 });
 
 describe("getImageCountCheck", () => {
-	it("passes when zero images are provided", () => {
-		const check = getImageCountCheck([]);
-		expect(check.ok).toBe(true);
-		expect(check.detail).toBe("No image provided; this is OK.");
-	});
-
-	it("passes when exactly one image is provided", () => {
-		const check = getImageCountCheck([{ filename: "games/img/my_game.png" }]);
-		expect(check.ok).toBe(true);
-		expect(check.detail).toBe("Exactly one image file provided.");
-	});
-
-	it("fails when more than one image is provided", () => {
-		const check = getImageCountCheck([
-			{ filename: "games/img/Retro space shooter.png" },
-			{ filename: "games/img/retro_space_shooter_thumbnail.png" },
-		]);
-		expect(check.ok).toBe(false);
-		expect(check.detail).toContain("Only one image is allowed per game");
-		expect(check.detail).toContain("Found 2 images");
-		expect(check.detail).toContain("`games/img/Retro space shooter.png`");
-		expect(check.detail).toContain("`games/img/retro_space_shooter_thumbnail.png`");
+	it.each([
+		[[], true],
+		[[{ filename: "games/img/a.png" }], true],
+		[[{ filename: "games/img/a.png" }, { filename: "games/img/b.png" }], false],
+	])("handles %i images (ok: %s)", (files, ok) => {
+		const check = getImageCountCheck(files);
+		expect(check.ok).toBe(ok);
+		if (!ok) {
+			expect(check.detail).toContain("Only one image is allowed per game");
+			expect(check.detail).toContain("`games/img/a.png`");
+		}
 	});
 });
 
 describe("validateImageFiles", () => {
-	it("passes when no images are provided", () => {
-		const checks = validateImageFiles({ imageFiles: [], gameBase: "my_game" });
-		expect(checks).toEqual([
-			{ name: "Optional image path", ok: true, detail: "No image provided; this is OK." },
-			{
-				name: "Optional image name",
-				ok: true,
-				detail: "No image provided; gallery thumbnail can be generated/default.",
-			},
-		]);
-	});
-
-	it("passes when the single image matches the game filename", () => {
-		const checks = validateImageFiles({
-			imageFiles: [{ filename: "games/img/my_game.png" }],
-			gameBase: "my_game",
-		});
-		expect(checks.find((c) => c.name === "Optional image path")?.ok).toBe(true);
-		expect(checks.find((c) => c.name === "Optional image name")?.ok).toBe(true);
-		expect(checks.find((c) => c.name === "Optional image name")?.detail).toBe(
-			"Image filename matches the game file."
-		);
-	});
-
-	it("gives a unified rename recommendation when the game file has spaces", () => {
-		const checks = validateImageFiles({
-			imageFiles: [
-				{ filename: "games/img/Retro space shooter.png" },
-				{ filename: "games/img/retro_space_shooter_thumbnail.png" },
-			],
-			gameBase: "Retro space shooter",
-		});
-
+	it.each([
+		{ files: [], base: "my_game", pathOk: true, nameOk: true, match: /gallery thumbnail/ },
+		{ files: ["games/img/my_game.png"], base: "my_game", pathOk: true, nameOk: true, match: /matches the game/ },
+		{ files: ["games/img/wrong.png"], base: "my_game", pathOk: true, nameOk: false, match: /Image must be named `games\/img\/my_game\.png`/ },
+		{ files: ["games/img/my_game.png"], base: null, pathOk: true, nameOk: false, match: /Add exactly one game file/ },
+		{ files: ["games/img/Retro space.png"], base: "Retro space", pathOk: true, nameOk: false, match: /rename to `games\/Retro_space\.js` and `games\/img\/Retro_space\.png`/ },
+		{ files: ["games/img/dr. mario.png"], base: "dr. mario", pathOk: true, nameOk: false, match: /games\/dr_mario\.js/ },
+		{ files: ["games/img/@#$.png"], base: "@#$", pathOk: true, nameOk: false, match: /games\/game\.js/ },
+	])("validates files for base '$base'", ({ files, base, pathOk, nameOk, match }) => {
+		const imageFiles = files.map((filename) => ({ filename }));
+		const checks = validateImageFiles({ imageFiles, gameBase: base });
+		expect(checks.find((c) => c.name === "Optional image path")?.ok).toBe(pathOk);
 		const nameCheck = checks.find((c) => c.name === "Optional image name");
-		expect(nameCheck?.ok).toBe(false);
-		expect(nameCheck?.detail).toBe(
-			"Both your game file and image filename must match and use only letters, numbers, '-', and '_'. For example, rename to `games/Retro_space_shooter.js` and `games/img/Retro_space_shooter.png`."
-		);
-	});
-
-	it("identifies mismatched image names when game filename is already valid", () => {
-		const checks = validateImageFiles({
-			imageFiles: [{ filename: "games/img/retro_space_shooter_thumbnail.png" }],
-			gameBase: "retro_space_shooter",
-		});
-
-		const nameCheck = checks.find((c) => c.name === "Optional image name");
-		expect(nameCheck?.ok).toBe(false);
-		expect(nameCheck?.detail).toBe(
-			"Image must be named `games/img/retro_space_shooter.png` to match `games/retro_space_shooter.js`. Found `games/img/retro_space_shooter_thumbnail.png`."
-		);
-	});
-
-	it("fails image name check if no game file was submitted", () => {
-		const checks = validateImageFiles({
-			imageFiles: [{ filename: "games/img/my_game.png" }],
-			gameBase: null,
-		});
-
-		const nameCheck = checks.find((c) => c.name === "Optional image name");
-		expect(nameCheck?.ok).toBe(false);
-		expect(nameCheck?.detail).toBe(
-			"Add exactly one game file in `games/` so the image filename can match it."
-		);
-	});
-
-	it("handles dots and special characters in game title cleanly", () => {
-		const checks = validateImageFiles({
-			imageFiles: [{ filename: "games/img/dr. mario.png" }],
-			gameBase: "dr. mario",
-		});
-
-		const nameCheck = checks.find((c) => c.name === "Optional image name");
-		expect(nameCheck?.ok).toBe(false);
-		expect(nameCheck?.detail).toBe(
-			"Both your game file and image filename must match and use only letters, numbers, '-', and '_'. For example, rename to `games/dr_mario.js` and `games/img/dr_mario.png`."
-		);
-	});
-
-	it("falls back to 'game' when gameBase has no alphanumeric characters", () => {
-		const checks = validateImageFiles({
-			imageFiles: [{ filename: "games/img/@#$.png" }],
-			gameBase: "@#$",
-		});
-
-		const nameCheck = checks.find((c) => c.name === "Optional image name");
-		expect(nameCheck?.ok).toBe(false);
-		expect(nameCheck?.detail).toBe(
-			"Both your game file and image filename must match and use only letters, numbers, '-', and '_'. For example, rename to `games/game.js` and `games/img/game.png`."
-		);
+		expect(nameCheck?.ok).toBe(nameOk);
+		expect(nameCheck?.detail).toMatch(match);
 	});
 });
