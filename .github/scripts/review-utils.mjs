@@ -439,22 +439,43 @@ export function extractAboutAndGameplay(body) {
 }
 
 export const TAG_KEYWORDS = [
-	{ tag: "puzzle", pattern: /\b(?:puzzle|sokoban|box|boxes|block|push|slide|tiles|logic|match)\b/i },
+	{ tag: "arcade", pattern: /\b(?:casino|roulette|slot|slots|payout|bet|betting)\b/i },
+	{ tag: "strategy", pattern: /\b(?:chess|checkmate|tic[- ]?tac(?:[- ]?toe)?)\b/i },
+	{ tag: "music", pattern: /\b(?:music|tune|rhythm|audio|beat|melody)\b/i },
+	{ tag: "runner", pattern: /\b(?:runner|running|dodge|dodging|dino)\b/i },
+	{ tag: "shooter", pattern: /\b(?:shooter|shoot|bullet|laser|spaceships?|asteroid|asteroids|invader)\b/i },
+	{ tag: "multiplayer", pattern: /\b(?:multiplayer|2[- ]?player|two[- ]?player|versus|1v1|pvp)\b/i },
 	{ tag: "maze", pattern: /\b(?:maze|labyrinth)\b/i },
-	{ tag: "runner", pattern: /\b(?:runner|running|dodge)\b/i },
 	{ tag: "platformer", pattern: /\b(?:platformer|platform|jump|jumping)\b/i },
-	{ tag: "arcade", pattern: /\b(?:arcade|classic)\b/i },
-	{ tag: "action", pattern: /\b(?:action|fight|battle)\b/i },
-	{ tag: "shooter", pattern: /\b(?:shooter|shoot|bullet|laser|space|invader)\b/i },
-	{ tag: "multiplayer", pattern: /\b(?:multiplayer|2\s*player|two\s*player|versus)\b/i },
-	{ tag: "strategy", pattern: /\b(?:strategy|tactics|chess|tower)\b/i },
+	{ tag: "strategy", pattern: /\b(?:strategy|tactics|tower|dispatcher)\b/i },
 	{ tag: "card", pattern: /\b(?:card|blackjack|poker|deck)\b/i },
-	{ tag: "music", pattern: /\b(?:music|tune|rhythm|audio)\b/i },
+	{ tag: "adventure", pattern: /\b(?:adventure|quest|rpg|explore|dungeon)\b/i },
+	{ tag: "puzzle", pattern: /\b(?:puzzle|sokoban|boxes?|block|push|slide|tiles?|logic|minesweeper|mine\s*sweeper)\b/i },
+	{ tag: "action", pattern: /\b(?:action|fight|battle|bomb|bomberman|blast)\b/i },
+	{ tag: "endless", pattern: /\b(?:endless|infinite|high score)\b/i },
 	{ tag: "retro", pattern: /\b(?:retro|pixel|8[- ]?bit)\b/i },
-	{ tag: "endless", pattern: /\b(?:endless|infinite|score)\b/i },
-	{ tag: "adventure", pattern: /\b(?:adventure|quest|rpg|explore)\b/i },
-	{ tag: "simulation", pattern: /\b(?:simulation|sim|tycoon|farm)\b/i },
+	{ tag: "arcade", pattern: /\b(?:arcade|classic)\b/i },
+	{ tag: "simulation", pattern: /\b(?:simulation|sim|tycoon|farm|gravity)\b/i },
 ];
+
+export function cleanGameTitle(rawTitle) {
+	if (!rawTitle) return "";
+	let title = rawTitle
+		.replace(/^\[(?:sprig app|sprig|game|submission)\]\s*/i, "")
+		.replace(/^(?:add|upload)?\s*(?:files?\s+via\s+upload|uploaded\s+files?)\s*/i, "")
+		.replace(/^(?:add|create|new game:?)\s+/i, "")
+		.replace(/\.js$/i, "")
+		.replace(/[-_]v\d+.*$/i, "")
+		.replace(/[-–—]\s*[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+$/g, "")
+		.replace(/["'`]/g, "")
+		.trim();
+
+	if (/^[A-Za-z0-9]+(?:[-_][A-Za-z0-9]+)+$/.test(title)) {
+		title = title.replace(/[-_]+/g, " ");
+	}
+
+	return title.trim();
+}
 
 export function inferSubmissionMetadata({ content, filename, pullRequest, existingMetadata } = {}) {
 	// 1. Title
@@ -465,23 +486,20 @@ export function inferSubmissionMetadata({ content, filename, pullRequest, existi
 		if (content) {
 			const commentMatch = content.match(/^\s*(?:\/\/|\/\*)\s*([A-Za-z0-9][A-Za-z0-9\s-_']{2,40})(?:\s*\([^)]*\))?\s*(?:\*\/|$)/m);
 			if (commentMatch) {
-				const candidate = commentMatch[1].trim();
+				const candidate = cleanGameTitle(commentMatch[1]);
 				if (!candidate.startsWith("@") && !/^eslint/i.test(candidate) && !/^prettier/i.test(candidate) && !/^sprig/i.test(candidate)) {
 					title = candidate;
 				}
 			}
 		}
 		if (!title && pullRequest?.title) {
-			const cleanedPr = pullRequest.title
-				.replace(/^\[(?:sprig app|sprig|game|submission)\]\s*/i, "")
-				.replace(/^(?:add|create|new game:?)\s+/i, "")
-				.trim();
+			const cleanedPr = cleanGameTitle(pullRequest.title);
 			if (cleanedPr && cleanedPr.length >= 2 && !/^my game$/i.test(cleanedPr)) {
 				title = cleanedPr;
 			}
 		}
 		if (!title && filename) {
-			const basename = path.basename(filename, ".js").replace(/[-_]+/g, " ").trim();
+			const basename = cleanGameTitle(path.basename(filename, ".js"));
 			if (basename && !/^my game$/i.test(basename)) {
 				title = basename;
 			}
@@ -503,6 +521,7 @@ export function inferSubmissionMetadata({ content, filename, pullRequest, existi
 			author = "Sprig Developer";
 		}
 	}
+	author = author.replace(/[:;\s]+$/, "").replace(/^["'`]|["'`]$/g, "").trim();
 
 	// 3. Description
 	let description = "";
@@ -510,12 +529,13 @@ export function inferSubmissionMetadata({ content, filename, pullRequest, existi
 		description = existingMetadata.description.trim();
 	} else {
 		const { about, gameplay } = extractAboutAndGameplay(pullRequest?.body ?? "");
-		const cleanAbout = about ? about.replace(/<!--[\s\S]*?-->/g, "").replace(/\s+/g, " ").trim() : "";
-		const cleanGameplay = gameplay ? gameplay.replace(/<!--[\s\S]*?-->/g, "").replace(/\s+/g, " ").trim() : "";
+		const cleanAbout = about ? stripTemplateNoise(about).replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() : "";
+		const cleanGameplay = gameplay ? stripTemplateNoise(gameplay).replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim() : "";
 
 		let descCandidate = cleanAbout;
-		if (cleanAbout.length < 25 && cleanGameplay) {
-			descCandidate = cleanAbout ? `${cleanAbout} ${cleanGameplay}` : cleanGameplay;
+		if (cleanAbout && cleanAbout.length < 25 && cleanGameplay) {
+			const sep = /[.!?]$/.test(cleanAbout) ? " " : ". ";
+			descCandidate = `${cleanAbout}${sep}${cleanGameplay}`;
 		} else if (!cleanAbout && cleanGameplay) {
 			descCandidate = cleanGameplay;
 		}
@@ -528,6 +548,7 @@ export function inferSubmissionMetadata({ content, filename, pullRequest, existi
 			description = `A custom game called ${title} built for Sprig.`;
 		}
 	}
+	description = description.replace(/[\r\n]+/g, " ").replace(/^["'`]|["'`]$/g, "").trim();
 
 	// 4. Tags
 	let tags = [];
@@ -536,9 +557,10 @@ export function inferSubmissionMetadata({ content, filename, pullRequest, existi
 		if (filtered.length > 0) tags = filtered;
 	}
 	if (tags.length === 0) {
-		const text = `${filename ?? ""} ${pullRequest?.title ?? ""} ${pullRequest?.body ?? ""} ${(content ?? "").slice(0, 3000)}`.toLowerCase();
+		const cleanBody = stripTemplateNoise(pullRequest?.body ?? "");
+		const text = `${filename ?? ""} ${pullRequest?.title ?? ""} ${cleanBody} ${(content ?? "").slice(0, 3000)}`.toLowerCase();
 		for (const { tag, pattern } of TAG_KEYWORDS) {
-			if (pattern.test(text)) {
+			if (pattern.test(text) && !tags.includes(tag)) {
 				tags.push(tag);
 				if (tags.length >= 2) break;
 			}
