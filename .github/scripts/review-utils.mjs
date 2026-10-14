@@ -356,4 +356,122 @@ export function parseTags(raw) {
 	return { tags };
 }
 
+export function checkMetadataDate(addedOn, add) {
+	const validFormat = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
+	const parsedDate = validFormat ? new Date(`${addedOn}T00:00:00Z`) : null;
+	const isRealDate = Boolean(
+		validFormat &&
+		parsedDate &&
+		!Number.isNaN(parsedDate.getTime()) &&
+		parsedDate.toISOString().slice(0, 10) === addedOn
+	);
+	const now = new Date();
+	const tooOld = isRealDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
+	const ok = isRealDate && !tooOld;
+	let detail = "Date looks current.";
+	if (!ok) {
+		if (isRealDate && tooOld) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
+		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
+			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
+		} else {
+			detail = "Set `@addedOn:` to a valid recent date in `YYYY-MM-DD` format.";
+		}
+	}
+	add("Metadata date", ok, detail);
+}
+
+export function buildMetadataSnippet({ title, author, description, tags, addedOn } = {}) {
+	const gameTitle = title || "My Game";
+	const gameAuthor = author || "Your Name";
+	const gameDesc = description || "A short description of what players do in your game";
+	let gameTags = "['puzzle']";
+	if (Array.isArray(tags) && tags.length > 0) {
+		gameTags = `[${tags.map((t) => `'${t.replace(/'/g, "\\'")}'`).join(", ")}]`;
+	} else if (typeof tags === "string" && tags.trim()) {
+		gameTags = tags.trim();
+	}
+	const gameDate = addedOn || new Date().toISOString().slice(0, 10);
+
+	return `/*
+@title: ${gameTitle}
+@author: ${gameAuthor}
+@description: ${gameDesc}
+@tags: ${gameTags}
+@addedOn: ${gameDate}
+*/`;
+}
+
+export function validateMetadataHeader(content, filename) {
+	const checks = [];
+	const values = {
+		title: getMetadataValue(content, "title"),
+		author: getMetadataValue(content, "author"),
+		description: getMetadataValue(content, "description"),
+		tags: getMetadataValue(content, "tags"),
+		addedOn: getMetadataValue(content, "addedOn"),
+	};
+
+	const hasAnyMetadata = Boolean(values.title || values.author || values.description || values.tags || values.addedOn);
+	if (!hasAnyMetadata) {
+		checks.push({
+			name: "Metadata header",
+			ok: false,
+			detail: `Missing comment header at the top of \`${filename}\`. Sprig games require a \`/* ... */\` comment block with game details at line 1.`,
+		});
+		return { checks, values: { ...values, tags: [] }, hasHeader: false };
+	}
+
+	const today = new Date().toISOString().slice(0, 10);
+	const missingDetails = {
+		title: `Add a title for your game (e.g. \`@title: My Game\`) to the comment header at the top of \`${filename}\`.`,
+		author: `Add your name or handle (e.g. \`@author: Your Name\`) to the comment header at the top of \`${filename}\`.`,
+		description: `Add a short description of what players do (e.g. \`@description: A fun puzzle game\`) to the comment header at the top of \`${filename}\`.`,
+		tags: `Add tags for your game (e.g. \`@tags: ['puzzle']\`) to the comment header at the top of \`${filename}\`.`,
+		addedOn: `Add today's date in YYYY-MM-DD format (e.g. \`@addedOn: ${today}\`) to the comment header at the top of \`${filename}\`.`,
+	};
+
+	for (const [key, value] of Object.entries(values)) {
+		checks.push({
+			name: `Metadata @${key}`,
+			ok: Boolean(value),
+			detail: value ? `@${key} is filled.` : missingDetails[key],
+		});
+	}
+
+	let parsedTags = { tags: [] };
+	if (values.tags) {
+		parsedTags = parseTags(values.tags);
+		const tagsValid = Boolean(parsedTags.tags && parsedTags.tags.length > 0);
+		checks.push({
+			name: "Metadata tags parse",
+			ok: tagsValid,
+			detail: tagsValid
+				? "Tags are formatted correctly."
+				: `Format \`@tags:\` as a list of tags in quotes and brackets, for example \`@tags: ['maze', 'puzzle']\`.\nReason: ${parsedTags.issue ?? "Tags list cannot be empty."}`,
+		});
+	}
+
+	if (values.addedOn) {
+		checkMetadataDate(values.addedOn, (name, ok, detail) => checks.push({ name, ok, detail }));
+	}
+
+	const titleLooksLikeTemplate = /^getting(_|\s)started$/i.test(values.title?.trim()) || /^template$/i.test(values.title?.trim()) || /^my game$/i.test(values.title?.trim());
+	const authorLooksLikeTemplate = /leo,\s*edits/i.test(values.author) || /^my name$/i.test(values.author?.trim());
+	const descriptionLooksLikeTemplate = /short description about the game/i.test(values.description?.trim());
+	const hasExampleTags = parsedTags.tags?.some((t) => ["tag1", "tag2", "example", "another-example"].includes(t.toLowerCase()));
+
+	const hasTemplateValues = titleLooksLikeTemplate || authorLooksLikeTemplate || descriptionLooksLikeTemplate || hasExampleTags;
+
+	checks.push({
+		name: "Metadata template values",
+		ok: !hasTemplateValues,
+		detail: !hasTemplateValues
+			? "No template metadata values found."
+			: "Replace example/template values in the metadata header (like 'MY GAME', 'MY NAME', 'Short description...', or placeholder tags).",
+	});
+
+	return { checks, values: { ...values, tags: parsedTags.tags ?? values.tags }, hasHeader: true };
+}
+
 
