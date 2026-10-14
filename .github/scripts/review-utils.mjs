@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import path from "node:path";
 
 export const LABELS = {
 	Submission: {
@@ -354,6 +355,210 @@ export function parseTags(raw) {
 	}
 
 	return { tags };
+}
+
+export function stripTemplateNoise(value) {
+	return (value ?? "")
+		.replace(/<!--[\s\S]*?-->/g, "")
+		.replace(/^>\s?.*$/gm, "")
+		.trim();
+}
+
+export function normalizeFieldValue(value) {
+	return (value ?? "")
+		.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+		.replace(/^[*`_~]+|[*`_~]+$/g, "")
+		.trim();
+}
+
+export function getSectionBlocks(body, heading) {
+	const pattern = new RegExp(String.raw`(?:^|\n)#+\s*${heading}[^\n]*\n([\s\S]*?)(?=\n#+\s|$)`, "i");
+	const match = (body ?? "").match(pattern);
+	if (!match) return [];
+	const clean = stripTemplateNoise(match[1]);
+	return clean
+		.split(/\n\s*\n+/)
+		.map((p) => normalizeFieldValue(p))
+		.filter(Boolean);
+}
+
+export function extractBoldField(body, label) {
+	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+
+	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
+	const boldMatch = (body ?? "").match(boldPattern);
+	if (boldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
+		if (value) return value;
+	}
+
+	const fullBoldPattern = new RegExp(String.raw`(?:\*\*|\*)${escaped}\s*:\s*(.+?)(?:\*\*|\*)(?:\r?\n|$)`, "i");
+	const fullBoldMatch = (body ?? "").match(fullBoldPattern);
+	if (fullBoldMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(fullBoldMatch[1]));
+		if (value) return value;
+	}
+
+	const plainPattern = new RegExp(String.raw`(?:^|\n)\s*(?:[-*]|\d+\.)*\s*(?:\*\*|\*)?${escaped}\s*:\s*([^\n]+)`, "i");
+	const plainMatch = (body ?? "").match(plainPattern);
+	if (plainMatch) {
+		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
+		if (value) return value;
+	}
+
+	return "";
+}
+
+export function extractAuthor(body) {
+	const direct = extractBoldField(body, "Author");
+	if (direct) return direct;
+	const blocks = getSectionBlocks(body, "Author(?:\\s+name)?");
+	for (const block of blocks) {
+		if (/^author:?$/i.test(block)) continue;
+		const clean = block.replace(/^author:\s*/i, "").trim();
+		if (clean) return clean;
+	}
+	return "";
+}
+
+export function extractAboutAndGameplay(body) {
+	let about = extractBoldField(body, "What is your game about?");
+	let gameplay = extractBoldField(body, "How do you play your game?");
+	if (about && gameplay) return { about, gameplay };
+
+	const isPrompt = (text) =>
+		/what is your game about/i.test(text) ||
+		/how do you play your game/i.test(text);
+
+	const blocks = getSectionBlocks(body, "About your game").filter((b) => !isPrompt(b));
+
+	if (!about && blocks.length > 0) about = blocks[0];
+	if (!gameplay && blocks.length > 1) gameplay = blocks[1];
+
+	return { about, gameplay };
+}
+
+export const TAG_KEYWORDS = [
+	{ tag: "puzzle", pattern: /\b(?:puzzle|sokoban|box|boxes|block|push|slide|tiles|logic|match)\b/i },
+	{ tag: "maze", pattern: /\b(?:maze|labyrinth)\b/i },
+	{ tag: "runner", pattern: /\b(?:runner|running|dodge)\b/i },
+	{ tag: "platformer", pattern: /\b(?:platformer|platform|jump|jumping)\b/i },
+	{ tag: "arcade", pattern: /\b(?:arcade|classic)\b/i },
+	{ tag: "action", pattern: /\b(?:action|fight|battle)\b/i },
+	{ tag: "shooter", pattern: /\b(?:shooter|shoot|bullet|laser|space|invader)\b/i },
+	{ tag: "multiplayer", pattern: /\b(?:multiplayer|2\s*player|two\s*player|versus)\b/i },
+	{ tag: "strategy", pattern: /\b(?:strategy|tactics|chess|tower)\b/i },
+	{ tag: "card", pattern: /\b(?:card|blackjack|poker|deck)\b/i },
+	{ tag: "music", pattern: /\b(?:music|tune|rhythm|audio)\b/i },
+	{ tag: "retro", pattern: /\b(?:retro|pixel|8[- ]?bit)\b/i },
+	{ tag: "endless", pattern: /\b(?:endless|infinite|score)\b/i },
+	{ tag: "adventure", pattern: /\b(?:adventure|quest|rpg|explore)\b/i },
+	{ tag: "simulation", pattern: /\b(?:simulation|sim|tycoon|farm)\b/i },
+];
+
+export function inferSubmissionMetadata({ content, filename, pullRequest, existingMetadata } = {}) {
+	// 1. Title
+	let title = "";
+	if (existingMetadata?.title && !/^getting(_|\s)started$/i.test(existingMetadata.title.trim()) && !/^template$/i.test(existingMetadata.title.trim()) && !/^my game$/i.test(existingMetadata.title.trim())) {
+		title = existingMetadata.title.trim();
+	} else {
+		if (content) {
+			const commentMatch = content.match(/^\s*(?:\/\/|\/\*)\s*([A-Za-z0-9][A-Za-z0-9\s-_']{2,40})(?:\s*\([^)]*\))?\s*(?:\*\/|$)/m);
+			if (commentMatch) {
+				const candidate = commentMatch[1].trim();
+				if (!candidate.startsWith("@") && !/^eslint/i.test(candidate) && !/^prettier/i.test(candidate) && !/^sprig/i.test(candidate)) {
+					title = candidate;
+				}
+			}
+		}
+		if (!title && pullRequest?.title) {
+			const cleanedPr = pullRequest.title
+				.replace(/^\[(?:sprig app|sprig|game|submission)\]\s*/i, "")
+				.replace(/^(?:add|create|new game:?)\s+/i, "")
+				.trim();
+			if (cleanedPr && cleanedPr.length >= 2 && !/^my game$/i.test(cleanedPr)) {
+				title = cleanedPr;
+			}
+		}
+		if (!title && filename) {
+			const basename = path.basename(filename, ".js").replace(/[-_]+/g, " ").trim();
+			if (basename && !/^my game$/i.test(basename)) {
+				title = basename;
+			}
+		}
+		if (!title) title = "Sprig Game";
+	}
+
+	// 2. Author
+	let author = "";
+	if (existingMetadata?.author && !/leo,\s*edits/i.test(existingMetadata.author) && !/^my name$/i.test(existingMetadata.author.trim())) {
+		author = existingMetadata.author.trim();
+	} else {
+		const prAuthor = extractAuthor(pullRequest?.body ?? "");
+		if (prAuthor && !/^my name$/i.test(prAuthor.trim())) {
+			author = prAuthor.trim();
+		} else if (pullRequest?.user?.login && !/^my name$/i.test(pullRequest.user.login.trim())) {
+			author = pullRequest.user.login.trim();
+		} else {
+			author = "Sprig Developer";
+		}
+	}
+
+	// 3. Description
+	let description = "";
+	if (existingMetadata?.description && !/short description about the game/i.test(existingMetadata.description.trim())) {
+		description = existingMetadata.description.trim();
+	} else {
+		const { about, gameplay } = extractAboutAndGameplay(pullRequest?.body ?? "");
+		const cleanAbout = about ? about.replace(/<!--[\s\S]*?-->/g, "").replace(/\s+/g, " ").trim() : "";
+		const cleanGameplay = gameplay ? gameplay.replace(/<!--[\s\S]*?-->/g, "").replace(/\s+/g, " ").trim() : "";
+
+		let descCandidate = cleanAbout;
+		if (cleanAbout.length < 25 && cleanGameplay) {
+			descCandidate = cleanAbout ? `${cleanAbout} ${cleanGameplay}` : cleanGameplay;
+		} else if (!cleanAbout && cleanGameplay) {
+			descCandidate = cleanGameplay;
+		}
+
+		descCandidate = descCandidate.replace(/^objective:\s*/i, "").trim();
+		const firstSentence = descCandidate.split(/(?<=[.!?])\s+/)[0]?.trim() ?? "";
+		if (firstSentence.length >= 5 && !/short description/i.test(firstSentence)) {
+			description = firstSentence.length > 140 ? `${firstSentence.slice(0, 137)}...` : firstSentence;
+		} else {
+			description = `A custom game called ${title} built for Sprig.`;
+		}
+	}
+
+	// 4. Tags
+	let tags = [];
+	if (Array.isArray(existingMetadata?.tags) && existingMetadata.tags.length > 0) {
+		const filtered = existingMetadata.tags.filter((t) => !["tag1", "tag2", "example", "another-example"].includes(t.toLowerCase()));
+		if (filtered.length > 0) tags = filtered;
+	}
+	if (tags.length === 0) {
+		const text = `${filename ?? ""} ${pullRequest?.title ?? ""} ${pullRequest?.body ?? ""} ${(content ?? "").slice(0, 3000)}`.toLowerCase();
+		for (const { tag, pattern } of TAG_KEYWORDS) {
+			if (pattern.test(text)) {
+				tags.push(tag);
+				if (tags.length >= 2) break;
+			}
+		}
+		if (tags.length === 0) tags = ["puzzle"];
+	}
+
+	// 5. AddedOn
+	let addedOn = "";
+	if (existingMetadata?.addedOn && /^\d{4}-\d{2}-\d{2}$/.test(existingMetadata.addedOn)) {
+		const parsed = new Date(`${existingMetadata.addedOn}T00:00:00Z`);
+		if (!Number.isNaN(parsed.getTime()) && Math.abs(Date.now() - parsed.getTime()) <= 183 * 86_400_000) {
+			addedOn = existingMetadata.addedOn;
+		}
+	}
+	if (!addedOn) {
+		addedOn = new Date().toISOString().slice(0, 10);
+	}
+
+	return { title, author, description, tags, addedOn };
 }
 
 export function checkMetadataDate(addedOn, add) {

@@ -5,12 +5,15 @@ import {
 	addLabels,
 	buildMetadataSnippet,
 	ensureReviewLabels,
+	extractAboutAndGameplay,
+	extractAuthor,
 	getIssueLabels,
 	getMetadataValue,
 	getRepository,
 	githubPaginated,
 	githubRequest,
 	hasLabel,
+	inferSubmissionMetadata,
 	parseTags,
 	readGitHubEvent,
 	removeLabel,
@@ -365,6 +368,7 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 		warnings,
 		metadata: metadata?.values ?? null,
 		gameFile: gameFile?.filename ?? null,
+		content,
 		rawUrl,
 		playUrl,
 		screenshotUrl,
@@ -384,87 +388,6 @@ function validatePullRequestBody(body) {
 	add("PR gameplay description", Boolean(gameplay), gameplay ? "Gameplay description is filled." : "Fill in `How do you play your game?` in the PR description.");
 
 	return { checks };
-}
-
-function getSectionBlocks(body, heading) {
-	const pattern = new RegExp(String.raw`(?:^|\n)#+\s*${heading}[^\n]*\n([\s\S]*?)(?=\n#+\s|$)`, "i");
-	const match = body.match(pattern);
-	if (!match) return [];
-	const clean = stripTemplateNoise(match[1]);
-	return clean
-		.split(/\n\s*\n+/)
-		.map((p) => normalizeFieldValue(p))
-		.filter(Boolean);
-}
-
-function extractAuthor(body) {
-	const direct = extractBoldField(body, "Author");
-	if (direct) return direct;
-	const blocks = getSectionBlocks(body, "Author(?:\\s+name)?");
-	for (const block of blocks) {
-		if (/^author:?$/i.test(block)) continue;
-		const clean = block.replace(/^author:\s*/i, "").trim();
-		if (clean) return clean;
-	}
-	return "";
-}
-
-function extractAboutAndGameplay(body) {
-	let about = extractBoldField(body, "What is your game about?");
-	let gameplay = extractBoldField(body, "How do you play your game?");
-	if (about && gameplay) return { about, gameplay };
-
-	const isPrompt = (text) =>
-		/what is your game about/i.test(text) ||
-		/how do you play your game/i.test(text);
-
-	const blocks = getSectionBlocks(body, "About your game").filter((b) => !isPrompt(b));
-
-	if (!about && blocks.length > 0) about = blocks[0];
-	if (!gameplay && blocks.length > 1) gameplay = blocks[1];
-
-	return { about, gameplay };
-}
-
-function extractBoldField(body, label) {
-	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-
-	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
-	const boldMatch = body.match(boldPattern);
-	if (boldMatch) {
-		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
-		if (value) return value;
-	}
-
-	const fullBoldPattern = new RegExp(String.raw`(?:\*\*|\*)${escaped}\s*:\s*(.+?)(?:\*\*|\*)(?:\r?\n|$)`, "i");
-	const fullBoldMatch = body.match(fullBoldPattern);
-	if (fullBoldMatch) {
-		const value = normalizeFieldValue(stripTemplateNoise(fullBoldMatch[1]));
-		if (value) return value;
-	}
-
-	const plainPattern = new RegExp(String.raw`(?:^|\n)\s*(?:[-*]|\d+\.)*\s*(?:\*\*|\*)?${escaped}\s*:\s*([^\n]+)`, "i");
-	const plainMatch = body.match(plainPattern);
-	if (plainMatch) {
-		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
-		if (value) return value;
-	}
-
-	return "";
-}
-
-function normalizeFieldValue(value) {
-	return value
-		.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-		.replace(/^[*`_~]+|[*`_~]+$/g, "")
-		.trim();
-}
-
-function stripTemplateNoise(value) {
-	return value
-		.replace(/<!--[\s\S]*?-->/g, "")
-		.replace(/^>\s?.*$/gm, "")
-		.trim();
 }
 
 async function validateMetadata(content, filename, workspace) {
@@ -711,17 +634,13 @@ function buildComment(result) {
 
 		const hasMetadataFailure = failedChecks.some((c) => categoryMap[c.name] === "metadata");
 		if (hasMetadataFailure && result.gameFile) {
-			const defaultTitle = pullRequest.title ? pullRequest.title.replace(/^\[.*?\]\s*/, "").trim() : "";
-			const filenameTitle = (result.gameFile.split("/").pop() ?? "").replace(/\.js$/, "").replace(/[-_]+/g, " ");
-			const sampleTitle = metadata.title || defaultTitle || filenameTitle || "My Game";
-			const sampleAuthor = metadata.author || pullRequest.user?.login || "Your Name";
-			const snippet = buildMetadataSnippet({
-				title: sampleTitle,
-				author: sampleAuthor,
-				description: metadata.description || undefined,
-				tags: Array.isArray(metadata.tags) && metadata.tags.length ? metadata.tags : undefined,
-				addedOn: metadata.addedOn || undefined,
+			const inferred = inferSubmissionMetadata({
+				content: result.content,
+				filename: result.gameFile,
+				pullRequest,
+				existingMetadata: metadata,
 			});
+			const snippet = buildMetadataSnippet(inferred);
 
 			checksSection += `> [!TIP]\n> **How to fix metadata:**\n> Click **[Edit Game File](${editUrl})** and paste this block at the very top (line 1) of \`${result.gameFile}\`:\n> \`\`\`javascript\n> ${snippet.split("\n").join("\n> ")}\n> \`\`\`\n\n`;
 		}

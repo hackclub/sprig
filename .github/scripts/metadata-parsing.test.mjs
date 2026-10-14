@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
 	buildMetadataSnippet,
 	getMetadataValue,
+	inferSubmissionMetadata,
 	parseTags,
 	validateMetadataHeader,
 } from "./review-utils.mjs";
@@ -228,5 +229,99 @@ describe("buildMetadataSnippet", () => {
 		expect(snippet).toContain("@addedOn: 2026-10-14");
 	});
 });
+
+describe("inferSubmissionMetadata", () => {
+	it("infers accurate metadata from PR details and source code comments", () => {
+		const content = `// Block Pusher (Sokoban)
+const player = "p";
+const block = "b";`;
+		const pullRequest = {
+			title: "[Sprig App] Vasko JS game",
+			user: { login: "vask3" },
+			body: `### Author name
+Author: vask3
+
+### About your game
+**What is your game about?**
+Hello, thats is my first JS game.
+
+**How do you play your game?**
+Objective: Push the block (b) onto the target tile (g).`,
+		};
+
+		const inferred = inferSubmissionMetadata({
+			content,
+			filename: "games/Vasko-JS-game.js",
+			pullRequest,
+		});
+
+		expect(inferred.title).toBe("Block Pusher");
+		expect(inferred.author).toBe("vask3");
+		expect(inferred.description).toContain("Hello, thats is my first JS game");
+		expect(inferred.tags).toEqual(["puzzle"]);
+		expect(inferred.addedOn).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+
+		// Guarantee that pasting the generated snippet passes 100% of metadata checks
+		const snippet = buildMetadataSnippet(inferred);
+		const validation = validateMetadataHeader(`${snippet}\n${content}`, "Vasko-JS-game.js");
+		expect(validation.hasHeader).toBe(true);
+		expect(validation.checks.every((c) => c.ok)).toBe(true);
+	});
+
+	it("falls back to cleaned PR title and author login when comments/body are minimal", () => {
+		const content = `const a = 1;`;
+		const pullRequest = {
+			title: "Add Dungeon Crawler Game",
+			user: { login: "gamer123" },
+			body: "",
+		};
+
+		const inferred = inferSubmissionMetadata({
+			content,
+			filename: "games/dungeon_crawler.js",
+			pullRequest,
+		});
+
+		expect(inferred.title).toBe("Dungeon Crawler Game");
+		expect(inferred.author).toBe("gamer123");
+		expect(inferred.description).toBe("A custom game called Dungeon Crawler Game built for Sprig.");
+		expect(inferred.tags).toBeDefined();
+		expect(inferred.tags.length).toBeGreaterThan(0);
+
+		const snippet = buildMetadataSnippet(inferred);
+		const validation = validateMetadataHeader(`${snippet}\n${content}`, "dungeon_crawler.js");
+		expect(validation.hasHeader).toBe(true);
+		expect(validation.checks.every((c) => c.ok)).toBe(true);
+	});
+
+	it("preserves already valid existing metadata fields", () => {
+		const content = `/*
+@title: Retro Race
+@author: Speedster
+*/`;
+		const existingMetadata = {
+			title: "Retro Race",
+			author: "Speedster",
+		};
+		const pullRequest = {
+			title: "[Sprig App] race",
+			user: { login: "someone" },
+			body: "**What is your game about?** Dodge cars at high speed.",
+		};
+
+		const inferred = inferSubmissionMetadata({
+			content,
+			filename: "games/retro_race.js",
+			pullRequest,
+			existingMetadata,
+		});
+
+		expect(inferred.title).toBe("Retro Race");
+		expect(inferred.author).toBe("Speedster");
+		expect(inferred.description).toBe("Dodge cars at high speed.");
+		expect(inferred.tags).toContain("runner");
+	});
+});
+
 
 
