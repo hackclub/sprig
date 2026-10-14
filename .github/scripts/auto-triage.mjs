@@ -826,9 +826,9 @@ function checkMetadataDate(addedOn, add) {
 
 function validateSubmissionFiles(pullFiles, addCheck) {
 	const manifest = buildSubmissionManifest(pullFiles);
-	const { gameFiles: jsFiles, gameFilesLoose, imageFiles, imageFilesLoose, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
+	const { gameFiles: jsFiles, gameFilesLoose, allImageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
 	const effectiveGameFiles = gameFilesLoose;
-	const effectiveImageFiles = imageFilesLoose ?? imageFiles;
+	const effectiveImageFiles = allImageFiles;
 	if (uppercaseGames.length > 0) {
 		const badNames = uppercaseGames.map((file) => `\`${file.filename}\``).join(", ");
 		addCheck("Directory must be lowercase", false, `Your file must be in the lowercase \`games/\` directory. Found ${badNames}.`);
@@ -877,7 +877,7 @@ function validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck
 	if (imageFiles.length > 0 && pullRequest?.head?.sha) {
 		const matchingImage = gameBase ? imageFiles.find((file) => file.filename === `games/img/${gameBase}.png`) : null;
 		const image = matchingImage ?? imageFiles[0];
-		return `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${encodeURI(image.filename)}`;
+		return `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${image.filename.split("/").map(encodeURIComponent).join("/")}`;
 	}
 	return null;
 }

@@ -17,6 +17,7 @@ describe("buildSubmissionManifest", () => {
 		expect(manifest.gameFiles).toHaveLength(1);
 		expect(manifest.imageFiles).toHaveLength(1);
 		expect(manifest.imageFilesLoose).toHaveLength(2);
+		expect(manifest.allImageFiles).toHaveLength(3);
 		expect(manifest.disallowedFiles.map((f) => f.filename)).toEqual([
 			"screenshots/my_game.png",
 			"games/sub/nested.js",
@@ -43,6 +44,8 @@ describe("validateImageFiles", () => {
 	it.each([
 		{ files: [], base: "my_game", pathOk: true, nameOk: true, match: /gallery thumbnail/ },
 		{ files: ["games/img/my_game.png"], base: "my_game", pathOk: true, nameOk: true, match: /matches the game/ },
+		{ files: ["games/my_game.png"], base: "my_game", pathOk: false, nameOk: false, match: /Image must be named `games\/img\/my_game\.png`/ },
+		{ files: ["screenshots/thumb.png"], base: "my_game", pathOk: false, nameOk: false, match: /Image must be named `games\/img\/my_game\.png`/ },
 		{ files: ["games/img/wrong.png"], base: "my_game", pathOk: true, nameOk: false, match: /Image must be named `games\/img\/my_game\.png`/ },
 		{ files: ["games/img/my_game.png"], base: null, pathOk: true, nameOk: false, match: /Add exactly one game file/ },
 		{ files: ["games/img/Retro space.png"], base: "Retro space", pathOk: true, nameOk: false, match: /rename to `games\/Retro_space\.js` and `games\/img\/Retro_space\.png`/ },

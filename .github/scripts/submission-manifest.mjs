@@ -2,6 +2,7 @@ const GAME_FILE_RE = /^games\/[A-Za-z0-9_-]+\.js$/;
 const GAME_FILE_LOOSE_RE = /^games\/[^/]+\.js$/;
 const IMAGE_FILE_RE = /^games\/img\/[A-Za-z0-9_-]+\.png$/i;
 const IMAGE_FILE_LOOSE_RE = /^games\/img\/[^/]+$/;
+const ANY_IMAGE_RE = /\.(png|jpe?g|gif|webp)$/i;
 
 export function buildSubmissionManifest(pullFiles) {
 	const files = pullFiles.map((file) => ({
@@ -12,6 +13,7 @@ export function buildSubmissionManifest(pullFiles) {
 		isGameLoose: GAME_FILE_LOOSE_RE.test(file.filename),
 		isImage: IMAGE_FILE_RE.test(file.filename),
 		isImageLoose: IMAGE_FILE_LOOSE_RE.test(file.filename),
+		isAnyImage: ANY_IMAGE_RE.test(file.filename),
 		isAllowed: GAME_FILE_LOOSE_RE.test(file.filename) || IMAGE_FILE_LOOSE_RE.test(file.filename),
 	}));
 
@@ -21,6 +23,7 @@ export function buildSubmissionManifest(pullFiles) {
 		gameFilesLoose: files.filter((file) => file.isGameLoose),
 		imageFiles: files.filter((file) => file.isImage),
 		imageFilesLoose: files.filter((file) => file.isImageLoose),
+		allImageFiles: files.filter((file) => file.isImageLoose || file.isAnyImage),
 		disallowedFiles: files.filter((file) => !file.isAllowed),
 		changedNonAddedFiles: files.filter((file) => file.status !== "added" && !file.filename.startsWith("games/")),
 		uppercaseGames: files.filter((file) => file.filename.toLowerCase().startsWith("games/") && !file.filename.startsWith("games/")),
