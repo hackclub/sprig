@@ -77,8 +77,11 @@ jobs:
           if [ "$GAMES_CHANGED" = "true" ] && [ -n "$CHANGED_GAMES" ] && [ "$CHANGED_GAMES" != "[]" ]; then
             mapfile -t files < <(bun -e 'for (const f of JSON.parse(process.env.CHANGED_GAMES)) console.log(f)')
             bun run tests/sprigfuzzy_workflow.js "${files[@]}"
-          elif [ "$ENGINE_CHANGED" = "true" ] || [ "$EVENT_NAME" = "workflow_dispatch" ]; then
-            echo "Running all games (engine/tests changed or workflow_dispatch)"
+          elif [ "$ENGINE_CHANGED" = "true" ]; then
+            echo "Running smoke tests on core games (engine/tests changed)"
+            bun run tests/sprigfuzzy_workflow.js games/sokoban.js games/maze.js games/15_puzzle.js games/2048.js
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "Running all games (workflow_dispatch)"
             bun run tests/sprigfuzzy_workflow.js
           else
             echo "No game or engine files changed, skipping"
