@@ -640,8 +640,8 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				branchName = openPR.pullRequest.head.ref;
 				try {
 					baseSha = await fetchLatestCommitSha(accessToken, repoOwner, repoName, branchName);
-				} catch (error) {
-					if (openPR.pullRequest.state === "closed") {
+				} catch (error: any) {
+					if (openPR.pullRequest.state === "closed" && (error?.status === 404 || error?.message?.includes("404"))) {
 						console.warn(`Branch ${branchName} not found on closed PR #${pullNumber}, creating new PR instead.`);
 						openPR = null;
 					} else {
@@ -839,7 +839,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 				const prUpdated = codeChanged || titleChanged || bodyChanged;
 				if (isReopened) {
 					publishOutcome.value = "reopened";
-				} else if (closedNeedsReviewer && prUpdated) {
+				} else if (closedNeedsReviewer) {
 					publishOutcome.value = "closed_updated";
 				} else {
 					publishOutcome.value = prUpdated ? "updated" : "unchanged";
@@ -1243,7 +1243,7 @@ export default function EditorNavbar(props: EditorNavbarProps) {
 											updated: "Your open pull request for this game was updated with this version.",
 											unchanged: "Your pull request is already up to date with this version.",
 											reopened: "Your pull request was updated and reopened on GitHub.",
-											closed_updated: `Your game was updated in pull request #${githubPRUrl.value?.match(/\/pull\/(\d+)/)?.[1] ?? ""}. Because it was closed by a reviewer, ask a reviewer to reopen it when you're ready!`,
+											closed_updated: `Your game is up to date in pull request #${githubPRUrl.value?.match(/\/pull\/(\d+)/)?.[1] ?? ""}. Because it was closed by a reviewer, ask a reviewer to reopen it when you're ready!`,
 										}[publishOutcome.value]}
 									</p>
 									<Button onClick={() => { githubPRUrl.value && window.open(githubPRUrl.value, "_blank") }}>

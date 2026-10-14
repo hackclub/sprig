@@ -447,7 +447,7 @@ export async function findGamePullRequest(
 		throw new Error(`Failed to check all open pull requests (${skippedCount} failed to load). Please try again.`);
 	}
 
-	if (closedSavedPR) {
+	if (closedSavedPR && closedSavedPR.files.some((file: any) => file.filename === gamePath && file.status !== "removed")) {
 		return closedSavedPR;
 	}
 
@@ -508,7 +508,7 @@ export async function findGamePullRequest(
 		throw new Error(`Failed to check all closed pull requests (${closedSkippedCount} failed to load). Please try again.`);
 	}
 
-	return null;
+	return closedSavedPR ?? null;
 }
 
 export async function fetchCommitTreeSha(
