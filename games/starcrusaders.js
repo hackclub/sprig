@@ -108,9 +108,9 @@ rrrrrrrrrrrrrrrr
 
 setMap(levelLayout)
 
-const oraSound = tune`C4 E4`
-const deflectSound = tune`G4 C5`
-const deadSound = tune`C3 B2 A2`
+const oraSound = tune``
+const deflectSound = tune``
+const deadSound = tune``
 
 let points = 0
 let gameOver = false

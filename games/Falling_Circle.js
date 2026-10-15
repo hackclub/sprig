@@ -50,14 +50,13 @@ setPushables({
 
 onInput("j", () => {
   if (getFirst(player).y == 1 && getFirst(player).x == 0) {
-    playTune(tune`500: c4~500;`);
+    playTune(tune`500: c4~500`);
     combo += 1
     getFirst(player).remove();
     addSprite(Math.floor(Math.random() * 2), 0, player);
     time_on_bottom = 0
   } else {
-    playTune(tune`300: c3-300;
-300: a2-300;`)
+    playTune(tune`300: c3-300`)
     combo = 0
     time_on_bottom = 0
   }
@@ -65,14 +64,13 @@ onInput("j", () => {
 
 onInput("k", () => {
   if (getFirst(player).y == 1 && getFirst(player).x == 1) {
-    playTune(tune`500: c4~500;`);
+    playTune(tune`500: c4~500`);
     combo += 1
     getFirst(player).remove();
     addSprite(Math.floor(Math.random() * 2), 0, player);
     time_on_bottom = 0
   } else {
-    playTune(tune`300: c3-300;
-300: a2-300;`)
+    playTune(tune`300: c3-300`)
     combo = 0
     time_on_bottom = 0
   }

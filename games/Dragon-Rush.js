@@ -513,6 +513,7 @@ afterInput(() => {
     keyCollect = true;
     getFirst(key).remove();
   }
+  if (!getFirst(portalOne) || !getFirst(portalTwo)) return
   if (getFirst(player).x == getFirst(portalOne).x && getFirst(player).y == getFirst(portalOne).y && level == 5) {
     getFirst(player).x = getFirst(portalTwo).x;
     getFirst(player).y = getFirst(portalTwo).y;

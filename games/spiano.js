@@ -219,6 +219,7 @@ addText(" A D J  L  W S  I K", {
 })
 
 onInput("a", () => {
+  if (!getTile(0, 1).find(s => s.type == unpressedKey)) return
   getTile(0, 1).find(s => s.type == unpressedKey).remove()
   addSprite(0, 1, pressedKey)
   playTune(tuneA)
@@ -229,6 +230,7 @@ onInput("a", () => {
 })
 
 onInput("d", () => {
+  if (!getTile(1, 1).find(s => s.type == unpressedKey)) return
   getTile(1, 1).find(s => s.type == unpressedKey).remove()
   addSprite(1, 1, pressedKey)
   playTune(tuneD)
@@ -239,6 +241,7 @@ onInput("d", () => {
 })
 
 onInput("j", () => {
+  if (!getTile(2, 1).find(s => s.type == unpressedKey)) return
   getTile(2, 1).find(s => s.type == unpressedKey).remove()
   addSprite(2, 1, pressedKey)
   playTune(tuneJ)
@@ -249,6 +252,7 @@ onInput("j", () => {
 })
 
 onInput("l", () => {
+  if (!getTile(3, 1).find(s => s.type == unpressedKey)) return
   getTile(3, 1).find(s => s.type == unpressedKey).remove()
   addSprite(3, 1, pressedKey)
   playTune(tuneL)
@@ -259,6 +263,7 @@ onInput("l", () => {
 })
 
 onInput("w", () => {
+  if (!getTile(4, 1).find(s => s.type == unpressedKey)) return
   getTile(4, 1).find(s => s.type == unpressedKey).remove()
   addSprite(4, 1, pressedKey)
   playTune(tuneW)
@@ -269,6 +274,7 @@ onInput("w", () => {
 })
 
 onInput("s", () => {
+  if (!getTile(5, 1).find(s => s.type == unpressedKey)) return
   getTile(5, 1).find(s => s.type == unpressedKey).remove()
   addSprite(5, 1, pressedKey)
   playTune(tuneS)
@@ -279,6 +285,7 @@ onInput("s", () => {
 })
 
 onInput("i", () => {
+  if (!getTile(6, 1).find(s => s.type == unpressedKey)) return
   getTile(6, 1).find(s => s.type == unpressedKey).remove()
   addSprite(6, 1, pressedKey)
   playTune(tuneI)
@@ -289,6 +296,7 @@ onInput("i", () => {
 })
 
 onInput("k", () => {
+  if (!getTile(7, 1).find(s => s.type == unpressedKey)) return
   getTile(7, 1).find(s => s.type == unpressedKey).remove()
   addSprite(7, 1, pressedKey)
   playTune(tuneK)

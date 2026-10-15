@@ -535,7 +535,7 @@ console.log(getComplement("pqe3", "gdh3"));
 class SetGame {
   constructor() {
     this.deck = Object.keys(bitmaps);
-    console.assert(this.deck.length == 81);
+    if (console.assert) console.assert(this.deck.length == 81);
     shuffleList(this.deck);
     this.board = [];
     while (this.board.length < 12) {

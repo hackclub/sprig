@@ -951,7 +951,7 @@ function getMovable(direction) {
   return true
 }
 
-playingTracks = []
+let playingTracks = []
 
 function play() {
   bgmTracks.forEach((e) => playingTracks.push(playTune(e, Infinity)))

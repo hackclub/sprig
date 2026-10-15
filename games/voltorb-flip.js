@@ -899,6 +899,7 @@ onInput("w", () => {
   getFirst(player).y -= 1;
 });
 let easportsitsinthegame=true;
+let saveX, saveY, posnum, savedX, savedY;
 onInput("a", () => {
   getFirst(player).x -= 1;
 });

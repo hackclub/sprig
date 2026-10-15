@@ -656,19 +656,19 @@ let lettersprites = [
 ]
 
 // create tunes
-TuneWrong = tune`
+let TuneWrong = tune`
 200,
 200: A5-200 + G4^200 + F4~200 + E4/200,
 200: F4^200 + E4~200 + D4/200 + F5-200,
 200: C4/200 + D4~200 + E4^200 + D5-200,
 5600`
-TuneRight = tune`
+let TuneRight = tune`
 166.66666666666666,
 166.66666666666666: D5-166.66666666666666 + C4/166.66666666666666 + D4~166.66666666666666 + E4^166.66666666666666,
 166.66666666666666: F5-166.66666666666666 + E4~166.66666666666666 + D4/166.66666666666666 + G4^166.66666666666666,
 166.66666666666666: B4^166.66666666666666 + A5-166.66666666666666 + G4~166.66666666666666 + E4/166.66666666666666,
 4666.666666666666`
-TuneNextLevel = tune`
+let TuneNextLevel = tune`
 125,
 125: F4^125 + E4~125 + C4/125,
 125: C4/125 + E4~125 + F4^125,
@@ -683,6 +683,7 @@ TuneNextLevel = tune`
 2625`
 
 // create letter values for 7 letters in array to be referenced and able to be refreshed with the function
+var lettervalues;
 function updatelettervalues() {
   lettervalues = [
     LetterValue1,

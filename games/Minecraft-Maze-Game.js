@@ -437,12 +437,12 @@ onInput("i", () => {
 afterInput(() => {
 
 //Get sprite reference variables
-  playerp = getFirst(player);
-  teleportp = getFirst(teleport);
-  lava_array = getAll(lava);
-  tnt_array = getAll(tnt);
-  plate_array = getAll(plate);
-  breakable_array = getAll(breakable_wall);
+  let playerp = getFirst(player);
+  let teleportp = getFirst(teleport);
+  let lava_array = getAll(lava);
+  let tnt_array = getAll(tnt);
+  let plate_array = getAll(plate);
+  let breakable_array = getAll(breakable_wall);
   
 //Player touches teleport gets sent into next level
   if (teleportp && playerp.y == teleportp.y && playerp.x == teleportp.x)
@@ -496,6 +496,7 @@ for (let tnt_single of tnt_array) {
         }
       }
     }
+}
 
 //lava destroys tnt
 for (let tnt_single of tnt_array) {
@@ -505,7 +506,6 @@ for (let tnt_single of tnt_array) {
     tnt_single.remove();
   }
     
-}
 }
 }
 })

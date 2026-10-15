@@ -189,18 +189,22 @@ setPushables({
 })
 
 onInput("s", () => {
+	if (!getFirst(player)) { skipAfter = true; return }
 	getFirst(player).y += 1
     playTune(walk)
 })
 onInput("w", () => {
+	if (!getFirst(player)) { skipAfter = true; return }
 	getFirst(player).y -= 1
     playTune(walk)
 })
 onInput("d", () => {
+	if (!getFirst(player)) { skipAfter = true; return }
 	getFirst(player).x += 1
     playTune(walk)
 })
 onInput("a", () => {
+	if (!getFirst(player)) { skipAfter = true; return }
 	getFirst(player).x -= 1
     playTune(walk)
 })
@@ -209,11 +213,14 @@ onInput("k", () => {
 })
 const traps = tilesWith(trap)
 onInput("j", () => {
+ if (!getFirst(trap)) { skipAfter = true; return }
  getFirst(trap).remove();
   
 })
 let restart = 0
+let skipAfter = false
 afterInput(() => {
+  if (skipAfter) { skipAfter = false; return }
   clearText()
   if (restart === 0){
     addText("Get the Treasure!", {y: 11, color: color`6` });

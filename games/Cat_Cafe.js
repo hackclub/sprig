@@ -571,8 +571,6 @@ setMap(levels[level])
 for (let y = 0; y < levels[6].length; y++) {
   for (let x = 0; x < levels[6][y].length; x++) {
     if (levels[6][y][x] === 'm') {
-      outside.x = x;
-      outside.y = y;
       break;
     }
   }
@@ -660,19 +658,19 @@ onInput("a", () => {
 /* Player 2 */
 
 onInput("k", () => {
-  getFirst(player2).y += 1
+  if (getFirst(player2)) getFirst(player2).y += 1
 })
 
 onInput("i", () => {
-  getFirst(player2).y -= 1
+  if (getFirst(player2)) getFirst(player2).y -= 1
 })
 
 onInput("l", () => {
-  getFirst(player2).x += 1
+  if (getFirst(player2)) getFirst(player2).x += 1
 })
 
 onInput("j", () => {
-  getFirst(player2).x -= 1
+  if (getFirst(player2)) getFirst(player2).x -= 1
 })
 
 let previousX = getFirst(player).x
@@ -969,7 +967,7 @@ afterInput(() => {
     playback.end(starttune);
     playTune(traptune);
     if (level === 0) {
-      playTune(starttune, Inifity);
+      playTune(starttune, Infinity);
     }
   }
 
@@ -988,9 +986,6 @@ afterInput(() => {
 
     cat.x = outx;
     cat.y = outy;
-
-    player.x = cat.x;
-    player.y = cat.y;
 
     console.log(outx);
     console.log(outy);

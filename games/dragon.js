@@ -313,23 +313,23 @@ onInput("a", () => {
 })
 
 onInput("j", () => {
-  getFirst(fire).x -= 1
+  if (getFirst(fire)) getFirst(fire).x -= 1
 })
 
 onInput("l", () => {
-  getFirst(fire).x += 1
+  if (getFirst(fire)) getFirst(fire).x += 1
 })
 
 onInput("i", () => {
-  getFirst(fire).y -= 1
+  if (getFirst(fire)) getFirst(fire).y -= 1
 })
 
 onInput("k", () => {
-  getFirst(fire).y += 1
+  if (getFirst(fire)) getFirst(fire).y += 1
 })
 
 onInput("l", () => {
-  getFirst(fire).x += 1
+  if (getFirst(fire)) getFirst(fire).x += 1
 })
 
 function collisionFor1(sprite1, sprite2) {

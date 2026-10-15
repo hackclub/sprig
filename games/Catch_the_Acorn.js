@@ -396,19 +396,23 @@ addText("'k' to continue", { x: 2, y: 13, color: color`2` });
 
 
 onInput("s", () => { //move down
+  if (!getFirst(player)) return
   getFirst(player).y += 1
 });
 
 onInput("w", () => { //move up
+  if (!getFirst(player)) return
   getFirst(player).y -= 1
 
 });
 
 onInput("d", () => { //move right
+  if (!getFirst(player)) return
   getFirst(player).x += 1
 });
 
 onInput("a", () => { //move left
+  if (!getFirst(player)) return
   getFirst(player).x -= 1
 });
 

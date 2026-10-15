@@ -19,7 +19,7 @@ const melody = tune`
 500: B5~500,
 500: A5^500,
 14000`;
-const levelup = tune`;
+const levelup = tune`
 500: E5~500,
 500: E5~500,
 500: F5-500 + A5^500,

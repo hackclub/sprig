@@ -249,8 +249,8 @@ addText("<A D>   W^", {
   color: color`D`
 })
 
-isJumping = false;
-isDied = false;
+let isJumping = false;
+let isDied = false;
 
 function gravity() {
   let prev_y = getFirst(player).y;

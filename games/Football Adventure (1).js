@@ -651,6 +651,7 @@ setPushables({
 })
 
 let currentLevel = levels[level];
+var win, goal, ballOutOfPlay, ownGoal;
 
 onInput("j", () => {
   resetGame();

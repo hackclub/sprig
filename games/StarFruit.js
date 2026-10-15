@@ -775,7 +775,7 @@ function bugHit()
   {
     for(let i = 0; i < bugs[j].length; i++)
     {
-      bug = bugs[j][i];
+      let bug = bugs[j][i];
       if(bug.x == p.x && bug.y == p.y)
       {
         background.end();

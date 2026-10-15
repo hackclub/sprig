@@ -1193,6 +1193,7 @@ function cycleSelected(value) {
 }
 
 function getSelectedSprite() {
+	if (!getFirst(cursor)) return
 	const tile = getTile(getFirst(cursor).x, getFirst(cursor).y).filter((v) =>
 		v.type !== cursor
 	)
@@ -1344,7 +1345,7 @@ function* botRead() {
 			yield
 			continue
 		}
-		if (writable_information.includes(tile?.type)) {
+		if (writable_information.includes(tile.type)) {
 			playTune(sounds.read)
 			yield // wait a bit to "read" the information
 			const dir = getDirection(tile.type, lastDirection)
@@ -1368,17 +1369,17 @@ function* botRead() {
 updateTutorial()
 
 onInput('s', () => {
-	if (isPlaying === false) getFirst(cursor).y += 1
+	if (isPlaying === false && getFirst(cursor)) getFirst(cursor).y += 1
 })
 onInput('w', () => {
-	if (isPlaying === false) getFirst(cursor).y -= 1
+	if (isPlaying === false && getFirst(cursor)) getFirst(cursor).y -= 1
 })
 
 onInput('d', () => {
-	if (isPlaying === false) getFirst(cursor).x += 1
+	if (isPlaying === false && getFirst(cursor)) getFirst(cursor).x += 1
 })
 onInput('a', () => {
-	if (isPlaying === false) getFirst(cursor).x -= 1
+	if (isPlaying === false && getFirst(cursor)) getFirst(cursor).x -= 1
 })
 
 onInput('i', () => {
@@ -1387,6 +1388,7 @@ onInput('i', () => {
 		isPlaying = false
 		return
 	}
+	if (!getFirst(cursor)) return
 	getFirst(cursor).remove()
 	isPlaying = true
 	const spawn = getAll().filter((v) => spawn_tilecycle.includes(v.type))[0]

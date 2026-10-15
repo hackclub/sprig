@@ -135,7 +135,7 @@ D....DD.D.D.....
 ......DDDDD.....
 ......DDDDD.....`]
 )
-levels = [map`
+let levels = [map`
 ..............g
 ..............g
 ..............g
@@ -144,9 +144,9 @@ p.............g
 ..............g
 ..............g`]
 
-level = 0
-levelCount = 0;
-speed=650
+let level = 0
+let levelCount = 0;
+let speed=650
 setMap(levels[level])
 
 setPushables({
@@ -158,20 +158,20 @@ setSolids([player, kelp])
 setBackground(aqua)
 
 function spawnkelp() {
-    randomnumber = Math.floor(Math.random() * 3)+4
+    let randomnumber = Math.floor(Math.random() * 3)+4
     for (let i = 0; i < randomnumber; i++) {
-    randomykelp = Math.floor(Math.random() * height())
-    randomxkelp = Math.floor(Math.random() * (width() - 2))
+    let randomykelp = Math.floor(Math.random() * height())
+    let randomxkelp = Math.floor(Math.random() * (width() - 2))
     addSprite(randomxkelp, randomykelp, kelp)
     }
 }
 
 spawnkelp()
 function sharkfunc() {
-  randomy = Math.floor(Math.random() * height())
-  randomx = Math.floor(Math.random() * 3)+1
+  let randomy = Math.floor(Math.random() * height())
+  let randomx = Math.floor(Math.random() * 3)+1
   addSprite(width()-randomx, randomy, shark)
-  sharks = getAll(shark)
+  let sharks = getAll(shark)
   for (let i = 0; i < sharks.length; i++) {
     if (tilesWith(player, shark).length > 0) {
       setMap(levels[level])
