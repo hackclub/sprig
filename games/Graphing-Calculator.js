@@ -27,6 +27,7 @@ You need a multiplication sign in between
 
 */
 var isdead = false
+var graphStats
 
 graphStats = {
   // Width and height need to be odd numbers

@@ -595,7 +595,7 @@ afterInput(() => {
   if (tick % 2 === 0) {
     const allMoodTiles = MOODS.flatMap(type => tilesWith(type))
     allMoodTiles.forEach(tile => {
-      if (Math.random() < 0.4) {
+      if (Math.random() < 0.4 && tile.x !== undefined) {
         changeMoodAt(tile.x, tile.y)
       }
     })

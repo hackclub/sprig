@@ -173,7 +173,7 @@ const gameLoopFunc = () => {
     // Pineapple if possible
     case 1:
       // Ensure possibility
-      if (!(getTile(4, !newY).map(x => x.type).includes(pineapple) || getTile(5, !newY).map(x => x.type).includes(pineapple)))
+      if (!(getTile(4, 1 - newY).map(x => x.type).includes(pineapple) || getTile(5, 1 - newY).map(x => x.type).includes(pineapple)))
         addSprite(5, newY, pineapple);
       else
         addSprite(5, newY, mustard);

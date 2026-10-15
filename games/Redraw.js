@@ -85,6 +85,7 @@ const star_empty = "e"
 const star_full = "f"
 
 let cursor_inverted = false // Used if cursor is on black tile
+let curr_level, pos, x, y, sprite, middle, i, s, p, shwing_original
 
 let player_map = [ player, get_default_cursor() ]
 
@@ -759,18 +760,22 @@ function restart(){
 load_level(level)
 
 onInput("w", () => {
+  if (!getFirst(player)) return
   getFirst(player).y -= 1
   update_cursor_inversion()
 })
 onInput("s", () => {
+  if (!getFirst(player)) return
   getFirst(player).y += 1
   update_cursor_inversion()
 })
 onInput("a", () => {
+  if (!getFirst(player)) return
   getFirst(player).x -= 1
   update_cursor_inversion()
 })
 onInput("d", () => {
+  if (!getFirst(player)) return
   getFirst(player).x += 1
   update_cursor_inversion()
 })

@@ -262,7 +262,7 @@ function tick() {
       const col = cols[px].split("");
       col[pTileY] = ".";
       cols[px] = col.join("");
-      playTune(tune`C5/8`, 1);
+      playTune(tune``, 1);
     }
     if (pTile === H) {
       endGame();
@@ -273,7 +273,7 @@ function tick() {
       const col = cols[px].split("");
       col[pTileY] = ".";
       cols[px] = col.join("");
-      playTune(tune`G5/8 E5/8 C5/8`, 1);
+      playTune(tune``, 1);
     }
   }
 
@@ -337,7 +337,7 @@ function endGame() {
   clearInterval(tickId);
   addText("GAME OVER", { x: 5, y: 6, color: color`4` });
   addText("Press J to restart", { x: 2, y: 8, color: color`L` });
-  playTune(tune`C4/4 G3/4 E3/4 C3/2`, 1);
+  playTune(tune``, 1);
 }
 // rhw wuz here
 // --- INPUT HANDLING ---
@@ -353,10 +353,10 @@ onInput("w", () => {
       superJumpCharge--;
       superJumpActive = true;
       superJumpTimer = 60; // Lasts for 60 ticks
-      playTune(tune`G5/4`, 1);
+      playTune(tune``, 1);
     } else {
       vy = -3.0; // Normal jump
-      playTune(tune`C5/8`, 1);
+      playTune(tune``, 1);
     }
   }
 });

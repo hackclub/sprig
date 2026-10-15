@@ -368,6 +368,7 @@ wwwwww.
 h.....u`]
 
 let level = 0
+var me, sprites, wallThere, spridgets, fires_left, fires_right, fires_up, fires_down, oldX, oldY, objs
 setMap(levels[level])
 
 onInput("w", () => {

@@ -17,7 +17,8 @@ const key = "k"
 const door = "d"
 const trigger2 = "j"
 const movingWall2="e"
-triggerPressedOnce = false
+let triggerPressedOnce = false
+let nextX, nextY
 
 setLegend(
   [player, bitmap`

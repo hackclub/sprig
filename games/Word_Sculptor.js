@@ -19,7 +19,7 @@ let currentLetterIndex = 0;
 
 // Load custom words from local storage
 function loadCustomWords() {
-  const storedWords = localStorage.getItem('customWords');
+  const storedWords = typeof localStorage !== 'undefined' && localStorage.getItem('customWords');
   if (storedWords) {
     words = [...defaultWords, ...JSON.parse(storedWords)];
   }
@@ -27,7 +27,7 @@ function loadCustomWords() {
 
 // Save custom words to local storage
 function saveCustomWords() {
-  localStorage.setItem('customWords', JSON.stringify(words.filter(word => !defaultWords.includes(word))));
+  if (typeof localStorage !== 'undefined') localStorage.setItem('customWords', JSON.stringify(words.filter(word => !defaultWords.includes(word))));
 }
 
 // Sprites
@@ -117,8 +117,8 @@ onInput("i", () => {
 
 // Add Custom Words
 onInput("l", () => {
-  if (gameState === "playing") {
-    addCustomWord(prompt("Enter a new word:").toUpperCase());
+  if (gameState === "playing" && typeof prompt !== 'undefined') {
+    addCustomWord((prompt("Enter a new word:") || "").toUpperCase());
     initGame();
     update();
   }

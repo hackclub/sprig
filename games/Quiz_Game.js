@@ -275,6 +275,7 @@ onInput("d", () => {
   answerInput = "d";
 })
 let isCorrectAnswer = false;
+let iscorrectAnswer, isGameOver;
 
 afterInput(() => {
 

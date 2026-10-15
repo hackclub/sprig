@@ -62,6 +62,7 @@ let choices = ['r', 'a', 's'];
 let score = 0;
 let streak = 0;
 let level = 1;
+let resultColor;
 
 
 onInput('w', () => makeChoice('r'));

@@ -533,7 +533,7 @@ function tick() {
 
 function gameLoop() {
   tick();
-  setInterval(gameLoop, 30);
+  setTimeout(gameLoop, 30);
 }
 
 gameLoop();

@@ -339,6 +339,7 @@ function findShortestPath(x, y) {
 
 
 var gameOver = false;
+let tile;
 
 onInput("w", () => {
   tile = getTile(getFirst(player).x, getFirst(player).y-1)

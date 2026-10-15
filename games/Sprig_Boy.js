@@ -229,7 +229,7 @@ function makeBox(huh) {
   else {
     isWall = false
   }
-  if (!boxExists && !isWall) {
+  if (!boxExists && !isWall && getFirst(player).x + huh >= 0 && getFirst(player).x + huh < width()) {
     addSprite(getFirst(player).x + huh, getFirst(player).y, box)
     boxExists = true
   }

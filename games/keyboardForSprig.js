@@ -51,7 +51,7 @@ function calcKeyboard() {
   let charsCount = {}
 
   for (let word of possibleWords) { //we count the sum of characters at current index
-    letterAtCurrentIndex = word.charAt(currentCharIndex % word.length)
+    let letterAtCurrentIndex = word.charAt(currentCharIndex % word.length)
 
     charsCount[letterAtCurrentIndex] = charsCount[letterAtCurrentIndex] ? charsCount[letterAtCurrentIndex] + 1 : 1
   }

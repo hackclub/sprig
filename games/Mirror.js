@@ -233,26 +233,30 @@ setPushables({
 })
 
 onInput("w", () => {
+  if (!getFirst(player)) return
   getFirst(player).y -= 1
-  getFirst(mirror).y += 1
+  if (getFirst(mirror)) getFirst(mirror).y += 1
   playTune(move)
 })
 
 onInput("s", () => {
+  if (!getFirst(player)) return
   getFirst(player).y += 1
-  getFirst(mirror).y -= 1
+  if (getFirst(mirror)) getFirst(mirror).y -= 1
   playTune(move)
 })
 
 onInput("a", () => {
+  if (!getFirst(player)) return
   getFirst(player).x -= 1;
-  getFirst(mirror).x += 1;
+  if (getFirst(mirror)) getFirst(mirror).x += 1;
   playTune(move)
 });
 
 onInput("d", () => {
+  if (!getFirst(player)) return
   getFirst(player).x += 1;
-  getFirst(mirror).x -= 1
+  if (getFirst(mirror)) getFirst(mirror).x -= 1
   playTune(move)
 
 });
@@ -271,6 +275,7 @@ onInput("i", () => {
 })
 
 afterInput(() => {
+  if (!getFirst(player) || !getFirst(mirror)) return
   const playerTile = getTile(getFirst(player).x, getFirst(player).y)
   const mirrorTile = getTile(getFirst(mirror).x, getFirst(mirror).y)
 

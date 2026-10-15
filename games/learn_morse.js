@@ -1367,22 +1367,22 @@ setPushables({
 // inputs for player movement control
 onInput("s", () => {
   playTune(tMove);
-  getFirst(player).y += 1; // positive y is downwards
+  if (getFirst(player)) getFirst(player).y += 1; // positive y is downwards
 });
 
 onInput("d", () => {
   playTune(tMove);
-  getFirst(player).x += 1;
+  if (getFirst(player)) getFirst(player).x += 1;
 });
 
 onInput("a", () => {
   playTune(tMove);
-  getFirst(player).x -= 1;
+  if (getFirst(player)) getFirst(player).x -= 1;
 });
 
 onInput("w", () => {
   playTune(tMove);
-  getFirst(player).y -= 1;
+  if (getFirst(player)) getFirst(player).y -= 1;
 });
 
 // input to reset level

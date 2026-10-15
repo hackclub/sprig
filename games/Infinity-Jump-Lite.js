@@ -17,6 +17,7 @@ let gravity = 1
 let canFall = false
 let falling = false
 let jumping = false
+let grounded
 
 setLegend(
   [ player, bitmap`

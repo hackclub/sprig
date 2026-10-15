@@ -551,6 +551,7 @@ const winLvlMap = [
 ............
 ............`]
 
+let skipAfter = false
 function winlvl (){
  
 }
@@ -563,20 +564,24 @@ setPushables({
 
 onInput("w", () => {
   clearText()
+	if (!getFirst(player)) { skipAfter = true; return }
 	getFirst(player).y -= 1
 })
 
 onInput("a", () => {
   clearText()
+	if (!getFirst(player)) { skipAfter = true; return }
 	getFirst(player).x -= 1
 })
 
 onInput("d", () => {
   clearText()
+	if (!getFirst(player)) { skipAfter = true; return }
 	getFirst(player).x += 1
 })
 onInput("s", () => {
   clearText()
+	if (!getFirst(player)) { skipAfter = true; return }
 	getFirst(player).y += 1
 })
 
@@ -597,6 +602,7 @@ afterInput(() => {
 })
 
 afterInput(() => {
+  if (skipAfter) { skipAfter = false; return }
   const purplePortalsCovered = tilesWith(player, prportal);
   const bluePortalsCovered = tilesWith(player, bportal);
   

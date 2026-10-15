@@ -311,6 +311,7 @@ setPushables({
 })
 
 onInput("d", () => {
+  if (!getFirst(player)) return;
   getFirst(player).x += 1;
   
   let breadSprite = getFirst(bread);
@@ -340,6 +341,7 @@ onInput("d", () => {
 });
 
 onInput("a", () => {
+  if (!getFirst(player)) return;
   getFirst(player).x -= 1;
   
   let breadSprite = getFirst(bread);

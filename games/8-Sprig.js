@@ -516,7 +516,7 @@ function startGame() {
   gameStarted = true;
   clearText()
   nextLevel()
-  startTime = performance.now()
+  startTime = Date.now()
 }
 
 // special level switcher logic
@@ -538,7 +538,7 @@ function nextLevel() {
     level = 1; // keep level the same for simplicity
     setMap(levels[level])
     addSprite(0, 0, cursor)
-    startTime = performance.now()
+    startTime = Date.now()
 
     // generate new puzzle configuration
     let puzzle = generateRandomPuzzle();
@@ -562,7 +562,7 @@ function endlessStats() { // stats screen after every solve in endless mode
   statsShowing = true;
   setMap(endScreenLevel[0])
 
-  endTime = performance.now()
+  endTime = Date.now()
   var timeDiff = endTime - startTime; //in ms
   // strip the ms and convert to seconds
   timeDiff /= 1000;
@@ -590,7 +590,7 @@ function endlessStats() { // stats screen after every solve in endless mode
 function gameOver() { // only in speedrun mode
   setMap(endScreenLevel[0])
 
-  endTime = performance.now()
+  endTime = Date.now()
   var timeDiff = endTime - startTime; //in ms
   // strip the ms and convert to seconds
   timeDiff /= 1000;

@@ -1113,7 +1113,7 @@ setSolids([player, tile1])
 let boss1interval = null
 // gravity and ticks
 function Gravity() {
-  if (level != 0){
+  if (level != 0 && getFirst(player)){
     getFirst(player).y += 1;
   }
 }
@@ -1409,6 +1409,7 @@ function nextLevel() {
         })
         setBackground(background2);
     }
+    if (!levels[level]) return
     setMap(levels[level]);
     if (level == levels.length - 2) {
         clearInterval(bossdash)
@@ -1606,7 +1607,7 @@ function clockDoor(time, x, y) {
 }
 function Spawner(delay, delayrate, x, y, sprite, repeat){
   for (let i = 0; i < repeat+1; i++) {
-    setTimeout(function(){addSprite(x, y, sprite)}, delay + (delayrate*i))
+    setTimeout(function(){try { addSprite(x, y, sprite) } catch (e) {}}, delay + (delayrate*i))
   }
 }
 let playerX = 0
@@ -1709,7 +1710,7 @@ function Boss1() {
     if (Boss1attack > 25 && canAttack) {
        // console.log("dash")
         canAttack = false
-        if (getFirst(boss1p1).x == 1) {
+        if (getFirst(boss1p1) && getFirst(boss1p1).x == 1) {
             let plat1x = Math.floor(Math.random() * 3);
             let plat2x = Math.floor(Math.random() * 3);
             let savex = width() / 2 + plat1x
@@ -1813,7 +1814,7 @@ function Boss1() {
                 }, 300)
             }, 400);
         } 
-        if (getFirst(boss1p1).x == width() - 3) {
+        if (getFirst(boss1p1) && getFirst(boss1p1).x == width() - 3) {
             let plat1x = Math.floor(Math.random() * 3);
             let plat2x = Math.floor(Math.random() * 3);
             let savex = width() / 2 + plat1x
@@ -1922,7 +1923,7 @@ function Boss1() {
     if (Boss1attack < 25 && canAttack) {
         // console.log("stars")
         canAttack = false
-        if (getFirst(boss1p1).x == 1) {
+        if (getFirst(boss1p1) && getFirst(boss1p1).x == 1) {
             let interval = 0
             let SpawnStar = setInterval(function() {
                 let randint = Math.floor(Math.random() * 1)
@@ -1948,7 +1949,7 @@ function Boss1() {
                 clearInterval(ThrowStar)
             }
         } 
-        else if (getFirst(boss1p1).x == width() - 3) {
+        else if (getFirst(boss1p1) && getFirst(boss1p1).x == width() - 3) {
             let interval = 0
             let SpawnStar = setInterval(function() {
                 let randint = Math.floor(Math.random() * 2)
@@ -2039,6 +2040,7 @@ let facingLeft = true;
 onInput("d", () => {
   if (level != 0){
     if (!facingLeft) {
+        if (!getFirst(player)) return
         getFirst(player).x += 1;
     }
     facingLeft = false;
@@ -2086,6 +2088,7 @@ let jumps = 0;
 onInput("w", () => {
   if (level != 0){
     if (jumps >= 1) {
+        if (!getFirst(player)) return
         getFirst(player).y -= 1;
         jumps -= 1
     };
@@ -2096,6 +2099,7 @@ onInput("w", () => {
 onInput("a", () => {
   if (level != 0){
     if (facingLeft) {
+        if (!getFirst(player)) return
         getFirst(player).x -= 1;
     }
     facingLeft = true;
@@ -2150,6 +2154,7 @@ let interval1 = null;
 let interval2 = null;
 onInput("j", () => {
   if (level != 0){
+      if (!getFirst(player)) return
       if (facingLeft) {
           addSprite(getFirst(player).x - 1, getFirst(player).y, attack)
           interval1 = setInterval(clearAttack, 200);

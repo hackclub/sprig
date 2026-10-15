@@ -304,7 +304,8 @@ function getRndInt(min, max) {
 
 function getRandomInt(max) {
   const typedArray = new Uint32Array(1);
-  crypto.getRandomValues(typedArray);
+  if (typeof crypto !== "undefined") crypto.getRandomValues(typedArray);
+  else typedArray[0] = Math.random() * 4294967296;
   const res = typedArray % (max + 1);
 
   return res;

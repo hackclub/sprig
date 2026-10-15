@@ -8,9 +8,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 */
-const script = document.createElement('script');
+if (typeof document !== 'undefined') { const script = document.createElement('script');
 script.src = 'https://cdn.jsdelivr.net/gh/hackclub/sprig@1.1.0/dist/sprig.min.js';
-document.head.appendChild(script);
+document.head.appendChild(script); }
 
 const player = "p"
 const border = "b"
@@ -311,7 +311,7 @@ fffffffffffffff`
 
 setMap(levels[level])
 onInput("s", () => {
-  getFirst(player).y += 1
+  if (getFirst(player)) getFirst(player).y += 1
 })
 onInput("w", () => {
   if (current_map == "shop") {
@@ -321,14 +321,14 @@ onInput("w", () => {
     setMap(levels[level]);
     new_game();
   } else {
-    getFirst(player).y -= 1
+    if (getFirst(player)) getFirst(player).y -= 1
   }
 })
 onInput("a", () => {
-  getFirst(player).x -= 1
+  if (getFirst(player)) getFirst(player).x -= 1
 })
 onInput("d", () => {
-  getFirst(player).x += 1
+  if (getFirst(player)) getFirst(player).x += 1
 })
 onInput("k", () => {
   if (level == 0) {

@@ -172,6 +172,7 @@ p.....4...
 ......4...`,
 ]
 
+let state, p, x, y, newx, newy, targets, target, num, xi, yi
 state = {}
 
 setMap(levels[level])

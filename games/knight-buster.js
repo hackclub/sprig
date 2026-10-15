@@ -81,17 +81,17 @@ const p1_sound = tune`
 const p2_sound = tune`
 3000: C4~3000 + G4~3000 + C5~3000 + D4~3000,
 93000`
-introMusic = playTune(intro, Infinity)
+let introMusic = playTune(intro, Infinity)
 
 const p1 = "h"
 const p2 = "g"
 const floor = "f"
 const box = "w"
 
-p1_lives = 3
-p2_lives = 3
-winner = 0
-whoMoved = 0
+let p1_lives = 3
+let p2_lives = 3
+let winner = 0
+let whoMoved = 0
 
 setLegend(
   /*[ floor, bitmap`
@@ -288,7 +288,7 @@ afterInput(() => {
     for (let i = 1; i < 16; i++) {
       addSprite(Math.floor(Math.random() * 10), Math.floor(Math.random() * 8), box)
     }
-    player1 = addSprite(0,0,p1)
-    player2 = addSprite(9, 7, p2)
+    let player1 = addSprite(0,0,p1)
+    let player2 = addSprite(9, 7, p2)
   }
 });

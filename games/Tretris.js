@@ -812,6 +812,7 @@ const pauseBufferTime = 1
 let pauseTimer = pauseBufferTime
 onInput("i", () =>
 {
+  if (level !== 3) return
   if (hasLost)
   {
     paused = false
@@ -856,7 +857,7 @@ onInput("i", () =>
   else
   {
     // Restart music
-    songPlayback = playTune(song, Infinity);
+    songPlayback = playTune(currentSong, Infinity);
 
     // Remove paused text
     resetText()
