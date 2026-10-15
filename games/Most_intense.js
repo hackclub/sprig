@@ -3,7 +3,7 @@
 @description: This is a wall avoidence game that i have made. It is based on the bad time sim from sans except youy only face walls. This was my first project and it was very fun
 @author: aditya verma
 @tags: ['best game ever'] 
-@addedOn: 2026-10-5
+@addedOn: 2026-10-15
 */
 const player = "p"
 const wall = "w"
