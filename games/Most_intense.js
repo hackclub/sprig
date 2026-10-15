@@ -1,6 +1,6 @@
 /* 
-@title: Most intense
-@description: A wall avoinding game baised on a bad time sim
+@title: Most_intense
+@description: This is a wall avoidence game that i have made. It is based on the bad time sim from sans except youy only face walls. This was my first project and it was very fun
 @author: aditya verma
 @tags: ['best game ever'] 
 @addedOn: 2026-10-5
