@@ -2,14 +2,14 @@
 @title: Sprig-8
 @author: sircheetodust
 @tags: ['emulation']
-@addedOn: 2026-07-27
+@addedOn: 2026-01-01
 @description: Chip-8 Emulator for the Sprig
 */
 /* 
 Adding games:
 1. Use a file to hex string converter, create a string with that string that you just generated
 2. Add it to the games struct, Map controls to what controls you want to use on the Sprig. Use an online emulator to figure them out if needed.
-youre done!
+youre done(or if you are feeling cool, use my emulator! https://github.com/thecheetoman/octopy)
 */
 // built-in 4x5 pixel font set representing hex digits 0-F in memory
 const FONT_SPRITES = [
@@ -30,7 +30,77 @@ const FONT_SPRITES = [
   0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
   0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 ];
+//menu stuff to make game switching better
+let inMenu = true;
+let menuSelection = 0;
 
+// draw a basic menu
+function drawMenu() {
+  clearText();
+  setLegend(["B", bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`]);
+  setMap(map`
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB`);
+  addText("SPRIG-8 DIRECTORY", { x: 2, y: 1, color: color`4` });
+  GAMES.forEach((game, i) => {
+    const prefix = i === menuSelection ? "> " : "  ";
+    addText(prefix + game.name, {
+      x: 2,
+      y: 4 + i * 2,
+      color: i === menuSelection ? color`4` : color`1`,
+    });
+  });
+  addText("W/S move  K start", { x: 1, y: 13, color: color`1` });
+}
+// load menu, pause any game that is running, and then draw it.
+function enterMenu() {
+  inMenu = true;
+  if (cpuLoopInterval) clearInterval(cpuLoopInterval);
+  if (timerLoopInterval) clearInterval(timerLoopInterval);
+  cpuLoopInterval = null;
+  timerLoopInterval = null;
+  drawMenu();
+}
+// start a game from the menu
+function startGame(index) {
+  inMenu = false;
+  currentGameIndex = index;
+  clearText();
+  initializeEmulator();
+  setMap(map`
+ACDE
+FGHI`);
+}
 // sourced from https://johnearnest.github.io/chip8Archive/
 const breakoutROM = "129FFCFC80A202DDC100EEA204DBA100EEA2036002610587008610D67171086F388F174F00121770026F108F074F00121500EE22057D04220500EE22057DFC220500EE8080400168FF40FF68015AC0225300EE80B070FB61F880127005A203D0A100EE220B8B948A84220B4B0069014B3F69FF4A0068014A1F68FF4F0122434A1F228500EE00E06B1E6A142205220B221100EEFE073E0012936E04FE1500EE6D1E6C1E6B406A1DC901490069FF68FF2205220B22116007E0A1223B6009E0A122332263229312B5";
 // sourced from https://github.com/kripod/chip8-roms
@@ -71,7 +141,7 @@ let currentGameIndex = 0;
 const CPU_TICKS_PER_FRAME = 10;
 const EMULATION_SPEED_MS = 16;
 const KEY_HOLD_CYCLES = 30;
-const SPRITE_KEYS = ["0", "1", "2", "3", "4", "5", "6", "7"];
+const SPRITE_KEYS = ["A", "C", "D", "E", "F", "G", "H", "I"]; // now use these so that it doesnt instatly break when you load back to menu
 
 // helper to create blank 16x16 tile string
 const createEmptyTileString = () => ("0".repeat(16) + "\n").repeat(15) + "0".repeat(16);
@@ -88,12 +158,12 @@ function clearDisplayBuffer() {
   displayTileData = SPRITE_KEYS.map(() => createEmptyTileString());
 }
 
-// init map grid layout (4x2 grid of 16x16 tiles = 64x32 CHIP-8 resolution)
+// init map grid layout
 clearDisplayBuffer();
 updateScreen();
 setMap(map`
-0123
-4567`);
+ACDE
+FGHI`);
 
 // flip a display pixel to a color
 function flipDisplayPixel(x, y) {
@@ -328,20 +398,46 @@ function handleKeyPress(buttonName) {
   }
 }
 
-// bind all Sprig buttons to the dynamic handler
-onInput("w", () => handleKeyPress("w"));
-onInput("a", () => handleKeyPress("a"));
-onInput("s", () => handleKeyPress("s"));
-onInput("d", () => handleKeyPress("d"));
-onInput("i", () => handleKeyPress("i"));
-onInput("k", () => handleKeyPress("k"));
+// function i definetly didnt forget to make, changes the menu selection
+function moveSelection(delta) {
+  menuSelection = (menuSelection + delta + GAMES.length) % GAMES.length;
+  drawMenu();
+}
 
-// game switching using J
-onInput("j", () => {
-  currentGameIndex = (currentGameIndex + 1) % GAMES.length;
-  
-  // restart emulator with the new ROM
-  initializeEmulator();
+// bind keys to handler and if used in menu and is active, handle menu stuff like moving selections
+onInput("w", () => {
+  if (inMenu) moveSelection(-1);
+  else handleKeyPress("w");
 });
 
-initializeEmulator();
+onInput("s", () => {
+  if (inMenu) moveSelection(1);
+  else handleKeyPress("s");
+});
+
+onInput("a", () => {
+  if (!inMenu) handleKeyPress("a");
+});
+
+onInput("d", () => {
+  if (!inMenu) handleKeyPress("d");
+});
+
+// use i or k to launch game if in meny
+onInput("i", () => {
+  if (inMenu) startGame(menuSelection);
+  else handleKeyPress("i");
+});
+
+onInput("k", () => {
+  if (inMenu) startGame(menuSelection);
+  else handleKeyPress("k");
+});
+
+// back to menu
+onInput("j", () => {
+  if (!inMenu) enterMenu();
+});
+
+//launch menu
+drawMenu();
