@@ -330,6 +330,7 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 
 	let gameFile = null;
 	let metadata = null;
+	let content = null;
 	let rawUrl = null;
 	let playUrl = null;
 	let screenshotUrl = null;
@@ -340,6 +341,7 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 		const result = await validateSingleGameFile(gameFile, workspace, addCheck, warnings);
 		metadata = result.metadata;
 		similarity = result.similarity;
+		content = result.content ?? null;
 
 		rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${gameFile.filename}`;
 		
@@ -770,13 +772,13 @@ async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 
 	if (content === null) {
 		addCheck("Game file readable", false, `Unable to read \`${gameFile.filename}\` from the checked-out PR.`);
-		return { metadata, similarity };
+		return { metadata, similarity, content: null };
 	}
 
 	const maxFileSize = 2 * 1024 * 1024;
 	if (content.length > maxFileSize) {
 		addCheck("File size limit", false, `The file \`${filename}\` is too large (${(content.length / 1024 / 1024).toFixed(2)}MB). Maximum allowed size is 2MB.`);
-		return { metadata, similarity };
+		return { metadata, similarity, content };
 	}
 
 	const safeFilename = /^[a-zA-Z0-9_-]+\.js$/.test(filename);
@@ -817,5 +819,5 @@ async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 		warnings.push(`Similarity is ${formatPercent(similarity.score)} against \`${similarity.match}\`. A reviewer or lead should compare both games.`);
 	}
 
-	return { metadata, similarity };
+	return { metadata, similarity, content };
 }
