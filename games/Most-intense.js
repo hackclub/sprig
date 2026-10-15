@@ -27,16 +27,16 @@ setLegend(
     ................
   `],
   [player, bitmap`
-    .....00...00....
-    ....0000.0000...
-    ....000000000...
-    ....000000000...
-    .....0000000....
-    ......00000.....
-    .......000......
-    ........0.......
-    ................
-    ................
+    ......0000......
+    ......0000......
+    .......00.......
+    .....000000.....
+    ....00000000....
+    .....000000.....
+    ......0000......
+    ......0000......
+    .....00..00.....
+    ....00....00....
     ................
     ................
     ................
@@ -57,85 +57,74 @@ const level = map`
 `
 
 setMap(level)
-
-// Spawn player at a safe spot on the left
 addSprite(1, 3, player)
 
-// Movement controls (with boundary checks so player doesn't fall off screen)
-onInput("w", () => { let p = getFirst(player); if (p && p.y > 0) p.y -= 1; })
-onInput("a", () => { let p = getFirst(player); if (p && p.x > 0) p.x -= 1; })
-onInput("s", () => { let p = getFirst(player); if (p && p.y < 6) p.y += 1; })
-onInput("d", () => { let p = getFirst(player); if (p && p.x < 6) p.x += 1; })
-
-// Initial text
-addText("hello :)", {
-  x: 4,
-  y: 4,
-  color: color`8`
+onInput("w", () => {
+  let p = getFirst(player)
+  if (p && p.y > 0) p.y--
+})
+onInput("a", () => {
+  let p = getFirst(player)
+  if (p && p.x > 0) p.x--
+})
+onInput("s", () => {
+  let p = getFirst(player)
+  if (p && p.y < 6) p.y++
+})
+onInput("d", () => {
+  let p = getFirst(player)
+  if (p && p.x < 6) p.x++
 })
 
-// Function to generate a random wall wave with 2 gaps
-function spawnRandomWave() {
-  let gap1 = Math.floor(Math.random() * 7)
-  let gap2 = Math.floor(Math.random() * 7)
-  while (gap2 === gap1) {
-    gap2 = Math.floor(Math.random() * 7)
+addText("hello :)", { x: 4, y: 4, color: color`8` })
+
+function spawnWave() {
+  let g1 = Math.floor(Math.random() * 7)
+  let g2 = Math.floor(Math.random() * 7)
+  while (g2 === g1) {
+    g2 = Math.floor(Math.random() * 7)
   }
-  
   for (let y = 0; y <= 6; y++) {
-    if (y !== gap1 && y !== gap2) {
+    if (y !== g1 && y !== g2) {
       addSprite(6, y, wall)
     }
   }
 }
 
-let gameInterval; // Interval variable to stop the loop on game over
+let loop
 
-// Change text and start automatic wall movement after 2 seconds
 setTimeout(() => {
   clearText()
-  addText("GOODBYE", {
-    x: 4,
-    y: 1,
-    color: color`3`
-  })
-  
-  spawnRandomWave()
+  addText("GOODBYE", { x: 4, y: 1, color: color`3` })
+  spawnWave()
 
-  // Automatically move walls every 250ms
-  gameInterval = setInterval(() => {
+  loop = setInterval(() => {
     let p = getFirst(player)
     let walls = getAll(wall)
-    let hitEdge = false;
+    let hit = false
 
     walls.forEach(w => {
       if (w.x === 0) {
-        hitEdge = true;
+        hit = true
       } else {
-        w.x -= 1;
+        w.x--
       }
-    });
+    })
 
-    // Hit detection: Trigger GAME OVER if player touches a wall
     if (p) {
-      let itemsOnPlayer = getTile(p.x, p.y);
-      if (itemsOnPlayer.some(item => item.type === wall)) {
-        clearInterval(gameInterval); // Stop the game loop
-        p.remove();                  // Remove the player sprite
-        clearText();
-        addText("GAME OVER", {
-          x: 1,
-          y: 3,
-          color: color`3`
-        });
-        return;
+      let items = getTile(p.x, p.y)
+      if (items.some(i => i.type === wall)) {
+        clearInterval(loop)
+        p.remove()
+        clearText()
+        addText("GAME OVER", { x: 1, y: 3, color: color`3` })
+        return
       }
     }
 
-    // If wave reaches the edge, clear them and spawn a new random wave
-    if (hitEdge) {
-      walls.forEach(w => w.remove());
-      spawnRandomWave();
+    if (hit) {
+      walls.forEach(w => w.remove())
+      spawnWave()
     }
   }, 250)
 }, 2000)
