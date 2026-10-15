@@ -21,7 +21,7 @@ import {
 	upsertBotComment,
 	validateMetadataHeader,
 } from "./review-utils.mjs";
-import { buildSubmissionManifest } from "./submission-manifest.mjs";
+import { buildSubmissionManifest, getImageCountCheck, validateImageFiles } from "./submission-manifest.mjs";
 import {
 	DUPLICATE_LABEL,
 	LEGACY_DUPLICATE_LABEL,
@@ -355,10 +355,8 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 		playUrl = buildReviewUrl(reviewBaseUrl);
 	}
 
-	if (gameFile) {
-		const gameBase = path.basename(gameFile.filename, ".js");
-		screenshotUrl = validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck);
-	}
+	const gameBase = gameFile ? path.basename(gameFile.filename, ".js") : null;
+	screenshotUrl = validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck);
 
 	const ok = checks.every((check) => check.ok);
 	return {
@@ -585,6 +583,7 @@ function buildComment(result) {
 	const categoryMap = {
 		"Files stay in allowed folders": "file",
 		"Exactly one game file": "file",
+		"At most one image file": "file",
 		"Only new files added": "file",
 		"Filename uses safe characters": "file",
 		"Game file is directly inside games/": "file",
@@ -705,8 +704,9 @@ function formatPercent(value) {
 
 function validateSubmissionFiles(pullFiles, addCheck) {
 	const manifest = buildSubmissionManifest(pullFiles);
-	const { gameFiles: jsFiles, gameFilesLoose, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
+	const { gameFiles: jsFiles, gameFilesLoose, allImageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
 	const effectiveGameFiles = gameFilesLoose;
+	const effectiveImageFiles = allImageFiles;
 	if (uppercaseGames.length > 0) {
 		const badNames = uppercaseGames.map((file) => `\`${file.filename}\``).join(", ");
 		addCheck("Directory must be lowercase", false, `Your file must be in the lowercase \`games/\` directory. Found ${badNames}.`);
@@ -732,6 +732,9 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 				: `Only one game file is allowed per submission. Found ${jsNames}.`
 	);
 
+	const imgCountCheck = getImageCountCheck(effectiveImageFiles);
+	addCheck(imgCountCheck.name, imgCountCheck.ok, imgCountCheck.detail);
+
 	const changedNames = changedNonAddedFiles.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
 		"Only new or game files changed",
@@ -740,27 +743,19 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 			? `Submissions should only add new game files or modify existing ones in \`games/\`. These files outside \`games/\` were modified: ${changedNames}.`
 			: "All submitted files are new or inside \`games/\`."
 	);
-	return { jsFiles: effectiveGameFiles, imageFiles };
+	return { jsFiles: effectiveGameFiles, imageFiles: effectiveImageFiles };
 }
 
 function validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck) {
-	const badImagePaths = imageFiles.filter((file) => !file.filename.startsWith("games/img/"));
-	const badImgNames = badImagePaths.map((file) => `\`${file.filename}\``).join(", ");
-	let imgPathDetail = "No image provided; this is OK.";
-	if (badImagePaths.length) imgPathDetail = `Move images into \`games/img/\`: ${badImgNames}.`;
-	else if (imageFiles.length) imgPathDetail = "Image files are in `games/img/`.";
-	addCheck("Optional image path", badImagePaths.length === 0, imgPathDetail);
+	const checks = validateImageFiles({ imageFiles, gameBase });
+	for (const check of checks) {
+		addCheck(check.name, check.ok, check.detail);
+	}
 
-	const mismatchedImages = imageFiles.filter((file) => path.basename(file.filename, path.extname(file.filename)) !== gameBase);
-	const mismatchNames = mismatchedImages.map((file) => `\`${file.filename}\``).join(", ");
-	let imgNameDetail = "No image provided; gallery thumbnail can be generated/default.";
-	if (mismatchedImages.length) imgNameDetail = `Image filename must match \`${gameBase}.js\`. Found ${mismatchNames}.`;
-	else if (imageFiles.length) imgNameDetail = "Image filename matches the game file.";
-	addCheck("Optional image name", mismatchedImages.length === 0, imgNameDetail);
-
-	if (imageFiles.length > 0) {
-		const image = imageFiles.find((file) => path.basename(file.filename, path.extname(file.filename)) === gameBase) ?? imageFiles[0];
-		return `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${image.filename}`;
+	if (imageFiles.length > 0 && pullRequest?.head?.sha) {
+		const matchingImage = gameBase ? imageFiles.find((file) => file.filename === `games/img/${gameBase}.png`) : null;
+		const image = matchingImage ?? imageFiles[0];
+		return `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${image.filename.split("/").map(encodeURIComponent).join("/")}`;
 	}
 	return null;
 }
@@ -784,12 +779,16 @@ async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 		return { metadata, similarity };
 	}
 
+	const safeFilename = /^[a-zA-Z0-9_-]+\.js$/.test(filename);
+	const base = path.basename(filename, ".js");
+	const suggestedBase = base.trim().replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_-]/g, "") || "game";
+	const suggestedFilename = `${suggestedBase}.js`;
 	addCheck(
 		"Filename uses safe characters",
-		/^[a-zA-Z0-9_-]+\.js$/.test(filename),
-		/^[a-zA-Z0-9_-]+\.js$/.test(filename)
+		safeFilename,
+		safeFilename
 			? "Filename is safe."
-			: `Rename \`${filename}\` to use only letters, numbers, \`-\`, and \`_\`.`
+			: `Rename \`${filename}\` to use only letters, numbers, \`-\`, and \`_\`${suggestedFilename !== filename ? ` (for example: \`${suggestedFilename}\`)` : ""}.`
 	);
 
 	addCheck(
