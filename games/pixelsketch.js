@@ -3,7 +3,7 @@
 @description: A pocket pixel art creation tool with fully working audio, HUD, and fixed canvas tiles!
 @author: airfryer
 @tags: ['art', 'tool', 'sandbox']
-@addedOn: 2026-02-15
+@addedOn: 2026-10-15
 */
 
 /*
@@ -13,7 +13,7 @@ Hi, this is a small doodling app, I didnt want to make a game with only like 10 
 - k: Switch Color
 - j: Toggle Brush Size (1 or 2)
 - l: Clear entire canvas
-my third game/app, wish I put more effort but exams season, but still please enjoy :p 
+please enjoy :p 
 */
 
 const cursor = "p";
