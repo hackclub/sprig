@@ -178,7 +178,7 @@ async function applyReviewStatus({ issueNumber, status }) {
 	} else if (status === "approved" && !hasLabel(labels, "Failed") && !hasLabel(labels, "Ready for Maintainer")) {
 		await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Maintainer" });
 		console.log(`Reconciled #${issueNumber}: set "Ready for Maintainer".`);
-	} else if (status === "dismissed" || (status === "none" && hasLabel(labels, "Ready for Maintainer"))) {
+	} else if (status === "dismissed" || status === "none") {
 		if (hasLabel(labels, "Ready for Maintainer") || (hasLabel(labels, "Needs Author") && !hasLabel(labels, "Failed"))) {
 			await setStateLabel({ owner, repo, token, issueNumber, state: "Ready for Playtest" });
 			console.log(`Reconciled #${issueNumber}: review dismissed or outdated, reset to "Ready for Playtest".`);

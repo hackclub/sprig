@@ -3,22 +3,28 @@ import path from "node:path";
 import {
 	REVIEW_BOT_MARKER,
 	addLabels,
+	buildMetadataSnippet,
 	ensureReviewLabels,
+	extractAboutAndGameplay,
+	extractAuthor,
 	getIssueLabels,
 	getMetadataValue,
 	getRepository,
 	githubPaginated,
 	githubRequest,
 	hasLabel,
+	inferSubmissionMetadata,
 	parseTags,
 	readGitHubEvent,
 	removeLabel,
 	setStateLabel,
 	upsertBotComment,
+	validateMetadataHeader,
 } from "./review-utils.mjs";
 import { buildSubmissionManifest, getImageCountCheck, validateImageFiles } from "./submission-manifest.mjs";
 import {
 	DUPLICATE_LABEL,
+	LEGACY_DUPLICATE_LABEL,
 	DUPLICATE_NOTICE_MARKER,
 	buildLatestWarning,
 	buildOlderCheckDetail,
@@ -236,10 +242,12 @@ async function applyDuplicateActions({ group, failed }) {
 	if (failed) return;
 	if (!group) {
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: DUPLICATE_LABEL });
+		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: LEGACY_DUPLICATE_LABEL });
 		await removeOlderNotice(prNumber);
 		return;
 	}
 
+	await removeLabel({ owner, repo, token, issueNumber: prNumber, label: LEGACY_DUPLICATE_LABEL });
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: [DUPLICATE_LABEL] });
 	if (!group.isLatest) {
 		await syncOlderNotice({ issueNumber: prNumber, latestNumber: group.latestNumber, restart: event.action === "reopened" });
@@ -248,6 +256,7 @@ async function applyDuplicateActions({ group, failed }) {
 
 	for (const olderNumber of group.older) {
 		try {
+			await removeLabel({ owner, repo, token, issueNumber: olderNumber, label: LEGACY_DUPLICATE_LABEL });
 			await addLabels({ owner, repo, token, issueNumber: olderNumber, labels: [DUPLICATE_LABEL] });
 			await syncOlderNotice({ issueNumber: olderNumber, latestNumber: prNumber, restart: false });
 		} catch (error) {
@@ -357,6 +366,7 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 		warnings,
 		metadata: metadata?.values ?? null,
 		gameFile: gameFile?.filename ?? null,
+		content,
 		rawUrl,
 		playUrl,
 		screenshotUrl,
@@ -378,133 +388,8 @@ function validatePullRequestBody(body) {
 	return { checks };
 }
 
-function getSectionBlocks(body, heading) {
-	const pattern = new RegExp(String.raw`(?:^|\n)#+\s*${heading}[^\n]*\n([\s\S]*?)(?=\n#+\s|$)`, "i");
-	const match = body.match(pattern);
-	if (!match) return [];
-	const clean = stripTemplateNoise(match[1]);
-	return clean
-		.split(/\n\s*\n+/)
-		.map((p) => normalizeFieldValue(p))
-		.filter(Boolean);
-}
-
-function extractAuthor(body) {
-	const direct = extractBoldField(body, "Author");
-	if (direct) return direct;
-	const blocks = getSectionBlocks(body, "Author(?:\\s+name)?");
-	for (const block of blocks) {
-		if (/^author:?$/i.test(block)) continue;
-		const clean = block.replace(/^author:\s*/i, "").trim();
-		if (clean) return clean;
-	}
-	return "";
-}
-
-function extractAboutAndGameplay(body) {
-	let about = extractBoldField(body, "What is your game about?");
-	let gameplay = extractBoldField(body, "How do you play your game?");
-	if (about && gameplay) return { about, gameplay };
-
-	const isPrompt = (text) =>
-		/what is your game about/i.test(text) ||
-		/how do you play your game/i.test(text);
-
-	const blocks = getSectionBlocks(body, "About your game").filter((b) => !isPrompt(b));
-
-	if (!about && blocks.length > 0) about = blocks[0];
-	if (!gameplay && blocks.length > 1) gameplay = blocks[1];
-
-	return { about, gameplay };
-}
-
-function extractBoldField(body, label) {
-	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-
-	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
-	const boldMatch = body.match(boldPattern);
-	if (boldMatch) {
-		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
-		if (value) return value;
-	}
-
-	const fullBoldPattern = new RegExp(String.raw`(?:\*\*|\*)${escaped}\s*:\s*(.+?)(?:\*\*|\*)(?:\r?\n|$)`, "i");
-	const fullBoldMatch = body.match(fullBoldPattern);
-	if (fullBoldMatch) {
-		const value = normalizeFieldValue(stripTemplateNoise(fullBoldMatch[1]));
-		if (value) return value;
-	}
-
-	const plainPattern = new RegExp(String.raw`(?:^|\n)\s*(?:[-*]|\d+\.)*\s*(?:\*\*|\*)?${escaped}\s*:\s*([^\n]+)`, "i");
-	const plainMatch = body.match(plainPattern);
-	if (plainMatch) {
-		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
-		if (value) return value;
-	}
-
-	return "";
-}
-
-function normalizeFieldValue(value) {
-	return value
-		.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-		.replace(/^[*`_~]+|[*`_~]+$/g, "")
-		.trim();
-}
-
-function stripTemplateNoise(value) {
-	return value
-		.replace(/<!--[\s\S]*?-->/g, "")
-		.replace(/^>\s?.*$/gm, "")
-		.trim();
-}
-
 async function validateMetadata(content, filename, workspace) {
-	const checks = [];
-	const values = {
-		title: getMetadataValue(content, "title"),
-		author: getMetadataValue(content, "author"),
-		description: getMetadataValue(content, "description"),
-		tags: getMetadataValue(content, "tags"),
-		addedOn: getMetadataValue(content, "addedOn"),
-	};
-
-	const add = (name, ok, detail) => checks.push({ name, ok, detail });
-
-	for (const [key, value] of Object.entries(values)) {
-		add(
-			`Metadata @${key}`,
-			Boolean(value),
-			value ? `@${key} is filled.` : `Metadata in \`${filename}\` is missing or has empty \`@${key}:\`.`
-		);
-	}
-
-	const parsedTags = parseTags(values.tags);
-	const tagsValid = Boolean(parsedTags.tags && parsedTags.tags.length > 0);
-	add(
-		"Metadata tags parse",
-		tagsValid,
-		tagsValid
-			? "Tags are formatted correctly."
-			: `Format \`@tags:\` as a list of tags in quotes and brackets, for example \`@tags: ['maze', 'puzzle']\`.\nReason: ${parsedTags.issue ?? "Tags list cannot be empty."}`
-	);
-
-	checkMetadataDate(values.addedOn, add);
-
-	const titleLooksLikeTemplate = /^getting(_|\s)started$/i.test(values.title?.trim()) || /^template$/i.test(values.title?.trim()) || /^my game$/i.test(values.title?.trim());
-	const authorLooksLikeTemplate = /leo,\s*edits/i.test(values.author) || /^my name$/i.test(values.author?.trim());
-	const descriptionLooksLikeTemplate = /short description about the game/i.test(values.description?.trim());
-	const hasExampleTags = parsedTags.tags?.some(t => ["tag1", "tag2", "example", "another-example"].includes(t.toLowerCase()));
-
-	const hasTemplateValues = titleLooksLikeTemplate || authorLooksLikeTemplate || descriptionLooksLikeTemplate || hasExampleTags;
-
-	add(
-		"Metadata template values",
-		!hasTemplateValues,
-		!hasTemplateValues
-			? "No template metadata values found."
-			: "Replace example/template values in the metadata header (like 'MY GAME', 'MY NAME', 'Short description...', or placeholder tags)."
-	);
+	const { checks, values, hasHeader } = validateMetadataHeader(content, filename);
 
 	const TUTORIAL_FILES = ["getting_started.js", "maze_game_starter.js", "sprig_dodge.js"];
 	const isTutorial = TUTORIAL_FILES.some((tutFile) => {
@@ -514,25 +399,29 @@ async function validateMetadata(content, filename, workspace) {
 			return normalizeCode(content) === normalizeCode(tutContent);
 		} catch { return false; }
 	});
-	add(
-		"Not a tutorial game",
-		!isTutorial,
-		isTutorial
+	checks.push({
+		name: "Not a tutorial game",
+		ok: !isTutorial,
+		detail: isTutorial
 			? "This looks like an unmodified tutorial or starter game. Submit your own original game instead."
-			: "Game does not appear to be an unmodified tutorial."
-	);
+			: "Game does not appear to be an unmodified tutorial.",
+	});
+
+	if (!hasHeader) {
+		return { checks, values };
+	}
 
 	const safeTitle = values.title ? values.title.replace(/`/g, "'") : "";
 	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
-	add(
-		"Unique game title",
-		!titleConflict,
-		titleConflict
+	checks.push({
+		name: "Unique game title",
+		ok: !titleConflict,
+		detail: titleConflict
 			? `Game title \`${safeTitle}\` already appears in \`${titleConflict}\`; choose a unique title.`
-			: "Game title appears unique."
-	);
+			: "Game title appears unique.",
+	});
 
-	return { checks, values: { ...values, tags: parsedTags.tags ?? values.tags } };
+	return { checks, values };
 }
 
 async function findTitleConflict(title, filename, workspace) {
@@ -705,6 +594,7 @@ function buildComment(result) {
 		"Code checklist": "pr",
 		"Image checklist": "pr",
 
+		"Metadata header": "metadata",
 		"Metadata @title": "metadata",
 		"Metadata @author": "metadata",
 		"Metadata @description": "metadata",
@@ -727,6 +617,10 @@ function buildComment(result) {
 		categories[catKey].checks.push(check);
 	}
 
+	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
+	const headRef = pullRequest.head.ref;
+	const editUrl = `https://github.com/${headRepo}/edit/${headRef}/${result.gameFile ?? ""}`;
+
 	const failedChecks = result.checks.filter((c) => !c.ok);
 
 	let checksSection = "";
@@ -736,6 +630,19 @@ function buildComment(result) {
 			checksSection += `> - ❌ **${check.name}:** ${check.detail}\n`;
 		}
 		checksSection += "\n";
+
+		const hasMetadataFailure = failedChecks.some((c) => categoryMap[c.name] === "metadata");
+		if (hasMetadataFailure && result.gameFile) {
+			const inferred = inferSubmissionMetadata({
+				content: result.content,
+				filename: result.gameFile,
+				pullRequest,
+				existingMetadata: metadata,
+			});
+			const snippet = buildMetadataSnippet(inferred);
+
+			checksSection += `> [!TIP]\n> **How to fix metadata:**\n> Click **[Edit Game File](${editUrl})** and paste this block at the very top (line 1) of \`${result.gameFile}\`.\n>\n> *Note: We generated this header automatically from your PR details to help you out. Please review it and update any details (like your title, description, or tags) to make sure they match your game before committing!*\n> \`\`\`javascript\n> ${snippet.split("\n").join("\n> ")}\n> \`\`\`\n\n`;
+		}
 	}
 
 	checksSection += "#### Checks Status\n";
@@ -756,10 +663,6 @@ function buildComment(result) {
 		}
 	}
 
-	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
-	const headRef = pullRequest.head.ref;
-	const editUrl = `https://github.com/${headRepo}/edit/${headRef}/${result.gameFile ?? ""}`;
-
 	const links = [];
 	if (result.playUrl) links.push(`- [Play in Sprig Editor](${result.playUrl})`);
 	if (result.gameFile) links.push(`- [Edit Game File](${editUrl})`);
@@ -778,7 +681,7 @@ function buildComment(result) {
 	return `${REVIEW_BOT_MARKER}
 ### ${status}
 
-${result.ok ? "This submission is ready for human playtest." : "This submission needs author fixes before normal review."}
+${result.ok ? "All automated checks passed! Your game is ready for a reviewer to playtest." : "Thanks for submitting! There are just a few quick fixes needed before we can playtest your game."}
 
 #### Submission
 - Game: ${metadata.title ? `\`${metadata.title}\`` : "unknown"}
@@ -791,37 +694,12 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.\n If you are in trouble, don't hesitate to ask for help in the #sprig channel on Slack or ping @LucasHT22 here.`}
+${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: you can update your game right here ([edit file](${editUrl})) or push new commits. Once you do, these checks will rerun automatically! If you get stuck or have questions, ask in the #sprig channel on Slack or ping @LucasHT22 here.`}
 `;
 }
 
 function formatPercent(value) {
 	return `${Math.round(value * 100)}%`;
-}
-
-function checkMetadataDate(addedOn, add) {
-	const validFormat = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
-	const parsedDate = validFormat ? new Date(`${addedOn}T00:00:00Z`) : null;
-	const isRealDate = Boolean(
-		validFormat &&
-		parsedDate &&
-		!Number.isNaN(parsedDate.getTime()) &&
-		parsedDate.toISOString().slice(0, 10) === addedOn
-	);
-	const now = new Date();
-	const tooOld = isRealDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	const ok = isRealDate && !tooOld;
-	let detail = "Date looks current.";
-	if (!ok) {
-		if (isRealDate && tooOld) {
-			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
-		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
-			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
-		} else {
-			detail = "Set `@addedOn:` to a valid recent date in `YYYY-MM-DD` format.";
-		}
-	}
-	add("Metadata date", ok, detail);
 }
 
 function validateSubmissionFiles(pullFiles, addCheck) {
