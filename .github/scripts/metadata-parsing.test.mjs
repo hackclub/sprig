@@ -256,7 +256,7 @@ Objective: Push the block (b) onto the target tile (g).`,
 			pullRequest,
 		});
 
-		expect(inferred.title).toBe("Block Pusher");
+		expect(inferred.title).toBe("Vasko JS game");
 		expect(inferred.author).toBe("vask3");
 		expect(inferred.description).toContain("Hello, thats is my first JS game");
 		expect(inferred.tags).toEqual(["puzzle"]);
@@ -267,6 +267,30 @@ Objective: Push the block (b) onto the target tile (g).`,
 		const validation = validateMetadataHeader(`${snippet}\n${content}`, "Vasko-JS-game.js");
 		expect(validation.hasHeader).toBe(true);
 		expect(validation.checks.every((c) => c.ok)).toBe(true);
+	});
+
+	it("falls back to filename and top comment when PR title is generic or missing", () => {
+		const content = `// Block Pusher (Sokoban)
+const player = "p";`;
+		const pullRequestGeneric = {
+			title: "[Sprig App] my game",
+			user: { login: "gamer" },
+			body: "",
+		};
+
+		const inferredFromFilename = inferSubmissionMetadata({
+			content,
+			filename: "games/dungeon_crawler.js",
+			pullRequest: pullRequestGeneric,
+		});
+		expect(inferredFromFilename.title).toBe("dungeon crawler");
+
+		const inferredFromComment = inferSubmissionMetadata({
+			content,
+			filename: "games/my-game.js",
+			pullRequest: pullRequestGeneric,
+		});
+		expect(inferredFromComment.title).toBe("Block Pusher");
 	});
 
 	it("falls back to cleaned PR title and author login when comments/body are minimal", () => {
