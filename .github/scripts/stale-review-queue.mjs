@@ -140,7 +140,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 	if (!since) return;
 
 	const authorLogin = pullRequest.user?.login;
-	const lastAuthorActivity = await latestAuthorCommentTime(pullRequest.number, authorLogin);
+	const lastAuthorActivity = await latestAuthorActivityTime(pullRequest.number, authorLogin);
 	if (lastAuthorActivity && new Date(lastAuthorActivity).getTime() > new Date(since).getTime()) {
 		since = lastAuthorActivity;
 	}
@@ -211,7 +211,7 @@ async function handleClaimed(pullRequest) {
 async function handleUntouchedSubmission(pullRequest, labels) {
 	if (hasLabel(labels, "Stale")) {
 		const authorLogin = pullRequest.user?.login;
-		const lastAuthorActivity = await latestAuthorCommentTime(pullRequest.number, authorLogin);
+		const lastAuthorActivity = await latestAuthorActivityTime(pullRequest.number, authorLogin);
 		const staleTime = await latestLabelTime(pullRequest.number, "Stale");
 		if (lastAuthorActivity && staleTime && new Date(lastAuthorActivity).getTime() > new Date(staleTime).getTime()) {
 			await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Stale" });
@@ -222,7 +222,8 @@ async function handleUntouchedSubmission(pullRequest, labels) {
 		return;
 	}
 
-	if (daysBetween(pullRequest.updated_at) >= 30) {
+	const lastActivity = await latestSubmissionActivityTime(pullRequest);
+	if (daysBetween(lastActivity) >= 30) {
 		await addLabels({ owner, repo, token, issueNumber: pullRequest.number, labels: ["Stale"] });
 		await commentOnce({
 			issueNumber: pullRequest.number,
@@ -240,16 +241,46 @@ async function latestLabelTime(issueNumber, labelName) {
 	return matching[0]?.created_at ?? null;
 }
 
-async function latestAuthorCommentTime(issueNumber, authorLogin) {
+async function latestAuthorActivityTime(issueNumber, authorLogin) {
 	if (!authorLogin) return null;
+	const lowerAuthor = authorLogin.toLowerCase();
 	try {
-		const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
+		const [comments, commits] = await Promise.all([
+			githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`),
+			githubPaginated(token, `/repos/${owner}/${repo}/pulls/${issueNumber}/commits`),
+		]);
 		const authorComments = comments
-			.filter((c) => c.user?.login?.toLowerCase() === authorLogin.toLowerCase())
-			.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-		return authorComments[0]?.created_at ?? null;
+			.filter((c) => c.user?.login?.toLowerCase() === lowerAuthor)
+			.map((c) => c.created_at);
+		const authorCommits = commits
+			.filter((c) => c.author?.login?.toLowerCase() === lowerAuthor || c.committer?.login?.toLowerCase() === lowerAuthor)
+			.map((c) => c.commit?.author?.date || c.commit?.committer?.date)
+			.filter(Boolean);
+		return newestDate([...authorComments, ...authorCommits]);
 	} catch {
 		return null;
+	}
+}
+
+async function latestSubmissionActivityTime(pullRequest) {
+	const fallback = pullRequest.created_at;
+	const authorLogin = pullRequest.user?.login;
+	const lowerAuthor = authorLogin?.toLowerCase();
+	try {
+		const [comments, commits] = await Promise.all([
+			githubPaginated(token, `/repos/${owner}/${repo}/issues/${pullRequest.number}/comments`),
+			githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pullRequest.number}/commits`),
+		]);
+		const humanComments = comments
+			.filter((c) => c.user?.type !== "Bot")
+			.map((c) => c.created_at);
+		const authorCommits = commits
+			.filter((c) => !lowerAuthor || c.author?.login?.toLowerCase() === lowerAuthor)
+			.map((c) => c.commit?.author?.date)
+			.filter(Boolean);
+		return newestDate([...humanComments, ...authorCommits, fallback]);
+	} catch {
+		return pullRequest.updated_at ?? fallback;
 	}
 }
 

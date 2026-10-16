@@ -8,6 +8,7 @@ import {
 	githubPaginated,
 	githubRequest,
 	hasLabel,
+	isReviewCommitOutdated,
 	readGitHubEvent,
 	setStateLabel,
 } from "./review-utils.mjs";
@@ -74,11 +75,26 @@ async function syncSinglePR(prNumber) {
 	if (!hasLabel(labels, "Submission")) return;
 
 	const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
+	const outdatedCommitIds = new Set();
+	for (const r of reviews) {
+		if (r.commit_id && r.commit_id !== pull.head?.sha) {
+			const isOutdated = await isReviewCommitOutdated({
+				owner,
+				repo,
+				token,
+				prNumber,
+				commitId: r.commit_id,
+				headSha: pull.head?.sha,
+			});
+			if (isOutdated) outdatedCommitIds.add(r.commit_id);
+		}
+	}
 	const status = reconcileReviewStatus({
 		reviews,
 		reviewers,
 		authorLogin: pull.user?.login,
 		headSha: pull.head?.sha,
+		isCommitOutdated: (cid) => cid !== pull.head?.sha && outdatedCommitIds.has(cid),
 	});
 
 	await applyReviewStatus({ issueNumber: prNumber, status });
@@ -154,11 +170,27 @@ async function syncAllOpenSubmissions() {
 				submitted_at: r.submittedAt,
 			}));
 
+			const outdatedCommitIds = new Set();
+			for (const r of reviews) {
+				if (r.commit_id && r.commit_id !== node.headRefOid) {
+					const isOutdated = await isReviewCommitOutdated({
+						owner,
+						repo,
+						token,
+						prNumber: issueNumber,
+						commitId: r.commit_id,
+						headSha: node.headRefOid,
+					});
+					if (isOutdated) outdatedCommitIds.add(r.commit_id);
+				}
+			}
+
 			const status = reconcileReviewStatus({
 				reviews,
 				reviewers,
 				authorLogin: node.author?.login,
 				headSha: node.headRefOid,
+				isCommitOutdated: (cid) => cid !== node.headRefOid && outdatedCommitIds.has(cid),
 			});
 
 			try {

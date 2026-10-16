@@ -14,6 +14,7 @@ import {
 	githubRequest,
 	hasLabel,
 	inferSubmissionMetadata,
+	isReviewCommitOutdated,
 	parseTags,
 	readGitHubEvent,
 	removeLabel,
@@ -523,11 +524,32 @@ function readFileSafe(filePath) {
 	}
 }
 
-async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha }) {
+async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha, pullFiles }) {
 	if (!reviewers || reviewers.size === 0) return "unknown";
 	try {
 		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
-		return reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha });
+		const outdatedCommitIds = new Set();
+		for (const r of reviews) {
+			if (r.commit_id && r.commit_id !== headSha) {
+				const isOutdated = await isReviewCommitOutdated({
+					owner,
+					repo,
+					token,
+					prNumber,
+					commitId: r.commit_id,
+					headSha,
+					submissionFiles: pullFiles,
+				});
+				if (isOutdated) outdatedCommitIds.add(r.commit_id);
+			}
+		}
+		return reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin,
+			headSha,
+			isCommitOutdated: (cid) => cid !== headSha && outdatedCommitIds.has(cid),
+		});
 	} catch (e) {
 		console.warn("Unable to fetch reviews; skipping review reconciliation:", e.message);
 		return "unknown";
@@ -545,6 +567,7 @@ async function applyLabels(result) {
 		reviewers,
 		authorLogin: pullRequest.user?.login,
 		headSha: pullRequest.head?.sha,
+		pullFiles,
 	});
 	const changes = autoReviewLabelChanges({
 		labels: currentLabels,

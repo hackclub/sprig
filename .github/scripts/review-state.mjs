@@ -47,10 +47,13 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 	}
 }
 
-export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha }) {
+export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha, isCommitOutdated }) {
 	if (!reviewers || reviewers.size === 0) return "unknown";
 	const lowerReviewers = new Set([...reviewers].map((u) => u.toLowerCase()));
 	const lowerAuthor = authorLogin?.toLowerCase();
+
+	// ponytail: default considers a commit outdated if not headSha; upgrade path is passing isCommitOutdated comparing game files
+	const isOutdated = isCommitOutdated ?? ((commitId) => Boolean(headSha) && commitId !== headSha);
 
 	const latestByReviewer = new Map();
 	for (const review of reviews) {
@@ -64,10 +67,10 @@ export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha
 	}
 
 	const active = [...latestByReviewer.values()];
-	if (active.some((r) => r.state === "CHANGES_REQUESTED" && (!headSha || r.commit_id === headSha))) {
+	if (active.some((r) => r.state === "CHANGES_REQUESTED" && !isOutdated(r.commit_id))) {
 		return "changes_requested";
 	}
-	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && r.commit_id === headSha)) {
+	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && !isOutdated(r.commit_id))) {
 		return "approved";
 	}
 	if (active.some((r) => r.state === "DISMISSED")) {

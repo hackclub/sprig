@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { autoReviewLabelChanges, reconcileReviewStatus } from "./review-state.mjs";
+import { isReviewCommitOutdated } from "./review-utils.mjs";
 
 describe("autoReviewLabelChanges", () => {
 	it("sets Ready for Playtest on passing validation for new submissions", () => {
@@ -202,5 +203,123 @@ describe("reconcileReviewStatus", () => {
 
 	it("returns unknown when reviewers set is empty or undefined", () => {
 		expect(reconcileReviewStatus({ reviews: [], reviewers: null, authorLogin: "author1", headSha })).toBe("unknown");
+	});
+
+	it("preserves changes_requested across non-game commits when isCommitOutdated is false", () => {
+		const reviews = [
+			{ user: { login: "SSoggyTacoMan" }, state: "CHANGES_REQUESTED", commit_id: "mergeSha", submitted_at: "2026-10-04T09:00:00Z" },
+		];
+		const status = reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin: "author1",
+			headSha,
+			isCommitOutdated: (cid) => cid !== "mergeSha",
+		});
+		expect(status).toBe("changes_requested");
+	});
+
+	it("preserves approved across non-game commits when isCommitOutdated is false", () => {
+		const reviews = [
+			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: "mergeSha", submitted_at: "2026-10-04T09:00:00Z" },
+		];
+		const status = reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin: "author1",
+			headSha,
+			isCommitOutdated: (cid) => cid !== "mergeSha",
+		});
+		expect(status).toBe("approved");
+	});
+
+	it("resets changes_requested to none when isCommitOutdated is true", () => {
+		const reviews = [
+			{ user: { login: "SSoggyTacoMan" }, state: "CHANGES_REQUESTED", commit_id: "olderSha", submitted_at: "2026-10-04T09:00:00Z" },
+		];
+		const status = reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin: "author1",
+			headSha,
+			isCommitOutdated: () => true,
+		});
+		expect(status).toBe("none");
+	});
+});
+
+describe("isReviewCommitOutdated", () => {
+	it("returns false when commitId matches headSha or either is missing", async () => {
+		expect(await isReviewCommitOutdated({ commitId: "abc", headSha: "abc" })).toBe(false);
+		expect(await isReviewCommitOutdated({ commitId: null, headSha: "abc" })).toBe(false);
+		expect(await isReviewCommitOutdated({ commitId: "abc", headSha: null })).toBe(false);
+	});
+
+	it("returns false when compare diff does not touch submission game files", async () => {
+		const originalFetch = globalThis.fetch;
+		globalThis.fetch = vi.fn().mockResolvedValue({
+			ok: true,
+			status: 200,
+			text: async () => JSON.stringify({ files: [{ filename: "README.md" }, { filename: "games/other.js" }] }),
+		});
+
+		try {
+			const outdated = await isReviewCommitOutdated({
+				owner: "hackclub",
+				repo: "sprig",
+				token: "token",
+				prNumber: 123,
+				commitId: "sha1",
+				headSha: "sha2",
+				submissionFiles: [{ filename: "games/my-game.js" }],
+			});
+			expect(outdated).toBe(false);
+		} finally {
+			globalThis.fetch = originalFetch;
+		}
+	});
+
+	it("returns true when compare diff touches submission game files", async () => {
+		const originalFetch = globalThis.fetch;
+		globalThis.fetch = vi.fn().mockResolvedValue({
+			ok: true,
+			status: 200,
+			text: async () => JSON.stringify({ files: [{ filename: "games/my-game.js" }] }),
+		});
+
+		try {
+			const outdated = await isReviewCommitOutdated({
+				owner: "hackclub",
+				repo: "sprig",
+				token: "token",
+				prNumber: 123,
+				commitId: "sha1",
+				headSha: "sha2",
+				submissionFiles: [{ filename: "games/my-game.js" }],
+			});
+			expect(outdated).toBe(true);
+		} finally {
+			globalThis.fetch = originalFetch;
+		}
+	});
+
+	it("returns true as safe fallback when compare request throws", async () => {
+		const originalFetch = globalThis.fetch;
+		globalThis.fetch = vi.fn().mockRejectedValue(new Error("Network error"));
+
+		try {
+			const outdated = await isReviewCommitOutdated({
+				owner: "hackclub",
+				repo: "sprig",
+				token: "token",
+				prNumber: 123,
+				commitId: "sha1",
+				headSha: "sha2",
+				submissionFiles: [{ filename: "games/my-game.js" }],
+			});
+			expect(outdated).toBe(true);
+		} finally {
+			globalThis.fetch = originalFetch;
+		}
 	});
 });

@@ -276,6 +276,29 @@ export function daysBetween(start, end = new Date()) {
 	return Math.floor((endTime - startTime) / 86_400_000);
 }
 
+export async function isReviewCommitOutdated({ owner, repo, token, prNumber, commitId, headSha, submissionFiles }) {
+	if (!commitId || !headSha || commitId === headSha) return false;
+	try {
+		const files = submissionFiles ?? (await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/files`));
+		const submissionFilenames = new Set(
+			files
+				.map((f) => (typeof f === "string" ? f : f.filename))
+				.filter((fn) => fn.toLowerCase().startsWith("games/"))
+		);
+		if (submissionFilenames.size === 0) return true;
+
+		const compare = await githubRequest(
+			token,
+			"GET",
+			`/repos/${owner}/${repo}/compare/${encodeURIComponent(commitId)}...${encodeURIComponent(headSha)}`
+		);
+		const changedFiles = compare.files ?? [];
+		return changedFiles.some((f) => submissionFilenames.has(f.filename));
+	} catch {
+		return true;
+	}
+}
+
 export function getMetadataValue(content, key) {
 	const match = content.match(new RegExp(String.raw`@${key}:[^\S\r\n]*([\s\S]*?)(?=\r?\n\s*\*?\s*@|\r?\n\s*\*\/|\*\/)`, "i"));
 	if (!match?.[1]) return "";
