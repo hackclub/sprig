@@ -19,6 +19,7 @@ export interface SandboxedGameControllerHandle {
 	sendKey(key: string): void
 	setMuted(muted: boolean): void
 	focus(): void
+	extractBitmaps(code: string): void
 	destroy(): void
 }
 
@@ -77,6 +78,10 @@ export class SandboxedGameController implements SandboxedGameControllerHandle {
 		this.iframe.focus()
 	}
 
+	extractBitmaps(code: string): void {
+		this.send({ type: 'EXTRACT_BITMAPS', channelId: this.channelId, code })
+	}
+
 	destroy(): void {
 		this.stop()
 		window.removeEventListener('message', this.handleMessage)
@@ -120,6 +125,20 @@ export class SandboxedGameController implements SandboxedGameControllerHandle {
 			case 'BITMAPS_CHANGED':
 				this.options.onBitmaps?.(event.data.bitmaps)
 				break
+			case 'SHORTCUT_KEY': {
+				const syntheticEvent = new KeyboardEvent('keydown', {
+					key: event.data.key,
+					code: event.data.code,
+					ctrlKey: event.data.ctrlKey,
+					metaKey: event.data.metaKey,
+					shiftKey: event.data.shiftKey,
+					altKey: event.data.altKey,
+					bubbles: true,
+					cancelable: true,
+				})
+				window.dispatchEvent(syntheticEvent)
+				break
+			}
 			case 'STOPPED':
 				this.options.onStopped?.()
 				break

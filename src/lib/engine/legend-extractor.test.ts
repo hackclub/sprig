@@ -49,3 +49,22 @@ LLLLLLLLLLLLLLLL\`]
 		['w', '\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL\nLLLLLLLLLLLLLLLL'],
 	])
 })
+
+test('extracts bitmaps defined in variables and object property keys', () => {
+	const code = `
+		const SPRITES = {
+			PLAYER: "p",
+			WALL: "w"
+		}
+		const playerSprite = bitmap\`0000\`
+		function resetLegend() {}
+		setLegend(
+			[SPRITES.PLAYER, playerSprite],
+			[SPRITES.WALL, bitmap\`1111\`]
+		)
+	`
+	expect(extractLegendBitmaps(code)).toEqual([
+		['p', '0000'],
+		['w', '1111'],
+	])
+})

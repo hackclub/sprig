@@ -1,4 +1,4 @@
-import { bitmaps, codeMirror, editors, openEditor, type EditorKind } from '../../lib/state'
+import { bitmaps, codeMirror, editors, gamePlayerRef, openEditor, type EditorKind } from '../../lib/state'
 import BitmapPreview from '../design-system/bitmap-preview'
 import styles from './open-button.module.css'
 import { extractLegendBitmaps } from '../../lib/engine/legend-extractor'
@@ -20,7 +20,12 @@ export default function OpenButton(props: OpenButtonProps) {
 
 				if (editors[props.kind].needsBitmaps) {
 					const code = codeMirror.value?.state.doc.toString() ?? ''
-					bitmaps.value = extractLegendBitmaps(code)
+					const extracted = extractLegendBitmaps(code)
+					if (extracted.length > 0) {
+						bitmaps.value = extracted
+					} else if (gamePlayerRef.value) {
+						gamePlayerRef.value.extractBitmaps(code)
+					}
 				}
 
 				openEditor.value = {

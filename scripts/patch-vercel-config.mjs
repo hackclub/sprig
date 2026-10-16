@@ -12,8 +12,7 @@ const astroAssetsRoute = astroAssetsRouteIndex >= 0 ? routes[astroAssetsRouteInd
 if (astroAssetsRoute) {
 	astroAssetsRoute.headers = {
 		...astroAssetsRoute.headers,
-		'Access-Control-Allow-Origin': 'null',
-		'Access-Control-Allow-Credentials': 'true',
+		'Access-Control-Allow-Origin': '*',
 		'Cross-Origin-Resource-Policy': 'cross-origin',
 	}
 

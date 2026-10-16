@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { IoClose } from 'react-icons/io5'
 import { tinykeys } from 'tinykeys'
 import { usePopupCloseClick } from '../../lib/utils/popup-close-click'
-import { bitmaps, codeMirror, editors, openEditor, codeMirrorEditorText, _foldRanges, _widgets, type OpenEditor } from '../../lib/state'
+import { bitmaps, codeMirror, editors, gamePlayerRef, openEditor, codeMirrorEditorText, _foldRanges, _widgets, type OpenEditor } from '../../lib/state'
 import styles from './editor-modal.module.css'
 import levenshtein from 'js-levenshtein'
 import { extractLegendBitmaps } from '../../lib/engine/legend-extractor'
@@ -115,7 +115,14 @@ export default function EditorModal() {
 			const editRange = _foldRanges.value[indexOfMinDistance]
 			const openEditorCode = code.slice(editRange?.from, editRange?.to)
 
-			if (openEditor.value?.kind === 'map') bitmaps.value = extractLegendBitmaps(code ?? '');
+			if (openEditor.value?.kind === 'map') {
+				const extracted = extractLegendBitmaps(code ?? '')
+				if (extracted.length > 0) {
+					bitmaps.value = extracted
+				} else if (gamePlayerRef.value) {
+					gamePlayerRef.value.extractBitmaps(code ?? '')
+				}
+			}
 
 				text.value = openEditorCode;
 

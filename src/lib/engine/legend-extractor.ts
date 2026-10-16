@@ -1,5 +1,3 @@
-const identifierPattern = /^[A-Za-z_$][\w$]*$/
-
 const getStringConstants = (code: string): Record<string, string> => {
 	const constants: Record<string, string> = {}
 	const stringAssignment = /\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(['"`])([\s\S]*?)\2/g
@@ -10,7 +8,31 @@ const getStringConstants = (code: string): Record<string, string> => {
 		if (name && value && value.length === 1) constants[name] = value
 	}
 
+	const objectAssignment = /\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*\{([\s\S]*?)\}/g
+	while ((match = objectAssignment.exec(code))) {
+		const [, objName, body] = match
+		const propPattern = /([A-Za-z_$][\w$]*)\s*:\s*(['"`])([\s\S]*?)\2/g
+		let propMatch: RegExpExecArray | null
+		while ((propMatch = propPattern.exec(body!))) {
+			const [, propName, , val] = propMatch
+			if (propName && val && val.length === 1) {
+				constants[`${objName}.${propName}`] = val
+			}
+		}
+	}
+
 	return constants
+}
+
+const getBitmapConstants = (code: string): Record<string, string> => {
+	const bitmaps: Record<string, string> = {}
+	const bitmapAssignment = /\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*bitmap`([\s\S]*?)`/g
+	let match: RegExpExecArray | null
+	while ((match = bitmapAssignment.exec(code))) {
+		const [, name, content] = match
+		if (name && content) bitmaps[name] = content
+	}
+	return bitmaps
 }
 
 const readCallBody = (code: string, start: number): string | null => {
@@ -50,29 +72,37 @@ const resolveSpriteKey = (expression: string, constants: Record<string, string>)
 	const value = expression.trim()
 	const quoted = value.match(/^(['"`])(.+)\1$/)
 	if (quoted?.[2]?.length === 1) return quoted[2]
-	if (identifierPattern.test(value) && constants[value]) return constants[value]
+	if (constants[value]) return constants[value]
 	return null
 }
 
 export const extractLegendBitmaps = (code: string): [string, string][] => {
 	const constants = getStringConstants(code)
+	const bitmapVars = getBitmapConstants(code)
 	const bitmaps: [string, string][] = []
-	let searchIndex = 0
+	const seenKeys = new Set<string>()
 
-	while (searchIndex < code.length) {
-		const callIndex = code.indexOf('setLegend(', searchIndex)
-		if (callIndex === -1) break
+	const setLegendRegex = /\bsetLegend\s*\(/g
+	let match: RegExpExecArray | null
 
-		const bodyStart = callIndex + 'setLegend('.length
+	while ((match = setLegendRegex.exec(code))) {
+		const bodyStart = match.index + match[0].length
 		const body = readCallBody(code, bodyStart)
-		searchIndex = bodyStart + (body?.length ?? 0) + 1
+		setLegendRegex.lastIndex = bodyStart + (body?.length ?? 0) + 1
 		if (!body) continue
 
-		const entryPattern = /\[\s*([^,\]]+)\s*,\s*bitmap`([\s\S]*?)`\s*\]/g
+		const entryPattern = /\[\s*([^,\]]+)\s*,\s*(?:bitmap`([\s\S]*?)`|([A-Za-z_$][\w$]*))\s*\]/g
 		let entry: RegExpExecArray | null
 		while ((entry = entryPattern.exec(body))) {
 			const key = resolveSpriteKey(entry[1]!, constants)
-			if (key) bitmaps.push([key, entry[2]!])
+			const inlineContent = entry[2]
+			const varName = entry[3]?.trim()
+			const content = inlineContent !== undefined ? inlineContent : (varName ? bitmapVars[varName] : undefined)
+
+			if (key && content !== undefined && !seenKeys.has(key)) {
+				seenKeys.add(key)
+				bitmaps.push([key, content])
+			}
 		}
 	}
 

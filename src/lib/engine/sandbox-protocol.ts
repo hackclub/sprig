@@ -8,6 +8,7 @@ export type ParentToSandboxMessage =
 	| { type: 'STOP_GAME', channelId: string }
 	| { type: 'KEY_DOWN', channelId: string, key: string }
 	| { type: 'MUTE_CHANGED', channelId: string, muted: boolean }
+	| { type: 'EXTRACT_BITMAPS', channelId: string, code: string }
 
 export type SandboxToParentMessage =
 	| { type: 'READY' }
@@ -16,6 +17,7 @@ export type SandboxToParentMessage =
 	| { type: 'CONSOLE_LOG', channelId: string, args: SerializableLogArg[], nums: number[], isErr: false }
 	| { type: 'CONSOLE_ERROR', channelId: string, args: SerializableLogArg[], nums: number[], isErr: true }
 	| { type: 'BITMAPS_CHANGED', channelId: string, bitmaps: [string, string][] }
+	| { type: 'SHORTCUT_KEY', channelId: string, key: string, code?: string, ctrlKey: boolean, metaKey: boolean, shiftKey: boolean, altKey: boolean }
 
 export const isParentToSandboxMessage = (value: unknown): value is ParentToSandboxMessage => {
 	if (!value || typeof value !== 'object') return false
@@ -35,6 +37,8 @@ export const isParentToSandboxMessage = (value: unknown): value is ParentToSandb
 			return typeof message.key === 'string'
 		case 'MUTE_CHANGED':
 			return typeof message.muted === 'boolean'
+		case 'EXTRACT_BITMAPS':
+			return typeof message.code === 'string'
 		default:
 			return false
 	}
@@ -58,6 +62,8 @@ export const isSandboxToParentMessage = (value: unknown): value is SandboxToPare
 			return Array.isArray(message.args) && Array.isArray(message.nums) && message.isErr === true
 		case 'BITMAPS_CHANGED':
 			return Array.isArray(message.bitmaps)
+		case 'SHORTCUT_KEY':
+			return typeof message.key === 'string' && typeof message.ctrlKey === 'boolean' && typeof message.metaKey === 'boolean'
 		default:
 			return false
 	}

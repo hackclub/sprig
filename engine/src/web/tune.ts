@@ -51,6 +51,7 @@ export function playTune(tune: Tune, number = 1): PlayTuneRes {
 	const playingRef = { playing: true }
 
 	if (audioCtx === null) audioCtx = new AudioContext()
+	if (audioCtx.state === 'suspended') audioCtx.resume()
 	playTuneHelper(tune, number, playingRef, audioCtx, audioCtx.destination)
 
 	return {

@@ -5,11 +5,7 @@
 			"headers": [
 				{
 					"key": "Access-Control-Allow-Origin",
-					"value": "null"
-				},
-				{
-					"key": "Access-Control-Allow-Credentials",
-					"value": "true"
+					"value": "*"
 				},
 				{
 					"key": "Cross-Origin-Resource-Policy",

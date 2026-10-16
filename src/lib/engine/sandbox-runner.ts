@@ -1,5 +1,5 @@
 import type { NormalizedError } from '../state'
-import { runGame } from '.'
+import { runGame, runGameHeadless } from '.'
 import {
 	type ParentToSandboxMessage,
 	type SandboxToParentMessage,
@@ -100,6 +100,28 @@ window.addEventListener('message', (event) => {
 		case 'MUTE_CHANGED':
 			isMuted = message.muted
 			break
+		case 'EXTRACT_BITMAPS':
+			runGameHeadless(message.code, (bitmaps) => {
+				if (channelId) post({ type: 'BITMAPS_CHANGED', channelId, bitmaps })
+			})
+			break
+	}
+})
+
+window.addEventListener('keydown', (event) => {
+	if (event.ctrlKey || event.metaKey || event.key === 'Escape') {
+		if (channelId) {
+			post({
+				type: 'SHORTCUT_KEY',
+				channelId,
+				key: event.key,
+				code: event.code,
+				ctrlKey: event.ctrlKey,
+				metaKey: event.metaKey,
+				shiftKey: event.shiftKey,
+				altKey: event.altKey,
+			})
+		}
 	}
 })
 

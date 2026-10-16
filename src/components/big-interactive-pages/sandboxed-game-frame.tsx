@@ -15,6 +15,7 @@ interface SandboxedGameFrameProps {
 export default function SandboxedGameFrame(props: SandboxedGameFrameProps) {
 	const iframe = useRef<HTMLIFrameElement>(null)
 	const controller = useRef<SandboxedGameController | null>(null)
+	// ponytail: Vite HMR in dev requires allow-same-origin for websocket/client storage access; prod enforces strict opaque-origin sandbox.
 	const sandboxFlags = import.meta.env.DEV ? 'allow-scripts allow-same-origin' : 'allow-scripts'
 
 	useEffect(() => {
@@ -50,6 +51,7 @@ export default function SandboxedGameFrame(props: SandboxedGameFrameProps) {
 			src="/game-sandbox"
 			title={props.title ?? 'Sprig game sandbox'}
 			sandbox={sandboxFlags}
+			allow="autoplay"
 			referrerPolicy="no-referrer"
 			onLoad={() => controller.current?.markReady()}
 		/>

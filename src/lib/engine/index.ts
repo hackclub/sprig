@@ -154,6 +154,35 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 	}), cleanup };
 }
 
-export function runGameHeadless(code: string): void {
-	extractLegendBitmaps(code)
+export function runGameHeadless(code: string, onBitmaps?: (bitmaps: [string, string][]) => void): void {
+	const game = webEngine(document.createElement('canvas'))
+
+	const api = {
+		...game.api,
+		setTimeout: () => {},
+		setInterval: () => {},
+		setLegend: (..._bitmaps: [string, string][]) => {
+			if (JSON.stringify(_bitmaps) === "[null]") {
+				throw new Error('The sprites passed into setLegend each need to be in square brackets, like setLegend([player, bitmap`...`]).')
+			}
+			onBitmaps?.(_bitmaps)
+			return game.api.setLegend(..._bitmaps)
+		},
+		playTune: () => ({
+			end() {},
+			isPlaying() { return false }
+		})
+	}
+
+	const engineAPIKeys = Object.keys(api)
+	transformAndThrowErrors(code, engineAPIKeys, (transformedCode) => {
+		try {
+			const fn = new Function(...engineAPIKeys, transformedCode.code!)
+			fn(...Object.values(api))
+		} catch (error: any) {
+			normalizeGameError({ kind: 'runtime', error })
+		}
+	})
+
+	game.cleanup()
 }

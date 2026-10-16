@@ -5,18 +5,6 @@ export async function onRequest({ request }: any, next: () => any) {
   let response = await next();
 
   if (path === "game-sandbox" || path === "game-sandbox/") {
-	const contentType = response.headers.get("Content-Type") ?? "";
-	if (contentType.includes("text/html")) {
-		const html = await response.text();
-		response = new Response(
-			html.replaceAll(
-				'<script type="module" src=',
-				'<script type="module" crossorigin="use-credentials" src='
-			),
-			response
-		);
-	}
-
 	response.headers.set(
 		"Content-Security-Policy",
 		[
