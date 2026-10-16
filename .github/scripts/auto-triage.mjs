@@ -648,7 +648,7 @@ function buildComment(result) {
 				? `Paste the header below at line 1 of \`${result.gameFile}\`.`
 				: `Replace the comment header at the top of \`${result.gameFile}\` with the block below.`;
 
-			checksSection += `> [!TIP]\n> **How to fix metadata:**\n> 1. Click **[Edit Game File](${editUrl})**.\n> 2. ${actionStep}\n> 3. Check the details, then commit your changes.\n\n> [!IMPORTANT]\n> **Auto-generated header: please review before committing!**\n> We drafted this header from your PR details, but it may not be 100% accurate. Verify that \`@title\`, \`@description\`, and \`@tags\` match your actual game before saving.\n\n\`\`\`javascript\n${snippet}\n\`\`\`\n\n`;
+			checksSection += `> [!TIP]\n> **How to fix metadata:**\n> 1. Click **[Edit Game File](${editUrl})**.\n> 2. ${actionStep}\n> 3. Check the details, then commit your changes.\n>\n> ⚠️ **Auto-generated header: please review before committing!**\n> We drafted this header from your PR details, but it may not be 100% accurate. Verify that \`@title\`, \`@description\`, and \`@tags\` match your actual game before saving.\n\n\`\`\`javascript\n${snippet}\n\`\`\`\n\n`;
 		}
 	}
 
