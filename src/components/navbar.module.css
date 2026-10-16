@@ -101,6 +101,12 @@
 	gap: 14px;
 }
 
+.navActions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
 /* Logo */
 .logo a,
 .logo button {

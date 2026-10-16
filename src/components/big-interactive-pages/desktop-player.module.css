@@ -2,19 +2,37 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	position: fixed; /* TODO: this is bad! figure out how to make better */
-	top: 0;
-	height: 100vh;
-	width: 100vw;
+	width: 100%;
+	height: 100%;
+	flex: 1;
+	min-height: 0;
 }
 
 .root {
 	display: flex;
-	margin: 20px
+	margin: 20px;
+	max-width: 100%;
+	max-height: 100%;
+	align-items: center;
+	justify-content: center;
 }
 
 .screenContainer {
 	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+.canvasWrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 100%;
+	max-height: 100%;
+	min-height: 0;
 }
 
 .screen {
@@ -25,7 +43,13 @@
 	aspect-ratio: 1000 / 800;
 	image-rendering: pixelated;
 	outline: none;
-	width: 100%;
+	width: auto;
+	max-width: 100%;
+	max-height: min(800px, calc(100vh - 120px));
+}
+
+.embedded .screen {
+	max-height: min(800px, calc(100vh - 250px));
 }
 
 .screenControls {
@@ -37,7 +61,6 @@
 	gap: 10px;
 	align-items: center;
 	padding: 8px 0;
-	position: absolute;
 	width: 100%;
 }
 
@@ -78,6 +101,43 @@
 		background: var(--bg-base);
 		padding: 8px 20px;
 	}
+}
+
+.screenContainer:fullscreen {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background: #000000;
+	width: 100vw;
+	height: 100vh;
+}
+
+.screenContainer:fullscreen .screenControls {
+	display: none;
+}
+
+.screenContainer:fullscreen .screen {
+	border: none;
+	height: 100%;
+	max-height: 100%;
+	width: auto;
+}
+
+.screenContainer:fullscreen .canvasWrapper {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.screenContainer:fullscreen .screenControls.enabled {
+	display: flex;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background: var(--bg-base);
+	padding: 8px 20px;
 }
 
 .screenControls .mute,

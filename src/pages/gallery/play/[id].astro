@@ -162,44 +162,20 @@ const props: Props = {
       width: 100%;
       min-height: 0;
       position: relative;
-      overflow: auto;
-    }
-
-    :global(.rootContainer) {
-      position: absolute !important;
-      height: 100% !important;
-      width: 100% !important;
-      top: 0 !important;
-      left: 0 !important;
-      overflow: hidden !important;
-    }
-
-    /* Hide the metadata panel */
-    :global(#desktop-player-meta) {
-      display: none !important;
-    }
-
-    :global(.screen) {
-      aspect-ratio: 1.25;
-      border: 2px solid var(--accent);
-      background: #000000;
-      image-rendering: pixelated;
-      max-height: 70vh;
-      width: auto;
     }
   </style>
 </head>
 <body>
-<MainNavbar session={props.session}>
-  {type !== 'document' && (
-    <a href={`/gallery/${props.game.filename}`}>
-      <Button icon={IoCode}>View Code</Button>
+  <MainNavbar session={props.session}>
+    {type !== 'document' && (
+      <a href={`/gallery/${props.game.filename}`}>
+        <Button icon={IoCode}>View Code</Button>
+      </a>
+    )}
+    <a href={`/~/new-game?remix=${props.game.filename}`}>
+      <Button icon={IoShuffle}>Remix Game</Button>
     </a>
-  )}
-  <a href={`/~/new-game?remix=${props.game.filename}`}>
-    <Button icon={IoShuffle}>Remix Game</Button>
-  </a>
-</MainNavbar>
+  </MainNavbar>
   <div class="game-view">
     <div class="game-header">
       <div class="game-info">
@@ -224,6 +200,7 @@ const props: Props = {
         filename={props.game.filename}
         isLoggedIn={!!props.session?.session.full}
         hearted={false}
+        embedded={true}
       />
     </div>
   </div>
