@@ -56,11 +56,11 @@ test('extracts bitmaps defined in variables and object property keys', () => {
 			PLAYER: "p",
 			WALL: "w"
 		}
-		const playerSprite = bitmap\`0000\`
+		const playerSprite = bitmap \`0000\`
 		function resetLegend() {}
 		setLegend(
 			[SPRITES.PLAYER, playerSprite],
-			[SPRITES.WALL, bitmap\`1111\`]
+			[SPRITES.WALL, bitmap \`1111\`]
 		)
 	`
 	expect(extractLegendBitmaps(code)).toEqual([

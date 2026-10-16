@@ -119,7 +119,8 @@ export default function EditorModal() {
 				const extracted = extractLegendBitmaps(code ?? '')
 				if (extracted.length > 0) {
 					bitmaps.value = extracted
-				} else if (gamePlayerRef.value) {
+				}
+				if (gamePlayerRef.value) {
 					gamePlayerRef.value.extractBitmaps(code ?? '')
 				}
 			}

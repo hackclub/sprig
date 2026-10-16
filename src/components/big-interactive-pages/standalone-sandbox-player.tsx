@@ -26,10 +26,15 @@ export default function StandaloneSandboxPlayer(props: StandaloneSandboxPlayerPr
 		if (!props.watchFile) return
 
 		const interval = window.setInterval(async () => {
-			const response = await fetch(props.watchFile!)
-			const code = await response.text()
-			if (lastCode.current === code) return
-			run(code)
+			try {
+				const response = await fetch(props.watchFile!)
+				if (!response.ok) return
+				const code = await response.text()
+				if (lastCode.current === code) return
+				run(code)
+			} catch (error) {
+				console.error(error)
+			}
 		}, props.watchMs ?? 1000)
 
 		return () => window.clearInterval(interval)

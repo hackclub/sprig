@@ -47,7 +47,7 @@ export default function SandboxedGameFrame(props: SandboxedGameFrameProps) {
 		<iframe
 			ref={iframe}
 			class={props.class}
-			style={props.style}
+			style={{ border: 'none', ...props.style }}
 			src="/game-sandbox"
 			title={props.title ?? 'Sprig game sandbox'}
 			sandbox={sandboxFlags}

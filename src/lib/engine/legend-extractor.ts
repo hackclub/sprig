@@ -26,7 +26,7 @@ const getStringConstants = (code: string): Record<string, string> => {
 
 const getBitmapConstants = (code: string): Record<string, string> => {
 	const bitmaps: Record<string, string> = {}
-	const bitmapAssignment = /\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*bitmap`([\s\S]*?)`/g
+	const bitmapAssignment = /\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*bitmap\s*`([\s\S]*?)`/g
 	let match: RegExpExecArray | null
 	while ((match = bitmapAssignment.exec(code))) {
 		const [, name, content] = match
@@ -91,7 +91,7 @@ export const extractLegendBitmaps = (code: string): [string, string][] => {
 		setLegendRegex.lastIndex = bodyStart + (body?.length ?? 0) + 1
 		if (!body) continue
 
-		const entryPattern = /\[\s*([^,\]]+)\s*,\s*(?:bitmap`([\s\S]*?)`|([A-Za-z_$][\w$]*))\s*\]/g
+		const entryPattern = /\[\s*([^,\]]+)\s*,\s*(?:bitmap\s*`([\s\S]*?)`|([A-Za-z_$][\w$]*))\s*\]/g
 		let entry: RegExpExecArray | null
 		while ((entry = entryPattern.exec(body))) {
 			const key = resolveSpriteKey(entry[1]!, constants)

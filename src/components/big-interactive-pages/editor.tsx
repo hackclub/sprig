@@ -448,6 +448,16 @@ export default function Editor({ persistenceState, cookies, roomState, review }:
 		screenShakeSignal = screenShake;
 	});
 	useEffect(() => () => cleanupRef.value?.(), []);
+	useEffect(() => {
+		const onKeyDown = (e: KeyboardEvent) => {
+			if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+				e.preventDefault();
+				onRun();
+			}
+		};
+		window.addEventListener('keydown', onKeyDown);
+		return () => window.removeEventListener('keydown', onKeyDown);
+	}, []);
 	// We like running games!
 	const screenShake = useSignal(0);
 

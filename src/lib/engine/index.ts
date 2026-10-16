@@ -11,6 +11,7 @@ import { extractLegendBitmaps } from './legend-extractor'
 interface RunResult {
 	error: NormalizedError | null
 	cleanup: () => void
+	stopTunes?: () => void
 }
 
 interface RunGameOptions {
@@ -75,9 +76,13 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 	}
 	window.addEventListener('error', errorListener)
 
+	const stopTunes = () => {
+		tunes.forEach(tune => tune.end())
+	}
+
 	const cleanup = () => {
 		game.cleanup()
-		tunes.forEach(tune => tune.end())
+		stopTunes()
 		timeouts.forEach(clearTimeout)
 		intervals.forEach(clearInterval)
 		window.removeEventListener('error', errorListener)
@@ -148,10 +153,14 @@ export function runGame(code: string, canvas: HTMLCanvasElement, onPageError: (e
 	}
 
     const engineAPIKeys = Object.keys(api);
-	return { error: transformAndThrowErrors(code, engineAPIKeys, (transformedCode) => {
-		const fn = new Function(...engineAPIKeys, transformedCode.code!)
-		fn(...Object.values(api))
-	}), cleanup };
+	return {
+		error: transformAndThrowErrors(code, engineAPIKeys, (transformedCode) => {
+			const fn = new Function(...engineAPIKeys, transformedCode.code!)
+			fn(...Object.values(api))
+		}),
+		cleanup,
+		stopTunes,
+	};
 }
 
 export function runGameHeadless(code: string, onBitmaps?: (bitmaps: [string, string][]) => void): void {

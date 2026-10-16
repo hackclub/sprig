@@ -23,7 +23,8 @@ export default function OpenButton(props: OpenButtonProps) {
 					const extracted = extractLegendBitmaps(code)
 					if (extracted.length > 0) {
 						bitmaps.value = extracted
-					} else if (gamePlayerRef.value) {
+					}
+					if (gamePlayerRef.value) {
 						gamePlayerRef.value.extractBitmaps(code)
 					}
 				}

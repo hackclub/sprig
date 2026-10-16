@@ -13,6 +13,7 @@ if (!canvas) throw new Error('Missing Sprig sandbox canvas')
 
 let channelId: string | null = null
 let cleanup: (() => void) | undefined
+let stopActiveTunes: (() => void) | undefined
 let isMuted = false
 
 const serializeError = (error: NormalizedError): NormalizedError => ({
@@ -46,6 +47,7 @@ const post = (message: SandboxToParentMessage): void => {
 const stopGame = (): void => {
 	cleanup?.()
 	cleanup = undefined
+	stopActiveTunes = undefined
 	if (channelId) post({ type: 'STOPPED', channelId })
 }
 
@@ -72,6 +74,7 @@ const run = (message: Extract<ParentToSandboxMessage, { type: 'RUN_GAME' }>): vo
 
 	canvas.focus()
 	cleanup = result?.cleanup
+	stopActiveTunes = result?.stopTunes
 	if (result?.error) post({ type: 'GAME_ERROR', channelId: message.channelId, error: serializeError(result.error) })
 }
 
@@ -99,6 +102,7 @@ window.addEventListener('message', (event) => {
 			break
 		case 'MUTE_CHANGED':
 			isMuted = message.muted
+			if (isMuted) stopActiveTunes?.()
 			break
 		case 'EXTRACT_BITMAPS':
 			runGameHeadless(message.code, (bitmaps) => {
