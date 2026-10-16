@@ -72,37 +72,6 @@
 	margin-left: 30px;
 }
 
-@media all and (display-mode: fullscreen) {
-	.screenControls {
-		display: none;
-	}
-	
-	.screenContainer {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-	
-	.screen {
-		border: none;
-		height: 100%;
-		width: unset
-	}
-	
-	.canvasWrapper {
-		height: 100%;
-	}
-	
-	.screenControls.enabled {
-		display: flex;
-		position: relative;
-		bottom: 0;
-		width: 100%;
-		background: var(--bg-base);
-		padding: 8px 20px;
-	}
-}
-
 .screenContainer:fullscreen {
 	display: flex;
 	flex-direction: column;
@@ -119,9 +88,11 @@
 
 .screenContainer:fullscreen .screen {
 	border: none;
-	height: 100%;
+	width: min(100%, calc(100vh * 1.25));
+	height: min(100%, calc(100vw * 0.8));
+	aspect-ratio: 1000 / 800;
 	max-height: 100%;
-	width: auto;
+	max-width: 100%;
 }
 
 .screenContainer:fullscreen .canvasWrapper {
