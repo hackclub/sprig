@@ -1,3 +1,11 @@
+/*
+@title: The Liar
+@author: dhyanamgit
+@description: This a really good detective game.
+@tags: ['puzzle']
+@addedOn: 2026-10-17
+*/
+
 const PLAYER = "p";
 const GUARD = "g";
 const MIRA = "1";
@@ -1348,7 +1356,7 @@ function buildCase() {
       lines: [
         "Server room door,",
         "seen from the",
-        "archive window.",
+        "archive pane.",
         "",
         "Clock: " + loginTime,
         "A hooded figure",
