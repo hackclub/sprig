@@ -3,19 +3,36 @@ import path from "node:path";
 import {
 	REVIEW_BOT_MARKER,
 	addLabels,
+	buildMetadataSnippet,
 	ensureReviewLabels,
+	extractAboutAndGameplay,
+	extractAuthor,
 	getIssueLabels,
+	getMetadataValue,
 	getRepository,
 	githubPaginated,
 	githubRequest,
 	hasLabel,
+	inferSubmissionMetadata,
+	parseTags,
 	readGitHubEvent,
 	removeLabel,
 	setStateLabel,
 	upsertBotComment,
+	validateMetadataHeader,
 } from "./review-utils.mjs";
-import { buildSubmissionManifest } from "./submission-manifest.mjs";
-import { autoReviewLabelChanges } from "./review-state.mjs";
+import { buildSubmissionManifest, getImageCountCheck, validateImageFiles } from "./submission-manifest.mjs";
+import {
+	DUPLICATE_LABEL,
+	LEGACY_DUPLICATE_LABEL,
+	DUPLICATE_NOTICE_MARKER,
+	buildLatestWarning,
+	buildOlderCheckDetail,
+	buildOlderNotice,
+	findDuplicateGroup,
+	parseOlderNotice,
+} from "./duplicate-detection.mjs";
+import { autoReviewLabelChanges, reconcileReviewStatus } from "./review-state.mjs";
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
@@ -25,11 +42,12 @@ let event = readGitHubEvent();
 let pullRequest = event.pull_request || event.issue;
 // keep it in this order pls or the entire thing explodes and fails. thanks
 let cachedOpenPulls = null;
+let duplicateGroupNumbers = new Set();
 
 let reviewers = new Set();
 try {
 	const reviewRoles = JSON.parse(readFileSync(path.resolve(process.env.SUBMISSION_PATH ?? process.cwd(), ".github/review-roles.json"), "utf8"));
-	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])]);
+	reviewers = new Set([...(reviewRoles.maintainers ?? []), ...(reviewRoles.triagers ?? [])].map((u) => u.toLowerCase()));
 } catch {
 	console.warn("review-roles.json not found or invalid; review state changes will be skipped.");
 }
@@ -77,32 +95,6 @@ if (event.action === "unassigned") {
 	process.exit(0);
 }
 
-if (event.review && event.action === "submitted") {
-	const reviewState = event.review.state.toLowerCase();
-	const reviewerLogin = event.review.user?.login;
-	const authorLogin = pullRequest.user?.login;
-
-	if (reviewerLogin && authorLogin && reviewerLogin === authorLogin) {
-		console.log(`Review submitted by PR author (${reviewerLogin}). Ignoring state change to prevent self-approval.`);
-		process.exit(0);
-	}
-
-	if (!reviewerLogin || !reviewers.has(reviewerLogin)) {
-		console.log(`Review submitted by ${reviewerLogin ?? "unknown reviewer"}. Ignoring state change because reviewer is not listed.`);
-		process.exit(0);
-	}
-	
-	if (reviewState === "changes_requested") {
-		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
-		console.log(`Review requested changes, set "Needs Author".`);
-	} else if (reviewState === "approved") {
-		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Ready for Maintainer" });
-		console.log(`Review approved, set "Ready for Maintainer".`);
-	} else {
-		console.log(`Review state is ${reviewState}, ignoring.`);
-	}
-	process.exit(0);
-}
 const workspace = path.resolve(process.env.SUBMISSION_PATH ?? process.cwd());
 const reviewBaseUrl = process.env.SPRIG_REVIEW_BASE_URL ?? "https://sprig.hackclub.com/editor";
 
@@ -114,19 +106,7 @@ const labels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber 
 const isLabeledSubmission = hasLabel(labels, "Submission");
 
 const body = pullRequest.body ?? "";
-const touchesNonGamePaths = pullFiles.some((f) =>
-	!f.filename.toLowerCase().startsWith("games/") &&
-	(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
-);
-const addedJsFiles = pullFiles.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
-const bodyLooksLikeSubmission =
-	/what is your game about|how do you play your game/i.test(body) ||
-	/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
-const isMisplacedGameSubmission = !touchesNonGamePaths &&
-	addedJsFiles.length > 0 &&
-	(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*@title:/m.test(f.patch ?? "")));
-
-const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission;
+const isSubmissionPR = modifiesGames || isLabeledSubmission || isMisplacedGameSubmission(pullFiles, body);
 
 if (!isSubmissionPR) {
 	console.log("Not a submission PR (no games/ files, no Submission label, and not a misplaced game submission); skipping.");
@@ -135,6 +115,8 @@ if (!isSubmissionPR) {
 
 try {
 	await materializeSubmittedGameFiles(pullRequest, pullFiles, workspace);
+	const duplicates = await detectDuplicateSubmissions(pullFiles);
+	duplicateGroupNumbers = new Set(duplicates.group?.duplicates ?? []);
 	const result = await validateSubmission({
 		pullRequest,
 		pullFiles,
@@ -142,9 +124,11 @@ try {
 		reviewBaseUrl,
 		owner,
 		repo,
+		duplicates,
 	});
 
 	await applyLabels(result);
+	await applyDuplicateActions(duplicates);
 	await upsertBotComment({
 		owner,
 		repo,
@@ -211,6 +195,100 @@ async function materializeSubmittedGameFiles(pullRequest, pullFiles, workspace) 
 	}
 }
 
+function isMisplacedGameSubmission(files, body) {
+	const touchesNonGamePaths = files.some((f) =>
+		!f.filename.toLowerCase().startsWith("games/") &&
+		(f.status !== "added" || (!f.filename.endsWith(".js") && !/\.(png)$/i.test(f.filename)))
+	);
+	const addedJsFiles = files.filter((f) => f.status === "added" && f.filename.endsWith(".js"));
+	const bodyLooksLikeSubmission =
+		/what is your game about|how do you play your game/i.test(body) ||
+		/^#+\s*(about your game|pre apply checklist)\b/im.test(body);
+	return !touchesNonGamePaths &&
+		addedJsFiles.length > 0 &&
+		(bodyLooksLikeSubmission || addedJsFiles.some((f) => /^\+\s*(?:\*\s*)?@title:/m.test(f.patch ?? "")));
+}
+
+function addsGame(files, body) {
+	return files.some((f) => f.status === "added" && /^games\/.+\.js$/i.test(f.filename)) ||
+		isMisplacedGameSubmission(files, body);
+}
+
+async function detectDuplicateSubmissions(pullFiles) {
+	const login = pullRequest.user?.login;
+	if (!login || reviewers.has(login) || !addsGame(pullFiles, pullRequest.body ?? "")) return { group: null };
+	try {
+		const openPulls = await getOpenPulls();
+		const targetLogin = login.toLowerCase();
+		const siblings = openPulls
+			.filter((pr) => pr.number !== prNumber && pr.user?.login?.toLowerCase() === targetLogin && !pr.draft)
+			.slice(0, 20);
+
+		const siblingNumbers = [];
+		for (const pr of siblings) {
+			const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
+			if (addsGame(prFiles, pr.body ?? "")) siblingNumbers.push(pr.number);
+		}
+
+		const group = findDuplicateGroup(prNumber, siblingNumbers);
+		return { group: group.duplicates.length ? group : null };
+	} catch (error) {
+		console.warn(`Duplicate detection failed, continuing without it: ${error.message}`);
+		return { group: null, failed: true };
+	}
+}
+
+async function applyDuplicateActions({ group, failed }) {
+	if (failed) return;
+	if (!group) {
+		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: DUPLICATE_LABEL });
+		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: LEGACY_DUPLICATE_LABEL });
+		await removeOlderNotice(prNumber);
+		return;
+	}
+
+	await removeLabel({ owner, repo, token, issueNumber: prNumber, label: LEGACY_DUPLICATE_LABEL });
+	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: [DUPLICATE_LABEL] });
+	if (!group.isLatest) {
+		await syncOlderNotice({ issueNumber: prNumber, latestNumber: group.latestNumber, restart: event.action === "reopened" });
+		return;
+	}
+
+	for (const olderNumber of group.older) {
+		try {
+			await removeLabel({ owner, repo, token, issueNumber: olderNumber, label: LEGACY_DUPLICATE_LABEL });
+			await addLabels({ owner, repo, token, issueNumber: olderNumber, labels: [DUPLICATE_LABEL] });
+			await syncOlderNotice({ issueNumber: olderNumber, latestNumber: prNumber, restart: false });
+		} catch (error) {
+			console.warn(`Could not notify duplicate PR #${olderNumber}: ${error.message}`);
+		}
+	}
+}
+
+async function removeOlderNotice(issueNumber) {
+	const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
+	for (const comment of comments) {
+		if (comment.user?.type === "Bot" && comment.body?.includes(DUPLICATE_NOTICE_MARKER)) {
+			await githubRequest(token, "DELETE", `/repos/${owner}/${repo}/issues/comments/${comment.id}`);
+		}
+	}
+}
+
+async function syncOlderNotice({ issueNumber, latestNumber, restart }) {
+	const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
+	const existing = comments.find((comment) => comment.body?.includes(DUPLICATE_NOTICE_MARKER));
+	if (!restart && parseOlderNotice(existing?.body)?.latestNumber === latestNumber) return;
+
+	await upsertBotComment({
+		owner,
+		repo,
+		token,
+		issueNumber,
+		marker: DUPLICATE_NOTICE_MARKER,
+		body: buildOlderNotice({ number: issueNumber, latestNumber, since: new Date().toISOString() }),
+	});
+}
+
 async function getOpenPulls() {
 	if (!cachedOpenPulls) {
 		cachedOpenPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?state=open`);
@@ -218,7 +296,7 @@ async function getOpenPulls() {
 	return cachedOpenPulls;
 }
 
-async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo }) {
+async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBaseUrl, owner, repo, duplicates }) {
 	const checks = [];
 	const problems = [];
 	const warnings = [];
@@ -233,23 +311,26 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 	const bodyChecks = validatePullRequestBody(pullRequest.body ?? "");
 	for (const check of bodyChecks.checks) addCheck(check.name, check.ok, check.detail);
 
-	const submitterLogin = pullRequest.user?.login;
-	if (submitterLogin) {
-		const openPulls = await getOpenPulls();
-		const duplicatePR = openPulls.find(
-			(pr) => pr.number !== prNumber && pr.user?.login === submitterLogin && pr.labels?.some((l) => l.name === "Submission")
-		);
+	if (duplicates.group && !duplicates.group.isLatest) {
 		addCheck(
 			"No duplicate open submission",
-			!duplicatePR,
-			duplicatePR
-				? `You already have an open submission (PR #${duplicatePR.number}). Please close one of them.`
-				: "No other open submissions from this user."
+			false,
+			buildOlderCheckDetail({ number: prNumber, latestNumber: duplicates.group.latestNumber })
 		);
+	} else {
+		addCheck(
+			"No duplicate open submission",
+			true,
+			duplicates.group ? "This is your newest open submission PR." : "No other open submission PRs from you."
+		);
+		if (duplicates.group?.older.length) {
+			warnings.push(buildLatestWarning({ older: duplicates.group.older }));
+		}
 	}
 
 	let gameFile = null;
 	let metadata = null;
+	let content = null;
 	let rawUrl = null;
 	let playUrl = null;
 	let screenshotUrl = null;
@@ -260,6 +341,7 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 		const result = await validateSingleGameFile(gameFile, workspace, addCheck, warnings);
 		metadata = result.metadata;
 		similarity = result.similarity;
+		content = result.content ?? null;
 
 		rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${gameFile.filename}`;
 		
@@ -275,10 +357,8 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 		playUrl = buildReviewUrl(reviewBaseUrl);
 	}
 
-	if (gameFile) {
-		const gameBase = path.basename(gameFile.filename, ".js");
-		screenshotUrl = validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck);
-	}
+	const gameBase = gameFile ? path.basename(gameFile.filename, ".js") : null;
+	screenshotUrl = validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck);
 
 	const ok = checks.every((check) => check.ok);
 	return {
@@ -288,6 +368,7 @@ async function validateSubmission({ pullRequest, pullFiles, workspace, reviewBas
 		warnings,
 		metadata: metadata?.values ?? null,
 		gameFile: gameFile?.filename ?? null,
+		content,
 		rawUrl,
 		playUrl,
 		screenshotUrl,
@@ -309,132 +390,8 @@ function validatePullRequestBody(body) {
 	return { checks };
 }
 
-function getSectionBlocks(body, heading) {
-	const pattern = new RegExp(String.raw`(?:^|\n)#+\s*${heading}[^\n]*\n([\s\S]*?)(?=\n#+\s|$)`, "i");
-	const match = body.match(pattern);
-	if (!match) return [];
-	const clean = stripTemplateNoise(match[1]);
-	return clean
-		.split(/\n\s*\n+/)
-		.map((p) => normalizeFieldValue(p))
-		.filter(Boolean);
-}
-
-function extractAuthor(body) {
-	const direct = extractBoldField(body, "Author");
-	if (direct) return direct;
-	const blocks = getSectionBlocks(body, "Author(?:\\s+name)?");
-	for (const block of blocks) {
-		if (/^author:?$/i.test(block)) continue;
-		const clean = block.replace(/^author:\s*/i, "").trim();
-		if (clean) return clean;
-	}
-	return "";
-}
-
-function extractAboutAndGameplay(body) {
-	let about = extractBoldField(body, "What is your game about?");
-	let gameplay = extractBoldField(body, "How do you play your game?");
-	if (about && gameplay) return { about, gameplay };
-
-	const isPrompt = (text) =>
-		/what is your game about/i.test(text) ||
-		/how do you play your game/i.test(text);
-
-	const blocks = getSectionBlocks(body, "About your game").filter((b) => !isPrompt(b));
-
-	if (!about && blocks.length > 0) about = blocks[0];
-	if (!gameplay && blocks.length > 1) gameplay = blocks[1];
-
-	return { about, gameplay };
-}
-
-function extractBoldField(body, label) {
-	const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
-
-	const boldPattern = new RegExp(String.raw`\*\*${escaped}:?\*\*\s*([\s\S]*?)(?=\n\s*(?:\*\*|#{1,6})|$)`, "i");
-	const boldMatch = body.match(boldPattern);
-	if (boldMatch) {
-		const value = normalizeFieldValue(stripTemplateNoise(boldMatch[1]));
-		if (value) return value;
-	}
-
-	const fullBoldPattern = new RegExp(String.raw`(?:\*\*|\*)${escaped}\s*:\s*(.+?)(?:\*\*|\*)(?:\r?\n|$)`, "i");
-	const fullBoldMatch = body.match(fullBoldPattern);
-	if (fullBoldMatch) {
-		const value = normalizeFieldValue(stripTemplateNoise(fullBoldMatch[1]));
-		if (value) return value;
-	}
-
-	const plainPattern = new RegExp(String.raw`(?:^|\n)\s*(?:[-*]|\d+\.)*\s*(?:\*\*|\*)?${escaped}\s*:\s*([^\n]+)`, "i");
-	const plainMatch = body.match(plainPattern);
-	if (plainMatch) {
-		const value = normalizeFieldValue(stripTemplateNoise(plainMatch[1]));
-		if (value) return value;
-	}
-
-	return "";
-}
-
-function normalizeFieldValue(value) {
-	return value
-		.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-		.replace(/^[*`_~]+|[*`_~]+$/g, "")
-		.trim();
-}
-
-function stripTemplateNoise(value) {
-	return value
-		.replace(/<!--[\s\S]*?-->/g, "")
-		.replace(/^>\s?.*$/gm, "")
-		.trim();
-}
-
 async function validateMetadata(content, filename, workspace) {
-	const checks = [];
-	const values = {
-		title: getMetadataValue(content, "title"),
-		author: getMetadataValue(content, "author"),
-		description: getMetadataValue(content, "description"),
-		tags: getMetadataValue(content, "tags"),
-		addedOn: getMetadataValue(content, "addedOn"),
-	};
-
-	const add = (name, ok, detail) => checks.push({ name, ok, detail });
-
-	for (const [key, value] of Object.entries(values)) {
-		add(
-			`Metadata @${key}`,
-			Boolean(value),
-			value ? `@${key} is filled.` : `Metadata in \`${filename}\` is missing or has empty \`@${key}:\`.`
-		);
-	}
-
-	const parsedTags = parseTags(values.tags);
-	add(
-		"Metadata tags parse",
-		parsedTags.tags !== undefined && parsedTags.tags.length > 0,
-		parsedTags.tags !== undefined && parsedTags.tags.length > 0
-			? "Tags are a non-empty array."
-			: `Set \`@tags:\` to a non-empty array, for example \`@tags: ['maze']\`.\nReason: ${parsedTags.issue}`
-	);
-
-	checkMetadataDate(values.addedOn, add);
-
-	const titleLooksLikeTemplate = /^getting(_|\s)started$/i.test(values.title?.trim()) || /^template$/i.test(values.title?.trim()) || /^my game$/i.test(values.title?.trim());
-	const authorLooksLikeTemplate = /leo,\s*edits/i.test(values.author) || /^my name$/i.test(values.author?.trim());
-	const descriptionLooksLikeTemplate = /short description about the game/i.test(values.description?.trim());
-	const hasExampleTags = parsedTags.tags?.some(t => ["tag1", "tag2", "example", "another-example"].includes(t.toLowerCase()));
-
-	const hasTemplateValues = titleLooksLikeTemplate || authorLooksLikeTemplate || descriptionLooksLikeTemplate || hasExampleTags;
-
-	add(
-		"Metadata template values",
-		!hasTemplateValues,
-		!hasTemplateValues
-			? "No template metadata values found."
-			: "Replace example/template values in the metadata header (like 'MY GAME', 'MY NAME', 'Short description...', or placeholder tags)."
-	);
+	const { checks, values, hasHeader } = validateMetadataHeader(content, filename);
 
 	const TUTORIAL_FILES = ["getting_started.js", "maze_game_starter.js", "sprig_dodge.js"];
 	const isTutorial = TUTORIAL_FILES.some((tutFile) => {
@@ -444,49 +401,29 @@ async function validateMetadata(content, filename, workspace) {
 			return normalizeCode(content) === normalizeCode(tutContent);
 		} catch { return false; }
 	});
-	add(
-		"Not a tutorial game",
-		!isTutorial,
-		isTutorial
+	checks.push({
+		name: "Not a tutorial game",
+		ok: !isTutorial,
+		detail: isTutorial
 			? "This looks like an unmodified tutorial or starter game. Submit your own original game instead."
-			: "Game does not appear to be an unmodified tutorial."
-	);
+			: "Game does not appear to be an unmodified tutorial.",
+	});
 
-	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
-	add(
-		"Unique game title",
-		!titleConflict,
-		titleConflict
-			? `Game title \`${values.title}\` already appears in \`${titleConflict}\`; choose a unique title.`
-			: "Game title appears unique."
-	);
-
-	return { checks, values: { ...values, tags: parsedTags.tags ?? values.tags } };
-}
-
-function getMetadataValue(content, key) {
-	const match = content.match(new RegExp(String.raw`@${key}:\s*([\s\S]*?)(?=\n\s*@|\n\s*\*\/)`));
-	return match?.[1]?.trim() ?? "";
-}
-
-function parseTags(raw) {
-	if (!raw?.trim()) return { issue: "is empty (expected a JSON-ish array like ['maze','puzzle'])." };
-
-	try {
-		const parsed = JSON.parse(raw.replaceAll("'", '"'));
-		if (!Array.isArray(parsed)) return { issue: "must be an array (example: ['maze','puzzle'])." };
-		if (parsed.some((tag) => typeof tag !== "string")) {
-			return { issue: "must be an array of strings (example: ['maze','puzzle'])." };
-		}
-
-		return { tags: parsed };
-	} catch (error) {
-		if (error instanceof SyntaxError) {
-			return { issue: "is not valid JSON (example: ['maze','puzzle'])." };
-		}
-
-		return { issue: "could not be parsed." };
+	if (!hasHeader) {
+		return { checks, values };
 	}
+
+	const safeTitle = values.title ? values.title.replace(/`/g, "'") : "";
+	const titleConflict = values.title ? await findTitleConflict(values.title, filename, workspace) : null;
+	checks.push({
+		name: "Unique game title",
+		ok: !titleConflict,
+		detail: titleConflict
+			? `Game title \`${safeTitle}\` already appears in \`${titleConflict}\`; choose a unique title.`
+			: "Game title appears unique.",
+	});
+
+	return { checks, values };
 }
 
 async function findTitleConflict(title, filename, workspace) {
@@ -503,7 +440,7 @@ async function findTitleConflict(title, filename, workspace) {
 	const openPulls = await getOpenPulls();
 	const submissionPRs = openPulls.filter((pr) => pr.labels?.some((l) => l.name === "Submission"));
 	for (const pr of submissionPRs) {
-		if (pr.number === prNumber) continue;
+		if (pr.number === prNumber || duplicateGroupNumbers.has(pr.number)) continue;
 		const prFiles = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pr.number}/files`);
 		for (const file of prFiles) {
 			if (file.filename.startsWith("games/") && file.filename.endsWith(".js")) {
@@ -526,13 +463,16 @@ function normalize(value) {
 function findMostSimilarGame(content, submittedFilename, workspace) {
 	const gamesDir = path.join(workspace, "games");
 	const gameFiles = readdirSync(gamesDir).filter((file) => file.endsWith(".js"));
+	const c1 = chunks(analyze(content));
+	if (!c1.size) return { score: 0, match: null };
+
 	let best = { score: 0, match: null };
 	for (const gameFile of gameFiles) {
 		const relativePath = `games/${gameFile}`;
 		if (relativePath === submittedFilename) continue;
 		const other = readFileSafe(path.join(gamesDir, gameFile));
 		if (!other) continue;
-		const score = checkSimilarity(content, other);
+		const score = compareChunks(c1, other);
 		if (score > best.score) best = { score, match: relativePath };
 	}
 	return best;
@@ -553,22 +493,26 @@ function stripComments(code) {
 	return code.replace(/\/\*[\s\S]*?\*\/|\/\/.*/g, "");
 }
 
-function checkSimilarity(a, b) {
-	const s1 = analyze(a);
-	const s2 = analyze(b);
-	const chunks = (value) => {
-		const set = new Set();
-		for (let i = 0; i <= value.length - 10; i += 1) set.add(value.slice(i, i + 10));
-		return set;
-	};
-	const c1 = chunks(s1);
-	const c2 = chunks(s2);
-	if (!c1.size || !c2.size) return 0;
+function chunks(value) {
+	const set = new Set();
+	for (let i = 0; i <= value.length - 10; i += 1) set.add(value.slice(i, i + 10));
+	return set;
+}
+
+function compareChunks(c1, code) {
+	if (!c1.size) return 0;
+	const c2 = chunks(analyze(code));
+	if (!c2.size) return 0;
 	let overlap = 0;
 	for (const chunk of c1) {
 		if (c2.has(chunk)) overlap += 1;
 	}
 	return (2 * overlap) / (c1.size + c2.size);
+}
+
+function checkSimilarity(a, b) {
+	const c1 = chunks(analyze(a));
+	return compareChunks(c1, b);
 }
 
 function readFileSafe(filePath) {
@@ -579,23 +523,44 @@ function readFileSafe(filePath) {
 	}
 }
 
+async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha }) {
+	if (!reviewers || reviewers.size === 0) return "unknown";
+	try {
+		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
+		return reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha });
+	} catch (e) {
+		console.warn("Unable to fetch reviews; skipping review reconciliation:", e.message);
+		return "unknown";
+	}
+}
+
 async function applyLabels(result) {
 	await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Submission"] });
 	const currentLabels = await getIssueLabels({ owner, repo, token, issueNumber: prNumber });
-	const changes = autoReviewLabelChanges({ labels: currentLabels, validationOk: result.ok, eventAction: event.action });
+	const reviewStatus = await getLatestReviewStatus({
+		owner,
+		repo,
+		token,
+		prNumber,
+		reviewers,
+		authorLogin: pullRequest.user?.login,
+		headSha: pullRequest.head?.sha,
+	});
+	const changes = autoReviewLabelChanges({
+		labels: currentLabels,
+		validationOk: result.ok,
+		eventAction: event.action,
+		reviewStatus,
+	});
 
 	if (result.ok) {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Verified"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: changes.state });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Failed" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Needs Author" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
 	} else {
 		await addLabels({ owner, repo, token, issueNumber: prNumber, labels: ["Failed"] });
 		await setStateLabel({ owner, repo, token, issueNumber: prNumber, state: "Needs Author" });
 		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Verified" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Playtest" });
-		await removeLabel({ owner, repo, token, issueNumber: prNumber, label: "Ready for Maintainer" });
 	}
 
 	if (result.similarity.score >= 0.5) {
@@ -620,6 +585,7 @@ function buildComment(result) {
 	const categoryMap = {
 		"Files stay in allowed folders": "file",
 		"Exactly one game file": "file",
+		"At most one image file": "file",
 		"Only new files added": "file",
 		"Filename uses safe characters": "file",
 		"Game file is directly inside games/": "file",
@@ -630,6 +596,7 @@ function buildComment(result) {
 		"Code checklist": "pr",
 		"Image checklist": "pr",
 
+		"Metadata header": "metadata",
 		"Metadata @title": "metadata",
 		"Metadata @author": "metadata",
 		"Metadata @description": "metadata",
@@ -652,6 +619,10 @@ function buildComment(result) {
 		categories[catKey].checks.push(check);
 	}
 
+	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
+	const headRef = pullRequest.head.ref;
+	const editUrl = `https://github.com/${headRepo}/edit/${headRef}/${result.gameFile ?? ""}`;
+
 	const failedChecks = result.checks.filter((c) => !c.ok);
 
 	let checksSection = "";
@@ -661,6 +632,19 @@ function buildComment(result) {
 			checksSection += `> - ❌ **${check.name}:** ${check.detail}\n`;
 		}
 		checksSection += "\n";
+
+		const hasMetadataFailure = failedChecks.some((c) => categoryMap[c.name] === "metadata");
+		if (hasMetadataFailure && result.gameFile) {
+			const inferred = inferSubmissionMetadata({
+				content: result.content,
+				filename: result.gameFile,
+				pullRequest,
+				existingMetadata: metadata,
+			});
+			const snippet = buildMetadataSnippet(inferred);
+
+			checksSection += `> [!TIP]\n> **How to fix metadata:**\n> Click **[Edit Game File](${editUrl})** and paste this block at the very top (line 1) of \`${result.gameFile}\`.\n>\n> *Note: We generated this header automatically from your PR details to help you out. Please review it and update any details (like your title, description, or tags) to make sure they match your game before committing!*\n> \`\`\`javascript\n> ${snippet.split("\n").join("\n> ")}\n> \`\`\`\n\n`;
+		}
 	}
 
 	checksSection += "#### Checks Status\n";
@@ -681,10 +665,6 @@ function buildComment(result) {
 		}
 	}
 
-	const headRepo = pullRequest.head.repo?.full_name ?? `${owner}/${repo}`;
-	const headRef = pullRequest.head.ref;
-	const editUrl = `https://github.com/${headRepo}/edit/${headRef}/${result.gameFile ?? ""}`;
-
 	const links = [];
 	if (result.playUrl) links.push(`- [Play in Sprig Editor](${result.playUrl})`);
 	if (result.gameFile) links.push(`- [Edit Game File](${editUrl})`);
@@ -703,7 +683,7 @@ function buildComment(result) {
 	return `${REVIEW_BOT_MARKER}
 ### ${status}
 
-${result.ok ? "This submission is ready for human playtest." : "This submission needs author fixes before normal review."}
+${result.ok ? "All automated checks passed! Your game is ready for a reviewer to playtest." : "Thanks for submitting! There are just a few quick fixes needed before we can playtest your game."}
 
 #### Submission
 - Game: ${metadata.title ? `\`${metadata.title}\`` : "unknown"}
@@ -716,7 +696,7 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: push fixes to this PR ([edit file](${editUrl})). These checks rerun automatically.\n If you are in trouble, don't hesitate to ask for help in the #sprig channel on Slack or ping @LucasHT22 here.`}
+${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: you can update your game right here ([edit file](${editUrl})) or push new commits. Once you do, these checks will rerun automatically! If you get stuck or have questions, ask in the #sprig channel on Slack or ping @LucasHT22 here.`}
 `;
 }
 
@@ -724,29 +704,11 @@ function formatPercent(value) {
 	return `${Math.round(value * 100)}%`;
 }
 
-function checkMetadataDate(addedOn, add) {
-	const validDate = /^\d{4}-\d{2}-\d{2}$/.test(addedOn);
-	const parsedDate = validDate ? new Date(`${addedOn}T00:00:00Z`) : null;
-	const now = new Date();
-	const tooOld = parsedDate ? Math.abs(now.getTime() - parsedDate.getTime()) > 183 * 86_400_000 : true;
-	const ok = validDate && parsedDate && !Number.isNaN(parsedDate.getTime()) && !tooOld;
-	let detail = "Date looks current.";
-	if (!ok) {
-		if (validDate && tooOld) {
-			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format (must be within the last 6 months).";
-		} else if (/\n/.test(addedOn) || /\b\d{4}-\d{2}-\d{2}\b/.test(addedOn)) {
-			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format. Close the metadata header with `*/` immediately after `@addedOn` before any instructions or other comments.";
-		} else {
-			detail = "Set `@addedOn:` to a recent date in `YYYY-MM-DD` format.";
-		}
-	}
-	add("Metadata date", ok, detail);
-}
-
 function validateSubmissionFiles(pullFiles, addCheck) {
 	const manifest = buildSubmissionManifest(pullFiles);
-	const { gameFiles: jsFiles, gameFilesLoose, imageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
+	const { gameFiles: jsFiles, gameFilesLoose, allImageFiles, disallowedFiles, uppercaseGames, changedNonAddedFiles } = manifest;
 	const effectiveGameFiles = gameFilesLoose;
+	const effectiveImageFiles = allImageFiles;
 	if (uppercaseGames.length > 0) {
 		const badNames = uppercaseGames.map((file) => `\`${file.filename}\``).join(", ");
 		addCheck("Directory must be lowercase", false, `Your file must be in the lowercase \`games/\` directory. Found ${badNames}.`);
@@ -772,6 +734,9 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 				: `Only one game file is allowed per submission. Found ${jsNames}.`
 	);
 
+	const imgCountCheck = getImageCountCheck(effectiveImageFiles);
+	addCheck(imgCountCheck.name, imgCountCheck.ok, imgCountCheck.detail);
+
 	const changedNames = changedNonAddedFiles.map((file) => `\`${file.filename}\``).join(", ");
 	addCheck(
 		"Only new or game files changed",
@@ -780,27 +745,19 @@ function validateSubmissionFiles(pullFiles, addCheck) {
 			? `Submissions should only add new game files or modify existing ones in \`games/\`. These files outside \`games/\` were modified: ${changedNames}.`
 			: "All submitted files are new or inside \`games/\`."
 	);
-	return { jsFiles: effectiveGameFiles, imageFiles };
+	return { jsFiles: effectiveGameFiles, imageFiles: effectiveImageFiles };
 }
 
 function validateImages(imageFiles, gameBase, owner, repo, pullRequest, addCheck) {
-	const badImagePaths = imageFiles.filter((file) => !file.filename.startsWith("games/img/"));
-	const badImgNames = badImagePaths.map((file) => `\`${file.filename}\``).join(", ");
-	let imgPathDetail = "No image provided; this is OK.";
-	if (badImagePaths.length) imgPathDetail = `Move images into \`games/img/\`: ${badImgNames}.`;
-	else if (imageFiles.length) imgPathDetail = "Image files are in `games/img/`.";
-	addCheck("Optional image path", badImagePaths.length === 0, imgPathDetail);
+	const checks = validateImageFiles({ imageFiles, gameBase });
+	for (const check of checks) {
+		addCheck(check.name, check.ok, check.detail);
+	}
 
-	const mismatchedImages = imageFiles.filter((file) => path.basename(file.filename, path.extname(file.filename)) !== gameBase);
-	const mismatchNames = mismatchedImages.map((file) => `\`${file.filename}\``).join(", ");
-	let imgNameDetail = "No image provided; gallery thumbnail can be generated/default.";
-	if (mismatchedImages.length) imgNameDetail = `Image filename must match \`${gameBase}.js\`. Found ${mismatchNames}.`;
-	else if (imageFiles.length) imgNameDetail = "Image filename matches the game file.";
-	addCheck("Optional image name", mismatchedImages.length === 0, imgNameDetail);
-
-	if (imageFiles.length > 0) {
-		const image = imageFiles.find((file) => path.basename(file.filename, path.extname(file.filename)) === gameBase) ?? imageFiles[0];
-		return `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${image.filename}`;
+	if (imageFiles.length > 0 && pullRequest?.head?.sha) {
+		const matchingImage = gameBase ? imageFiles.find((file) => file.filename === `games/img/${gameBase}.png`) : null;
+		const image = matchingImage ?? imageFiles[0];
+		return `https://raw.githubusercontent.com/${owner}/${repo}/${pullRequest.head.sha}/${image.filename.split("/").map(encodeURIComponent).join("/")}`;
 	}
 	return null;
 }
@@ -815,21 +772,25 @@ async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 
 	if (content === null) {
 		addCheck("Game file readable", false, `Unable to read \`${gameFile.filename}\` from the checked-out PR.`);
-		return { metadata, similarity };
+		return { metadata, similarity, content: null };
 	}
 
 	const maxFileSize = 2 * 1024 * 1024;
 	if (content.length > maxFileSize) {
 		addCheck("File size limit", false, `The file \`${filename}\` is too large (${(content.length / 1024 / 1024).toFixed(2)}MB). Maximum allowed size is 2MB.`);
-		return { metadata, similarity };
+		return { metadata, similarity, content };
 	}
 
+	const safeFilename = /^[a-zA-Z0-9_-]+\.js$/.test(filename);
+	const base = path.basename(filename, ".js");
+	const suggestedBase = base.trim().replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_-]/g, "") || "game";
+	const suggestedFilename = `${suggestedBase}.js`;
 	addCheck(
 		"Filename uses safe characters",
-		/^[a-zA-Z0-9_-]+\.js$/.test(filename),
-		/^[a-zA-Z0-9_-]+\.js$/.test(filename)
+		safeFilename,
+		safeFilename
 			? "Filename is safe."
-			: `Rename \`${filename}\` to use only letters, numbers, \`-\`, and \`_\`.`
+			: `Rename \`${filename}\` to use only letters, numbers, \`-\`, and \`_\`${suggestedFilename !== filename ? ` (for example: \`${suggestedFilename}\`)` : ""}.`
 	);
 
 	addCheck(
@@ -858,5 +819,5 @@ async function validateSingleGameFile(gameFile, workspace, addCheck, warnings) {
 		warnings.push(`Similarity is ${formatPercent(similarity.score)} against \`${similarity.match}\`. A reviewer or lead should compare both games.`);
 	}
 
-	return { metadata, similarity };
+	return { metadata, similarity, content };
 }
