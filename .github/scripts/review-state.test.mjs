@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { autoReviewLabelChanges, reconcileReviewStatus } from "./review-state.mjs";
+import { autoReviewLabelChanges, getActiveReviews, reconcileReviewStatus } from "./review-state.mjs";
 import { isReviewCommitOutdated } from "./review-utils.mjs";
 
 describe("autoReviewLabelChanges", () => {
@@ -245,6 +245,35 @@ describe("reconcileReviewStatus", () => {
 			isCommitOutdated: () => true,
 		});
 		expect(status).toBe("none");
+	});
+
+	it("treats null or missing commit_id as outdated even with custom isCommitOutdated", () => {
+		const reviews = [
+			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: null, submitted_at: "2026-10-04T09:00:00Z" },
+		];
+		const status = reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin: "author1",
+			headSha,
+			isCommitOutdated: () => false,
+		});
+		expect(status).toBe("none");
+	});
+});
+
+describe("getActiveReviews", () => {
+	it("filters out non-reviewers, author, and non-actionable review states", () => {
+		const reviews = [
+			{ user: { login: "random" }, state: "APPROVED", commit_id: "sha1", submitted_at: "2026-10-04T09:00:00Z" },
+			{ user: { login: "author1" }, state: "APPROVED", commit_id: "sha1", submitted_at: "2026-10-04T09:00:00Z" },
+			{ user: { login: "SSoggyTacoMan" }, state: "COMMENTED", commit_id: "sha1", submitted_at: "2026-10-04T09:00:00Z" },
+			{ user: { login: "SSoggyTacoMan" }, state: "CHANGES_REQUESTED", commit_id: "sha2", submitted_at: "2026-10-04T10:00:00Z" },
+			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: "sha3", submitted_at: "2026-10-04T11:00:00Z" },
+		];
+		const active = getActiveReviews({ reviews, reviewers: new Set(["ssoggytacoman", "lucasht22"]), authorLogin: "author1" });
+		expect(active).toHaveLength(2);
+		expect(active.map((r) => r.user.login)).toEqual(["SSoggyTacoMan", "LucasHT22"]);
 	});
 });
 

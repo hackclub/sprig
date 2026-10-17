@@ -175,6 +175,8 @@ async function handleNeedsAuthor(pullRequest, labels) {
 
 function newestDate(dates) {
 	return dates
+		.filter(Boolean)
+		.filter((d) => !Number.isNaN(new Date(d).getTime()))
 		.sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0] ?? null;
 }
 
@@ -219,6 +221,10 @@ async function handleUntouchedSubmission(pullRequest, labels) {
 				await addLabels({ owner, repo, token, issueNumber: pullRequest.number, labels: ["Ready for Playtest"] });
 			}
 		}
+		return;
+	}
+
+	if (daysBetween(pullRequest.created_at) < 30) {
 		return;
 	}
 
@@ -275,8 +281,13 @@ async function latestSubmissionActivityTime(pullRequest) {
 			.filter((c) => c.user?.type !== "Bot")
 			.map((c) => c.created_at);
 		const authorCommits = commits
-			.filter((c) => !lowerAuthor || c.author?.login?.toLowerCase() === lowerAuthor)
-			.map((c) => c.commit?.author?.date)
+			.filter(
+				(c) =>
+					!lowerAuthor ||
+					c.author?.login?.toLowerCase() === lowerAuthor ||
+					c.committer?.login?.toLowerCase() === lowerAuthor
+			)
+			.map((c) => c.commit?.author?.date || c.commit?.committer?.date)
 			.filter(Boolean);
 		return newestDate([...humanComments, ...authorCommits, fallback]);
 	} catch {
