@@ -1,8 +1,10 @@
-// @title: Vasko JS Game
-// @author: vask3
-// @description: A puzzle game where you push blocks onto target tiles.
-// @tags: ['puzzle', 'maze']
-// @addedOn: 2026-10-17
+/*
+@title: Vasko JS Game
+@author: vask3
+@description: Hello, that is my first JS game.
+@tags: ['puzzle']
+@addedOn: 2026-10-17
+*/
 
 // Block Pusher (Sokoban)
 const player = "p";
