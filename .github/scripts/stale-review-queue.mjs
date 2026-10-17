@@ -4,6 +4,7 @@ import path from "node:path";
 import {
 	DUPLICATE_CLOSE_AFTER_DAYS,
 	DUPLICATE_LABEL,
+	LEGACY_DUPLICATE_LABEL,
 	DUPLICATE_NOTICE_MARKER,
 	parseOlderNotice,
 } from "./duplicate-detection.mjs";
@@ -40,13 +41,22 @@ const openPulls = await githubPaginated(token, `/repos/${owner}/${repo}/pulls?st
 
 const closedDuplicateNumbers = new Set();
 
+function hasDuplicateState(labels) {
+	return hasLabel(labels, DUPLICATE_LABEL) || hasLabel(labels, LEGACY_DUPLICATE_LABEL);
+}
+
+async function removeDuplicateLabels(issueNumber) {
+	await removeLabel({ owner, repo, token, issueNumber, label: DUPLICATE_LABEL });
+	await removeLabel({ owner, repo, token, issueNumber, label: LEGACY_DUPLICATE_LABEL });
+}
+
 for (const pullRequest of openPulls) {
 	const issueNumber = pullRequest.number;
 	const labels = await getIssueLabels({ owner, repo, token, issueNumber });
 	if (!hasLabel(labels, "Submission")) continue;
 	if (hasLabel(labels, "Keep Open")) continue;
 
-	if (hasLabel(labels, DUPLICATE_LABEL) && (await handleOlderDuplicate(pullRequest, labels))) continue;
+	if (hasDuplicateState(labels) && (await handleOlderDuplicate(pullRequest, labels))) continue;
 
 	if (hasLabel(labels, "Needs Author") || hasLabel(labels, "Failed")) {
 		await handleNeedsAuthor(pullRequest, labels);
@@ -77,10 +87,10 @@ async function handleOlderDuplicate(pullRequest, labels) {
 				pr.number !== pullRequest.number &&
 				!closedDuplicateNumbers.has(pr.number) &&
 				pr.user?.login?.toLowerCase() === authorLogin &&
-				pr.labels?.some((label) => label.name === DUPLICATE_LABEL)
+				pr.labels?.some((label) => label.name === DUPLICATE_LABEL || label.name === LEGACY_DUPLICATE_LABEL)
 		);
 		if (!hasOlderDuplicates) {
-			await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: DUPLICATE_LABEL });
+			await removeDuplicateLabels(pullRequest.number);
 		}
 		return false;
 	}
@@ -88,7 +98,7 @@ async function handleOlderDuplicate(pullRequest, labels) {
 
 	const latest = await githubRequest(token, "GET", `/repos/${owner}/${repo}/pulls/${latestNumber}`).catch(() => null);
 	if (!latest || latest.state !== "open" || latest.draft) {
-		await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: DUPLICATE_LABEL });
+		await removeDuplicateLabels(pullRequest.number);
 		return false;
 	}
 
@@ -104,7 +114,7 @@ async function handleOlderDuplicate(pullRequest, labels) {
 	await commentOnce({
 		issueNumber: pullRequest.number,
 		marker: "<!-- sprig-duplicate-auto-close -->",
-		body: `Closing because #${latestNumber} is your newer open PR. If you'd rather keep this PR instead, reopen it and close #${latestNumber}.`,
+		body: `Closing this older submission so your newer PR (#${latestNumber}) can move forward. If you would rather keep this game instead, close #${latestNumber} and ask a reviewer to reopen this PR.`,
 	});
 	await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, { state: "closed" });
 	closedDuplicateNumbers.add(pullRequest.number);
@@ -115,10 +125,10 @@ async function handleOlderDuplicate(pullRequest, labels) {
 			pr.number !== latestNumber &&
 			!closedDuplicateNumbers.has(pr.number) &&
 			pr.user?.login?.toLowerCase() === authorLogin &&
-			pr.labels?.some((label) => label.name === DUPLICATE_LABEL)
+			pr.labels?.some((label) => label.name === DUPLICATE_LABEL || label.name === LEGACY_DUPLICATE_LABEL)
 	);
 	if (!stillDuplicated) {
-		await removeLabel({ owner, repo, token, issueNumber: latestNumber, label: DUPLICATE_LABEL });
+		await removeDuplicateLabels(latestNumber);
 	}
 	return true;
 }
@@ -143,7 +153,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: `<!-- sprig-auto-close-${cycle} -->`,
-			body: "Closing because this submission has been waiting on author changes for 14 days without activity. Push fixes and ask a reviewer to reopen when ready.",
+			body: "Closing this submission for now since there has been no activity for 14 days. Whenever you want to return to it, push your fixes and ping a reviewer to reopen it. We would love to see your game in the gallery!",
 		});
 		await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, {
 			state: "closed",
@@ -156,7 +166,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: `<!-- sprig-stale-reminder-${cycle} -->`,
-			body: "This submission has been waiting on author changes for 7 days. Please push fixes soon, or it may be closed after 14 days of no response.",
+			body: "Just checking in! This submission has been waiting for updates for 7 days. Whenever you have time, push your fixes so we can get your game reviewed. If there is no response after 14 days, the PR will close automatically, but you can always ask a reviewer to reopen it whenever you are ready!",
 		});
 	} else if (hasLabel(labels, "Stale")) {
 		await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Stale" });
@@ -175,7 +185,7 @@ async function handleReadyForMaintainer(pullRequest) {
 	await commentOnce({
 		issueNumber: pullRequest.number,
 		marker: MAINTAINER_REMINDER_MARKER,
-		body: `This submission has been ready for maintainer review for 7 days. ${pings} — could one of you take a look?`,
+		body: `This submission has been ready for maintainer review for 7 days. ${pings}, could one of you take a look?`,
 	});
 }
 
@@ -194,7 +204,7 @@ async function handleClaimed(pullRequest) {
 	await commentOnce({
 		issueNumber: pullRequest.number,
 		marker: "<!-- sprig-unclaim-stale -->",
-		body: "Unassigning because this review has had no activity for 3 days.",
+		body: "Releasing review claim back to the queue because there has been no activity for 3 days.",
 	});
 }
 
