@@ -8,17 +8,15 @@
 
 */
 
-
-
 const WALL = "#"
 const ROCK = "c"
 const CELL = "*"
-const HATCH = ">"    
-const OPEN = "@"     
-const ICE = "~"      
-const CRACK = "x"   
-const FLOOR = "f"   
-
+const HATCH = ">"
+const OPEN = "@"
+const ICE = "~"
+const CRACK = "x"
+const FLOOR = "f"
+const SNOW = "s"
 
 const U = "u"
 const D = "p"
@@ -230,11 +228,37 @@ setLegend(
 0LLLLLLLLLLLLLL0
 0LLLLLLLLLLLLLL0
 0000000000000000` ],
+  [ SNOW, bitmap`
+.......77.......
+..7...7117...7..
+...7..7117..7...
+.7..7.0770.7..7.
+..777071170777..
+....07111170....
+.77071100117077.
+7117110770117117
+7117110770117117
+.77071100117077.
+....07111170....
+..777071170777..
+.7..7.0770.7..7.
+...7..7117..7...
+..7...7117...7..
+.......77.......` ],
 )
 
 setBackground(FLOOR)
 setSolids([ WALL, ROCK ])
 
+const TITLE_MAP = map`
+........
+...ss...
+.s.ss.s.
+..ssss..
+..ssss..
+.s.ss.s.
+...ss...
+........`
 
 const LEVELS = [
   { name: "BOOT UP", par: 2, map: map`
@@ -319,17 +343,18 @@ const sfxFall = tune`70: G4^70, 70: E4^70, 160: C3^160`
 const sfxClear = tune`90: C5^90, 90: E5^90, 90: G5^90, 180: C6^180`
 const sfxWin = tune`140: C5^140, 140: E5^140, 140: G5^140, 140: C6^140, 280: E6^280`
 
-let rows = []        
-let level = 0        
-let px = 0            
+let rows = []
+let level = 0
+let px = 0
 let py = 0
-let facing = D       
-let cellsLeft = 0     
-let moves = 0         
-let phase = "title"   
-let note = ""        
-let history = []      
-let blink = false    
+let facing = D
+let cellsLeft = 0
+let moves = 0
+let phase = "title"
+let note = ""
+let history = []
+let blink = false
+let fallTimer = null
 
 const at = (x, y) => rows[y][x]
 
@@ -374,7 +399,8 @@ const fall = () => {
   playTune(sfxFall)
   setMap(screen())
   draw()
-  setTimeout(() => {
+  clearTimeout(fallTimer)
+  fallTimer = setTimeout(() => {
     if (phase !== "gone") return
     restore(history[history.length - 1])
     history.pop()
@@ -433,21 +459,27 @@ const slide = (dx, dy) => {
   moves++
   history.push(before)
 
-  if (hitRock) playTune(sfxRock)
-  else if (picked > 0) playTune(sfxCell)
-  else playTune(sfxSlide)
-
   note = ""
   if (picked > 0) note = cellsLeft === 0 ? "HATCH UNLOCKED!" : cellsLeft + " CELLS LEFT"
-  if (at(px, py) === HATCH) note = "HATCH LOCKED - " + cellsLeft + " CELLS LEFT"
+  if (at(px, py) === HATCH) note = "LOCKED: " + cellsLeft + " LEFT"
 
-  setMap(screen())
+  const cleared = at(px, py) === OPEN
 
-  if (at(px, py) === OPEN) {
+  if (cleared) {
     phase = "clear"
     note = ""
     playTune(sfxClear)
+  } else if (picked > 0 && cellsLeft === 0) {
+    playTune(sfxOpen)
+  } else if (picked > 0) {
+    playTune(sfxCell)
+  } else if (hitRock) {
+    playTune(sfxRock)
+  } else {
+    playTune(sfxSlide)
   }
+
+  setMap(screen())
   draw()
 }
 
@@ -480,18 +512,19 @@ const buildLevel = (i) => {
 }
 
 const startLevel = (i) => {
+  clearTimeout(fallTimer)
   buildLevel(i)
+  note = ""
   phase = "play"
-  note = "SLIDE WITH WASD"
   setMap(screen())
   draw()
 }
 
-const showTitle = (i) => {
-  buildLevel(i)
+const showTitle = () => {
+  level = 0
   phase = "title"
   note = ""
-  setMap(screen())
+  setMap(TITLE_MAP)
   draw()
 }
 
@@ -499,13 +532,8 @@ const draw = () => {
   clearText()
 
   if (phase === "title") {
-    addText("FROSTBYTE", { x: 5, y: 0, color: color`7` })
-    addText("THE FLOOR IS ICE.", { x: 2, y: 4, color: color`1` })
-    addText("YOU CANNOT STOP", { x: 2, y: 5, color: color`1` })
-    addText("WHERE YOU WANT.", { x: 2, y: 6, color: color`1` })
-    addText("WASD SLIDE  J START", { x: 1, y: 9, color: color`6` })
-    addText("A/D PICK   K/I REDO", { x: 1, y: 11, color: color`L` })
-    addText(blink ? "LEVEL " + (level + 1) + ": " + LEVELS[level].name : "", { x: 1, y: 13, color: color`6` })
+    addText("FROSTBYTE", { x: 5, y: 1, color: color`7` })
+    addText(blink ? "J TO START" : "", { x: 5, y: 14, color: color`6` })
     return
   }
 
@@ -523,17 +551,16 @@ const draw = () => {
     addText("BACK TO LIFE.", { x: 3, y: 6, color: color`2` })
     addText(blink ? "J PLAY AGAIN" : "", { x: 3, y: 9, color: color`6` })
   } else if (note !== "") {
-    addText(note, { x: 19 - note.length, y: 14, color: color`6` })
+    addText(note, { x: Math.max(0, 19 - note.length), y: 14, color: color`6` })
   }
 }
 
 const act = (key) => {
-  if (key === "k") return startLevel(level)   
+  if (phase === "gone") return
+  if (key === "k" && phase === "play") return startLevel(level)
 
   if (phase === "title") {
-    if (key === "a") showTitle((level + LEVELS.length - 1) % LEVELS.length)
-    if (key === "d") showTitle((level + 1) % LEVELS.length)
-    if (key === "j" || key === "s" || key === "w") startLevel(level)
+    if (key === "j" || key === "s" || key === "w" || key === "d" || key === "a") startLevel(0)
     return
   }
   if (phase === "clear") {
@@ -553,9 +580,8 @@ const act = (key) => {
     if (key === "j" || key === "d" || key === "s") startLevel(0)
     return
   }
-  if (phase === "gone") return                  
   if (key === "i") return undo()
-  if (key === "j" || key === "l") return
+  if (key === "j" || key === "l" || key === "k") return
 
   const dx = key === "a" ? -1 : key === "d" ? 1 : 0
   const dy = key === "w" ? -1 : key === "s" ? 1 : 0
@@ -576,4 +602,4 @@ setInterval(() => {
   if (phase !== "gone") draw()
 }, 450)
 
-showTitle(0)
+showTitle()
