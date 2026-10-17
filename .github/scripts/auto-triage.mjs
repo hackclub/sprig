@@ -696,7 +696,7 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes.\n\nAuthor: if your PR has been waiting for review, ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here." : `@${pullRequest.user.login}: you can update your game right here ([edit file](${editUrl})) or push new commits. Once you do, these checks will rerun automatically! If you get stuck or have questions, ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here.`}
+${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes.\n\nAuthor: if your PR has been waiting for review for more than a few days, ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here." : `@${pullRequest.user.login}: you can update your game right here ([edit file](${editUrl})) or push new commits. Once you do, these checks will rerun automatically! If you get stuck or have questions, ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here.`}
 `;
 }
 
