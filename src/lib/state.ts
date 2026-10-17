@@ -8,6 +8,7 @@ import BitmapEditor from '../components/subeditors/bitmap-editor'
 import ColorPickerEditor from '../components/subeditors/color-picker'
 import MapEditor from '../components/subeditors/map-editor'
 import SequencerEditor from '../components/subeditors/sequencer'
+import type { SandboxedGameControllerHandle } from './engine/sandbox-controller'
 import type { Game, SessionInfo, RoomParticipant } from './game-saving/account-types'
 export type { RoomParticipant } from './game-saving/account-types'
 
@@ -199,6 +200,7 @@ export const switchTheme = (themeType: ThemeType) => {
 }
 export const isNewSaveStrat = signal<boolean>(false)
 export const screenRef = signal<HTMLCanvasElement | null>(null);
+export const gamePlayerRef = signal<SandboxedGameControllerHandle | null>(null);
 export const cleanupRef = signal<(() => void) | undefined>(undefined);
 
 export interface ReviewState {
