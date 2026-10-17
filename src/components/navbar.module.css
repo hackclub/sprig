@@ -476,6 +476,21 @@
 	}
 }
 
+@media (max-width: 480px) {
+	.rightActions {
+		gap: 8px;
+		flex-wrap: wrap;
+		height: auto;
+		justify-content: center;
+		padding-bottom: 6px;
+	}
+
+	.navActions {
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+}
+
 @media (max-width: 420px) {
 	.container {
 		font-size: 0.9rem;

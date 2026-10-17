@@ -82,11 +82,34 @@
 	height: 100vh;
 }
 
+.screenContainer:-webkit-full-screen {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background: #000000;
+	width: 100vw;
+	height: 100vh;
+}
+
 .screenContainer:fullscreen .screenControls {
 	display: none;
 }
 
+.screenContainer:-webkit-full-screen .screenControls {
+	display: none;
+}
+
 .screenContainer:fullscreen .screen {
+	border: none;
+	width: min(100%, calc(100vh * 1.25));
+	height: min(100%, calc(100vw * 0.8));
+	aspect-ratio: 1000 / 800;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+.screenContainer:-webkit-full-screen .screen {
 	border: none;
 	width: min(100%, calc(100vh * 1.25));
 	height: min(100%, calc(100vw * 0.8));
@@ -102,7 +125,23 @@
 	justify-content: center;
 }
 
+.screenContainer:-webkit-full-screen .canvasWrapper {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 .screenContainer:fullscreen .screenControls.enabled {
+	display: flex;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	background: var(--bg-base);
+	padding: 8px 20px;
+}
+
+.screenContainer:-webkit-full-screen .screenControls.enabled {
 	display: flex;
 	position: absolute;
 	bottom: 0;
