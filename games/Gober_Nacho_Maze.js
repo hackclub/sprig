@@ -1,8 +1,8 @@
-/* 
+/*
 @title: Gober Nacho Maze
-@description: A little pink creature moving through a maze to eat all the nachos.
 @author: gober
-@tags: [puzzle, maze, food]
+@description: A little pink creature moving through a maze to eat all the nachos.
+@tags: ['music', 'maze']
 @addedOn: 2026-10-16
 */
 
