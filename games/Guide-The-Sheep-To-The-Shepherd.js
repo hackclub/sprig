@@ -3,7 +3,7 @@
 @title: guide_the_sheep
 @description: A simple game where you guide a sheep to the shepherd while ovoiding wolves
 @author: chainlinc
-@tags: []
+@tags: ['maze', 'puzzle', 'sheep', 'shepherd', 'wolf']
 @addedOn: 2026-10-17
 */
 
