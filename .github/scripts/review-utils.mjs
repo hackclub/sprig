@@ -280,22 +280,42 @@ export async function isReviewCommitOutdated({ owner, repo, token, prNumber, com
 	if (!commitId || !headSha || commitId === headSha) return false;
 	try {
 		const files = submissionFiles ?? (await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/files`));
-		const submissionFilenames = new Set(
-			files
-				.map((f) => (typeof f === "string" ? f : f.filename))
-				.filter((fn) => fn.toLowerCase().startsWith("games/"))
-		);
-		if (submissionFilenames.size === 0) return true;
+		const submissionFileObjects = files.filter((f) => {
+			const fn = typeof f === "string" ? f : f.filename;
+			return fn.toLowerCase().startsWith("games/");
+		});
+		if (submissionFileObjects.length === 0) return true;
 
-		const compare = await githubRequest(
-			token,
-			"GET",
-			`/repos/${owner}/${repo}/compare/${encodeURIComponent(commitId)}...${encodeURIComponent(headSha)}`
-		);
-		const changedFiles = compare.files ?? [];
-		return changedFiles.some((f) => submissionFilenames.has(f.filename));
+		for (const file of submissionFileObjects) {
+			const filename = typeof file === "string" ? file : file.filename;
+			const targetHeadSha =
+				typeof file === "object" && file?.sha
+					? file.sha
+					: await getFileBlobSha({ owner, repo, token, path: filename, ref: headSha });
+			if (!targetHeadSha) return true;
+
+			const commitBlobSha = await getFileBlobSha({ owner, repo, token, path: filename, ref: commitId });
+			if (!commitBlobSha || commitBlobSha !== targetHeadSha) {
+				return true;
+			}
+		}
+
+		return false;
 	} catch {
 		return true;
+	}
+}
+
+async function getFileBlobSha({ owner, repo, token, path: filePath, ref }) {
+	try {
+		const data = await githubRequest(
+			token,
+			"GET",
+			`/repos/${owner}/${repo}/contents/${filePath.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(ref)}`
+		);
+		return data?.sha ?? null;
+	} catch {
+		return null;
 	}
 }
 

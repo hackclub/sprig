@@ -250,6 +250,7 @@ async function latestLabelTime(issueNumber, labelName) {
 async function latestAuthorActivityTime(issueNumber, authorLogin) {
 	if (!authorLogin) return null;
 	const lowerAuthor = authorLogin.toLowerCase();
+	const maintainerLogins = new Set([...roles.maintainers, ...roles.triagers].map((u) => u.toLowerCase()));
 	try {
 		const [comments, commits] = await Promise.all([
 			githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`),
@@ -259,7 +260,14 @@ async function latestAuthorActivityTime(issueNumber, authorLogin) {
 			.filter((c) => c.user?.login?.toLowerCase() === lowerAuthor)
 			.map((c) => c.created_at);
 		const authorCommits = commits
-			.filter((c) => c.author?.login?.toLowerCase() === lowerAuthor || c.committer?.login?.toLowerCase() === lowerAuthor)
+			.filter((c) => {
+				const isAuthor = c.author?.login?.toLowerCase() === lowerAuthor;
+				const isCommitter = c.committer?.login?.toLowerCase() === lowerAuthor;
+				const gitAuthorName = c.commit?.author?.name?.toLowerCase();
+				const isGitAuthor = gitAuthorName && gitAuthorName === lowerAuthor;
+				const isUnlinkedAuthor = !c.author?.login && !maintainerLogins.has(c.committer?.login?.toLowerCase());
+				return isAuthor || isCommitter || isGitAuthor || isUnlinkedAuthor;
+			})
 			.map((c) => c.commit?.author?.date || c.commit?.committer?.date)
 			.filter(Boolean);
 		return newestDate([...authorComments, ...authorCommits]);
@@ -272,6 +280,7 @@ async function latestSubmissionActivityTime(pullRequest) {
 	const fallback = pullRequest.created_at;
 	const authorLogin = pullRequest.user?.login;
 	const lowerAuthor = authorLogin?.toLowerCase();
+	const maintainerLogins = new Set([...roles.maintainers, ...roles.triagers].map((u) => u.toLowerCase()));
 	try {
 		const [comments, commits] = await Promise.all([
 			githubPaginated(token, `/repos/${owner}/${repo}/issues/${pullRequest.number}/comments`),
@@ -281,12 +290,15 @@ async function latestSubmissionActivityTime(pullRequest) {
 			.filter((c) => c.user?.type !== "Bot")
 			.map((c) => c.created_at);
 		const authorCommits = commits
-			.filter(
-				(c) =>
-					!lowerAuthor ||
-					c.author?.login?.toLowerCase() === lowerAuthor ||
-					c.committer?.login?.toLowerCase() === lowerAuthor
-			)
+			.filter((c) => {
+				if (!lowerAuthor) return true;
+				const isAuthor = c.author?.login?.toLowerCase() === lowerAuthor;
+				const isCommitter = c.committer?.login?.toLowerCase() === lowerAuthor;
+				const gitAuthorName = c.commit?.author?.name?.toLowerCase();
+				const isGitAuthor = gitAuthorName && gitAuthorName === lowerAuthor;
+				const isUnlinkedAuthor = !c.author?.login && !maintainerLogins.has(c.committer?.login?.toLowerCase());
+				return isAuthor || isCommitter || isGitAuthor || isUnlinkedAuthor;
+			})
 			.map((c) => c.commit?.author?.date || c.commit?.committer?.date)
 			.filter(Boolean);
 		return newestDate([...humanComments, ...authorCommits, fallback]);

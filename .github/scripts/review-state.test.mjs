@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { autoReviewLabelChanges, getActiveReviews, reconcileReviewStatus } from "./review-state.mjs";
+import { autoReviewLabelChanges, getActiveReviewCommits, getActiveReviews, reconcileReviewStatus } from "./review-state.mjs";
 import { isReviewCommitOutdated } from "./review-utils.mjs";
 
 describe("autoReviewLabelChanges", () => {
@@ -262,7 +262,7 @@ describe("reconcileReviewStatus", () => {
 	});
 });
 
-describe("getActiveReviews", () => {
+describe("getActiveReviews and getActiveReviewCommits", () => {
 	it("filters out non-reviewers, author, and non-actionable review states", () => {
 		const reviews = [
 			{ user: { login: "random" }, state: "APPROVED", commit_id: "sha1", submitted_at: "2026-10-04T09:00:00Z" },
@@ -274,6 +274,14 @@ describe("getActiveReviews", () => {
 		const active = getActiveReviews({ reviews, reviewers: new Set(["ssoggytacoman", "lucasht22"]), authorLogin: "author1" });
 		expect(active).toHaveLength(2);
 		expect(active.map((r) => r.user.login)).toEqual(["SSoggyTacoMan", "LucasHT22"]);
+
+		const commits = getActiveReviewCommits({
+			reviews,
+			reviewers: new Set(["ssoggytacoman", "lucasht22"]),
+			authorLogin: "author1",
+			headSha: "sha3",
+		});
+		expect(commits).toEqual(["sha2"]);
 	});
 });
 
@@ -284,12 +292,12 @@ describe("isReviewCommitOutdated", () => {
 		expect(await isReviewCommitOutdated({ commitId: "abc", headSha: null })).toBe(false);
 	});
 
-	it("returns false when compare diff does not touch submission game files", async () => {
+	it("returns false when file blob SHA at commitId matches headSha", async () => {
 		const originalFetch = globalThis.fetch;
 		globalThis.fetch = vi.fn().mockResolvedValue({
 			ok: true,
 			status: 200,
-			text: async () => JSON.stringify({ files: [{ filename: "README.md" }, { filename: "games/other.js" }] }),
+			text: async () => JSON.stringify({ sha: "blobSha1" }),
 		});
 
 		try {
@@ -300,7 +308,7 @@ describe("isReviewCommitOutdated", () => {
 				prNumber: 123,
 				commitId: "sha1",
 				headSha: "sha2",
-				submissionFiles: [{ filename: "games/my-game.js" }],
+				submissionFiles: [{ filename: "games/my-game.js", sha: "blobSha1" }],
 			});
 			expect(outdated).toBe(false);
 		} finally {
@@ -308,12 +316,12 @@ describe("isReviewCommitOutdated", () => {
 		}
 	});
 
-	it("returns true when compare diff touches submission game files", async () => {
+	it("returns true when file blob SHA at commitId differs from headSha", async () => {
 		const originalFetch = globalThis.fetch;
 		globalThis.fetch = vi.fn().mockResolvedValue({
 			ok: true,
 			status: 200,
-			text: async () => JSON.stringify({ files: [{ filename: "games/my-game.js" }] }),
+			text: async () => JSON.stringify({ sha: "differentBlobSha" }),
 		});
 
 		try {
@@ -324,7 +332,7 @@ describe("isReviewCommitOutdated", () => {
 				prNumber: 123,
 				commitId: "sha1",
 				headSha: "sha2",
-				submissionFiles: [{ filename: "games/my-game.js" }],
+				submissionFiles: [{ filename: "games/my-game.js", sha: "blobSha1" }],
 			});
 			expect(outdated).toBe(true);
 		} finally {
@@ -332,7 +340,7 @@ describe("isReviewCommitOutdated", () => {
 		}
 	});
 
-	it("returns true as safe fallback when compare request throws", async () => {
+	it("returns true as safe fallback when contents request throws", async () => {
 		const originalFetch = globalThis.fetch;
 		globalThis.fetch = vi.fn().mockRejectedValue(new Error("Network error"));
 
@@ -344,7 +352,7 @@ describe("isReviewCommitOutdated", () => {
 				prNumber: 123,
 				commitId: "sha1",
 				headSha: "sha2",
-				submissionFiles: [{ filename: "games/my-game.js" }],
+				submissionFiles: [{ filename: "games/my-game.js", sha: "blobSha1" }],
 			});
 			expect(outdated).toBe(true);
 		} finally {

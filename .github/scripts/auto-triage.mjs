@@ -33,7 +33,7 @@ import {
 	findDuplicateGroup,
 	parseOlderNotice,
 } from "./duplicate-detection.mjs";
-import { autoReviewLabelChanges, getActiveReviews, reconcileReviewStatus } from "./review-state.mjs";
+import { autoReviewLabelChanges, getActiveReviewCommits, reconcileReviewStatus } from "./review-state.mjs";
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
@@ -528,14 +528,7 @@ async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, 
 	if (!reviewers || reviewers.size === 0) return "unknown";
 	try {
 		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
-		const active = getActiveReviews({ reviews, reviewers, authorLogin });
-		const pendingCommits = [
-			...new Set(
-				active
-					.filter((r) => (r.state === "CHANGES_REQUESTED" || r.state === "APPROVED") && r.commit_id && r.commit_id !== headSha)
-					.map((r) => r.commit_id)
-			),
-		];
+		const pendingCommits = getActiveReviewCommits({ reviews, reviewers, authorLogin, headSha });
 		const outdatedCommitIds = new Set();
 		for (const commitId of pendingCommits) {
 			const isOutdated = await isReviewCommitOutdated({

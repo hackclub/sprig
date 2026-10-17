@@ -66,6 +66,17 @@ export function getActiveReviews({ reviews, reviewers, authorLogin }) {
 	return [...latestByReviewer.values()];
 }
 
+export function getActiveReviewCommits({ reviews, reviewers, authorLogin, headSha }) {
+	const active = getActiveReviews({ reviews, reviewers, authorLogin });
+	const commits = new Set();
+	for (const r of active) {
+		if ((r.state === "APPROVED" || r.state === "CHANGES_REQUESTED") && r.commit_id && r.commit_id !== headSha) {
+			commits.add(r.commit_id);
+		}
+	}
+	return [...commits];
+}
+
 export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha, isCommitOutdated }) {
 	if (!reviewers || reviewers.size === 0) return "unknown";
 

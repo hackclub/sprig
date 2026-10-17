@@ -12,7 +12,7 @@ import {
 	readGitHubEvent,
 	setStateLabel,
 } from "./review-utils.mjs";
-import { getActiveReviews, reconcileReviewStatus } from "./review-state.mjs";
+import { getActiveReviewCommits, reconcileReviewStatus } from "./review-state.mjs";
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
@@ -69,14 +69,7 @@ if (dispatchedPr && !Number.isNaN(dispatchedPr)) {
 await syncAllOpenSubmissions();
 
 async function resolveOutdatedCommitIds({ prNumber, reviews, authorLogin, headSha }) {
-	const active = getActiveReviews({ reviews, reviewers, authorLogin });
-	const pendingCommits = [
-		...new Set(
-			active
-				.filter((r) => (r.state === "CHANGES_REQUESTED" || r.state === "APPROVED") && r.commit_id && r.commit_id !== headSha)
-				.map((r) => r.commit_id)
-		),
-	];
+	const pendingCommits = getActiveReviewCommits({ reviews, reviewers, authorLogin, headSha });
 	const outdatedCommitIds = new Set();
 	if (pendingCommits.length === 0) return outdatedCommitIds;
 
