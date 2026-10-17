@@ -156,7 +156,7 @@ try {
 Auto triage could not complete validation for this submission:
 > ${error.message}
 
-Please check that submitted files can be accessed, or ask a maintainer for assistance.`,
+Please check that submitted files can be accessed, or ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here for assistance.`,
 	});
 	process.exit(1);
 }
@@ -696,7 +696,7 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: you can update your game right here ([edit file](${editUrl})) or push new commits. Once you do, these checks will rerun automatically! If you get stuck or have questions, ask in the #sprig channel on Slack or ping @LucasHT22 here.`}
+${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes.\n\nAuthor: if your PR has been waiting for review, ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here." : `@${pullRequest.user.login}: you can update your game right here ([edit file](${editUrl})) or push new commits. Once you do, these checks will rerun automatically! If you get stuck or have questions, ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here.`}
 `;
 }
 

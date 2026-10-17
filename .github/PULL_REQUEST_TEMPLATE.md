@@ -38,4 +38,4 @@ Our automated bot will instantly check your game as soon as you submit this! To 
 4. **Is your game original?** The bot will check for plagiarism against all other games in the gallery. 
 5. **Did you include an image?** If you have an image, it must be in the [`/games/img` directory](https://github.com/hackclub/sprig/tree/main/games/img) and identically match your filename.
 
-> Thanks for your PR!
+> Thanks for your PR! Need help? Ask in #sprig on [Slack](https://hackclub.com/slack/) with your PR number, or tag @LucasHT22 here.

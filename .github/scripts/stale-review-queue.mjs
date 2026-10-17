@@ -114,7 +114,7 @@ async function handleOlderDuplicate(pullRequest, labels) {
 	await commentOnce({
 		issueNumber: pullRequest.number,
 		marker: "<!-- sprig-duplicate-auto-close -->",
-		body: `Closing this older submission so your newer PR (#${latestNumber}) can move forward. If you would rather keep this game instead, close #${latestNumber} and ask a reviewer to reopen this PR.`,
+		body: `Closing this older submission so your newer PR (#${latestNumber}) can move forward. If you would rather keep this game instead, close #${latestNumber} and ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here to reopen this PR.`,
 	});
 	await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, { state: "closed" });
 	closedDuplicateNumbers.add(pullRequest.number);
@@ -153,7 +153,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: `<!-- sprig-auto-close-${cycle} -->`,
-			body: "Closing this submission for now since there has been no activity for 14 days. Whenever you want to return to it, push your fixes and ping a reviewer to reopen it. We would love to see your game in the gallery!",
+			body: "Closing this submission for now since there has been no activity for 14 days. Whenever you want to return to it, push your fixes and ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here to reopen it. We would love to see your game in the gallery!",
 		});
 		await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, {
 			state: "closed",
@@ -166,7 +166,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: `<!-- sprig-stale-reminder-${cycle} -->`,
-			body: "Just checking in! This submission has been waiting for updates for 7 days. Whenever you have time, push your fixes so we can get your game reviewed. If there is no response after 14 days, the PR will close automatically, but you can always ask a reviewer to reopen it whenever you are ready!",
+			body: "Just checking in! This submission has been waiting for updates for 7 days. Whenever you have time, push your fixes so we can get your game reviewed. If there is no response after 14 days, the PR will close automatically, but you can always ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here to reopen it whenever you are ready!",
 		});
 	} else if (hasLabel(labels, "Stale")) {
 		await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Stale" });
@@ -227,7 +227,7 @@ async function handleUntouchedSubmission(pullRequest, labels) {
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: STALE_REMINDER_MARKER,
-			body: "This submission hasn't had any activity in over 30 days. Marking as Stale to get reviewer attention.",
+			body: "This submission hasn't had any activity in over 30 days. Marking as Stale to get reviewer attention. If your submission is ready for review, ask in #sprig on Slack (with your PR number) or tag @LucasHT22 here.",
 		});
 	}
 }
