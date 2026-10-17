@@ -6,6 +6,7 @@
 @addedOn: 2026-10-17
 */
 
+
 // Block Pusher (Sokoban)
 const player = "p";
 const block = "b";
