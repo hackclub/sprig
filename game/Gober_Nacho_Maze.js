@@ -1,5 +1,5 @@
 /* 
-@title: gobermaze
+@title: Gober Nacho Maze
 @description: silly lil maze game about a creature who loves eating nachos! use j to reset level, use l to eat the nachos you're standing next to, eat all the nachos to go to the next level!    
 @author: gober
 @tags: [puzzle, maze, food]
@@ -13,17 +13,17 @@ const target = "t";
 const wall = "w";
 const moveBlip = tune`
 77.92207792207792: G4/77.92207792207792,
-2415.5844155844156`
+2415.5844155844156`;
 const killBlip = tune`
 56.60377358490566: D4/56.60377358490566,
 56.60377358490566: E4/56.60377358490566,
 56.60377358490566: D5/56.60377358490566,
-1641.5094339622642`
+1641.5094339622642`;
 const resetBlip = tune`
 46.875: A4/46.875,
 46.875: E4/46.875,
 46.875: C4/46.875,
-1359.375`
+1359.375`;
 const winTune = tune`
 114.50381679389314: F4/114.50381679389314,
 114.50381679389314: C5/114.50381679389314,
@@ -40,7 +40,8 @@ const nextLevelBlip = tune`
 47.543581616481774: D4/47.543581616481774,
 47.543581616481774: D5/47.543581616481774,
 47.543581616481774: A4/47.543581616481774,
-1378.7638668779714`
+1378.7638668779714`;
+
 setLegend(
   [player, bitmap`
 ................
@@ -315,7 +316,7 @@ afterInput(() => {
   const numberOfGoalsCovered = tilesWith(player, target).length;
   const enemiesLeft = getAll(nachos).length;
 
-  // must be standing on the target and all level enemies must be totally gone :P
+  // must be standing on the target and all level nachos must be totally gone :P
   if (numberOfGoalsCovered > 0 && enemiesLeft === 0) {
     level = level + 1;
     if (level < levels.length) {
