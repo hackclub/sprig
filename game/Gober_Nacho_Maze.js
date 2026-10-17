@@ -1,6 +1,6 @@
 /* 
 @title: Gober Nacho Maze
-@description: silly lil maze game about a creature who loves eating nachos! use j to reset level, use l to eat the nachos you're standing next to, eat all the nachos to go to the next level!    
+@description: A little pink creature moving through a maze to eat all the nachos.
 @author: gober
 @tags: [puzzle, maze, food]
 @addedOn: 2026-10-16
