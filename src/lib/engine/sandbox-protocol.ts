@@ -2,6 +2,19 @@ import type { NormalizedError } from '../state'
 
 export type SerializableLogArg = string | number | boolean | null
 
+export const serializeLogArg = (arg: unknown): SerializableLogArg => {
+	if (arg === null) return null
+	if (arg === undefined) return 'undefined'
+	if (['string', 'number', 'boolean'].includes(typeof arg)) return arg as SerializableLogArg
+
+	try {
+		const json = JSON.stringify(arg)
+		return json !== undefined ? json : String(arg)
+	} catch {
+		return String(arg)
+	}
+}
+
 export type ParentToSandboxMessage =
 	| { type: 'INIT', channelId: string }
 	| { type: 'RUN_GAME', channelId: string, code: string, muted: boolean }

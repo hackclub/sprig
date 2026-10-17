@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { isParentToSandboxMessage, isSandboxToParentMessage } from './sandbox-protocol'
+import { isParentToSandboxMessage, isSandboxToParentMessage, serializeLogArg } from './sandbox-protocol'
 
 test('validates parent to sandbox messages', () => {
 	expect(isParentToSandboxMessage({ type: 'RUN_GAME', channelId: 'abc', code: 'setMap(map``)', muted: false })).toBe(true)
@@ -19,14 +19,16 @@ test('validates sandbox to parent messages', () => {
 	})).toBe(true)
 	expect(isSandboxToParentMessage({ type: 'CONSOLE_LOG', channelId: 'abc', args: ['hi'], nums: [1, 2], isErr: false })).toBe(true)
 	expect(isSandboxToParentMessage({ type: 'CONSOLE_LOG', channelId: 'abc', args: ['hi'], nums: [1, 2], isErr: true })).toBe(false)
-	expect(isSandboxToParentMessage({
-		type: 'SHORTCUT_KEY',
-		channelId: 'abc',
-		key: 'Enter',
-		ctrlKey: false,
-		metaKey: true,
-		shiftKey: false,
-		altKey: false,
-	})).toBe(true)
+	expect(isSandboxToParentMessage({ type: 'SHORTCUT_KEY', channelId: 'abc', key: 'Enter', ctrlKey: false, metaKey: true, shiftKey: false, altKey: false })).toBe(true)
 	expect(isSandboxToParentMessage({ type: 'OPEN_POPUP', channelId: 'abc' })).toBe(false)
+})
+
+test('serializes console log arguments safely', () => {
+	expect(serializeLogArg('hello')).toBe('hello')
+	expect(serializeLogArg(42)).toBe(42)
+	expect(serializeLogArg(true)).toBe(true)
+	expect(serializeLogArg(null)).toBe(null)
+	expect(serializeLogArg(undefined)).toBe('undefined')
+	expect(serializeLogArg({ a: 1 })).toBe('{"a":1}')
+	expect(serializeLogArg(() => {})).toContain('() =>')
 })

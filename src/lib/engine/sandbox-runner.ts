@@ -3,8 +3,8 @@ import { runGame, runGameHeadless } from '.'
 import {
 	type ParentToSandboxMessage,
 	type SandboxToParentMessage,
-	type SerializableLogArg,
 	isParentToSandboxMessage,
+	serializeLogArg,
 } from './sandbox-protocol'
 
 const canvas = document.getElementById('sprig-sandbox-screen') as HTMLCanvasElement | null
@@ -28,17 +28,6 @@ const serializeError = (error: NormalizedError): NormalizedError => ({
 		}
 		: String(error.raw),
 })
-
-const serializeLogArg = (arg: unknown): SerializableLogArg => {
-	if (arg === null) return null
-	if (['string', 'number', 'boolean'].includes(typeof arg)) return arg as SerializableLogArg
-
-	try {
-		return JSON.stringify(arg)
-	} catch {
-		return String(arg)
-	}
-}
 
 const post = (message: SandboxToParentMessage): void => {
 	window.parent.postMessage(message, '*')

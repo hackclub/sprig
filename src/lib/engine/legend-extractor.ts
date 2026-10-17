@@ -39,9 +39,26 @@ const readCallBody = (code: string, start: number): string | null => {
 	let depth = 1
 	let quote: string | null = null
 	let escaping = false
+	let inLineComment = false
+	let inBlockComment = false
 
 	for (let i = start; i < code.length; i++) {
 		const char = code[i]!
+		const nextChar = code[i + 1]
+
+		if (inLineComment) {
+			if (char === '\n') inLineComment = false
+			continue
+		}
+
+		if (inBlockComment) {
+			if (char === '*' && nextChar === '/') {
+				inBlockComment = false
+				i++
+			}
+			continue
+		}
+
 		if (quote) {
 			if (escaping) {
 				escaping = false
@@ -52,6 +69,18 @@ const readCallBody = (code: string, start: number): string | null => {
 				continue
 			}
 			if (char === quote) quote = null
+			continue
+		}
+
+		if (char === '/' && nextChar === '/') {
+			inLineComment = true
+			i++
+			continue
+		}
+
+		if (char === '/' && nextChar === '*') {
+			inBlockComment = true
+			i++
 			continue
 		}
 

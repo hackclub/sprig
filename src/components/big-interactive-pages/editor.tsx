@@ -450,6 +450,7 @@ export default function Editor({ persistenceState, cookies, roomState, review }:
 	useEffect(() => () => cleanupRef.value?.(), []);
 	useEffect(() => {
 		const onKeyDown = (e: KeyboardEvent) => {
+			if (e.defaultPrevented) return;
 			if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
 				e.preventDefault();
 				onRun();

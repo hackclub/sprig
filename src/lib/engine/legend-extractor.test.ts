@@ -68,3 +68,20 @@ test('extracts bitmaps defined in variables and object property keys', () => {
 		['w', '1111'],
 	])
 })
+
+test('extracts bitmaps when setLegend contains comments with quotes or parens', () => {
+	const code = `
+		const p = "p"
+		const w = "w"
+		setLegend(
+			// don't break on player's apostrophe or paren :)
+			[p, bitmap\`0000\`],
+			/* block comment with "quotes" and (parens) */
+			[w, bitmap\`1111\`]
+		)
+	`
+	expect(extractLegendBitmaps(code)).toEqual([
+		['p', '0000'],
+		['w', '1111'],
+	])
+})
