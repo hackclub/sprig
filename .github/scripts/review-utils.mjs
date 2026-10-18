@@ -530,16 +530,7 @@ export function inferSubmissionMetadata({ content, filename, pullRequest, existi
 	if (existingMetadata?.title && !/^getting(_|\s)started$/i.test(existingMetadata.title.trim()) && !/^template$/i.test(existingMetadata.title.trim()) && !/^my game$/i.test(existingMetadata.title.trim())) {
 		title = existingMetadata.title.trim();
 	} else {
-		if (content) {
-			const commentMatch = content.match(/^\s*(?:\/\/|\/\*)\s*([A-Za-z0-9][A-Za-z0-9\s-_']{2,40})(?:\s*\([^)]*\))?\s*(?:\*\/|$)/m);
-			if (commentMatch) {
-				const candidate = cleanGameTitle(commentMatch[1]);
-				if (!candidate.startsWith("@") && !/^eslint/i.test(candidate) && !/^prettier/i.test(candidate) && !/^sprig/i.test(candidate)) {
-					title = candidate;
-				}
-			}
-		}
-		if (!title && pullRequest?.title) {
+		if (pullRequest?.title) {
 			const cleanedPr = cleanGameTitle(pullRequest.title);
 			if (cleanedPr && cleanedPr.length >= 2 && !/^my game$/i.test(cleanedPr)) {
 				title = cleanedPr;
@@ -549,6 +540,16 @@ export function inferSubmissionMetadata({ content, filename, pullRequest, existi
 			const basename = cleanGameTitle(path.basename(filename, ".js"));
 			if (basename && !/^my game$/i.test(basename)) {
 				title = basename;
+			}
+		}
+		if (!title && content) {
+			const firstLine = content.split("\n").find((line) => line.trim().length > 0) || "";
+			const commentMatch = firstLine.match(/^\s*(?:\/\/|\/\*)\s*([A-Za-z0-9][A-Za-z0-9\s-_']{2,40})(?:\s*\([^)]*\))?\s*(?:\*\/|$)/);
+			if (commentMatch) {
+				const candidate = cleanGameTitle(commentMatch[1]);
+				if (!candidate.startsWith("@") && !/^eslint/i.test(candidate) && !/^prettier/i.test(candidate) && !/^sprig/i.test(candidate)) {
+					title = candidate;
+				}
 			}
 		}
 		if (!title) title = "Sprig Game";
