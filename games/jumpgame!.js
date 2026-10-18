@@ -1,3 +1,11 @@
+
+  /*
+    @title: jumpgame!
+    @author: darthkenobi2407
+    @description: an endless runner where your aim to to maxx out your score and avoid hitting obstacles!!
+    @tags: ['jump', 'run', 'endless']
+    @addedOn: 2026-10-18
+    */
 //jumpgame! an endless runner where your aim to to maxx out your score and avoid hitting obstacles
 // use A and D to move left and rigt!
 
