@@ -1,9 +1,10 @@
 /*
 @title: Sky Sweeper
-@description: Mine Sweeper for in the sky wasd to move. J to restat. K to flag, I to sweep. 
 @author: Aishy
+@description: Mine Sweeper for in the sky wasd to move. J to restat. K to flag, I to sweep.
 @tags: ['Space', 'Star', 'Mine Sweeper']
-@addedOn: 2026-10-11
+@addedOn: 2026-10-19
+*/
 
 Controls:
   W A S D = move 
