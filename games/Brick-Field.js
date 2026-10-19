@@ -1,3 +1,11 @@
+/*
+@title: Brick Field
+@author: TheDerpyMit
+@description: The goal is to destroy all the bricks and get the highest score before you run out of lives
+@tags: ['puzzle']
+@addedOn: 2026-10-19
+*/
+
 
 const player = "p"
 const wall = "w"
