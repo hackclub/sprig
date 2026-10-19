@@ -23,6 +23,14 @@ const bodyRightUp = "c"
 const bodyLeftUp = "d"
 const wall = "z"
 
+let normalSpeed = 150
+let boostedSpeed = 100
+let slowedSpeed = 200
+let speed = normalSpeed
+let gameTimer = null
+let speedTimeout = null
+let powerUp
+
 let gameOver = false
 let score = 0
 const GRID_WIDTH = 18
@@ -333,18 +341,75 @@ let food_pos = { x: 0, y: 0 }
 function spawnFood() {
   let randomX, randomY
   do {
-    randomX = Math.floor(Math.random() * 14) + 1   // 1-14 instead of 0-15
-    randomY = Math.floor(Math.random() * 6) + 1    // 1-6 instead of 0-7
+    randomX = Math.floor(Math.random() * 14) + 1   
+    randomY = Math.floor(Math.random() * 6) + 1    
   } while (snake.some(s => s.x === randomX && s.y === randomY))
   
   food_pos = { x: randomX, y: randomY }
 }
 
 spawnFood()
+function powerUps() {
+  powerUp = Math.floor(Math.random() * 7) + 1   
+  
+  switch (powerUp) {
+  case 1:
+    speed = boostedSpeed
+    startGameLoop(speed)
+
+    // Reset the timer if another speed power-up is collected
+    if (speedTimeout !== null) clearTimeout(speedTimeout)
+
+    speedTimeout = setTimeout(() => {
+      speed = normalSpeed
+      startGameLoop(speed)
+      speedTimeout = null
+    }, 5000)
+      
+    addText("Boost: 5 seconds!")
+
+    setTimeout(() => {
+    clearText()
+    }, 1000)  
+    
+    console.log("Speed boost for 5 seconds!")
+    break
+
+  case 2:
+    speed = slowedSpeed
+    startGameLoop(speed)
+
+    // Reset the timer if another speed power-up is collected
+    if (speedTimeout !== null) clearTimeout(speedTimeout)
+
+    speedTimeout = setTimeout(() => {
+      speed = normalSpeed
+      startGameLoop(speed)
+      speedTimeout = null
+    }, 5000)
+      
+    addText("Slowed: 5 seconds!")
+
+    setTimeout(() => {
+    clearText()
+    }, 1000)  
+    
+    console.log("slowed for 5 seconds!")
+    break
+
+  case 3:
+    score++
+    console.log("Extra points!")
+    break
+
+  default:
+    console.log("no power up")
+  }
+}
 
 
 
-setInterval(() => {
+function gameTick() {
   if (gameOver || snake.length === 0) return
 
   // UPDATE DIRECTION
@@ -394,11 +459,17 @@ setInterval(() => {
   if (ateFood) {
     snake.unshift(newHead)
     score++
+    powerUps()
     spawnFood()
   } else {
     snake.pop()
     snake.unshift(newHead)
   }
+  
+  
+  
+  
+  
 
   // Update body/tail graphics
   for (let i = 1; i < snake.length - 1; i++) {
@@ -451,19 +522,28 @@ setInterval(() => {
     addText(`GAME OVER! Score: ${score}`, () => {})
   }
 
-}, 150)
+  
+}
+
+function startGameLoop(delay) {
+  if (gameTimer !== null) clearInterval(gameTimer)
+  gameTimer = setInterval(gameTick, delay)
+}
+
+startGameLoop(speed)
 
 // Restart control
 onInput("j", () => {
   if (gameOver) {
-    // Clear old snake sprites
     for (let segment of snake) {
       let tile = getTile(segment.x, segment.y)
       for (let sprite of tile) {
         sprite.remove()
       }
+      
     }
-	  setMap(levels[0])
+    setMap(levels[0])
+    // Clear old snake sprites
     
     // Clear old food sprite
     let foodTile = getFirst(food)
@@ -471,6 +551,13 @@ onInput("j", () => {
     
     gameOver = false
     score = 0
+
+    // Cancel any active speed boost and restore normal speed
+    if (speedTimeout !== null) {
+      clearTimeout(speedTimeout)
+      speedTimeout = null
+    }
+    speed = normalSpeed
     snake = [
       { x: 4, y: 1, type: headRight },
       { x: 3, y: 1, type: bodyRightLeft },
@@ -479,6 +566,7 @@ onInput("j", () => {
     direction = "right"
     nextDirection = "right"
     spawnFood()
+    startGameLoop(speed)
     
     clearText()
   }
