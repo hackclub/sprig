@@ -962,7 +962,7 @@ function printBoardText() {
 function prepareHandForSelection() {
   const isBot = game.currentPlayer === 0
 
-  objectHand?.remove()
+  if (objectHand) objectHand.remove()
   isBot ?
     addSprite(handMinX, boardBotY + 1, handUp) :
     addSprite(handMaxX, boardTopY - 1, handDown)
@@ -1083,6 +1083,7 @@ function delay(ms) {
 
 function startNewGame() {
   setMap(levels[level])
+  objectHand = null
   setBackground(nothing)
 
   for (let x = storeLeftX; x <= storeRightX; x++)

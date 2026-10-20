@@ -2,7 +2,7 @@
 @title: plant survivor
 @description: In my game you are a plant. You need to make sure you get enough water and sunlight while not getting hit bye the flying birds.
 @author: Olli Becker
-@tags: ['tutorial']
+@tags: ['dodge']
 @addedOn: 2025-9-28
 */
 

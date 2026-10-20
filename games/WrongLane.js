@@ -331,10 +331,10 @@ const newCars = []
 
 function stop() {
   playing = false
+  clearCars()
   setMap(levels[0])
   if (carTaskID) clearInterval(carTaskID)
   if (carSpawnTaskID) clearInterval(carSpawnTaskID)
-  clearCars()
   if (score > highscore) highscore = score
   playback.end()
   score = 0
@@ -410,8 +410,9 @@ function refreshGame() {
   }, speed)
   carSpawnTaskID = setInterval(() => {
     const carType = getRandomCarType();
-    addSprite(2 + Math.floor(Math.random() * 3), 0, carType)
-    const sprite = getAll(carType)[getAll(carType).length - 1]
+    const carX = 2 + Math.floor(Math.random() * 3)
+    addSprite(carX, 0, carType)
+    const sprite = getTile(carX, 0).find(s => s.type === carType)
     cars.push(sprite)
     newCars.push(sprite)
   }, speed * frequency)
@@ -518,7 +519,7 @@ onInput("d", () => {
 })
 
 onInput("i", () => {
-  if (!playing) {
+  if (!playing && getFirst(player)) {
     getFirst(player).y--
   }
 })

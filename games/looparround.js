@@ -294,6 +294,7 @@ onInput("j",()=>{
 
 
 afterInput(() => {
+  let doors, openadoors, i
   if (tilesWith(flag,player).length>0){
     level++;
     setMap(levels[level])

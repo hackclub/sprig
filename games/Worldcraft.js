@@ -24,10 +24,10 @@ function getMapV2(){
   for(var i = 0; i < height(); i++){
     map.push([]);
     for(var j = 0; j < width(); j++){
-      map[i].push([]);
+      map[i].push("");
       var tile = getTile(j, i);
       for(var k = 0; k < tile.length; k++){
-        map[i][j].push(tile[k].type);
+        map[i][j] += tile[k].type;
       }
     }
   }

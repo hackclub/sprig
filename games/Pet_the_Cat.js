@@ -158,6 +158,7 @@ setInterval(function() {
   })
 })
 function petting(){
+  if (!getFirst(player)) return
   getFirst(player).remove()
   addSprite(0, 0, "e")
   addSprite(0, 1, "s")
@@ -166,6 +167,7 @@ function petting(){
   pats++
 }
 function reset(){
+  if (!getFirst(pattedcat)) return
   getFirst(pattedcat).remove()
   getFirst(exstend).remove()
   getFirst(pat).remove()

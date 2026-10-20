@@ -546,6 +546,7 @@ addText("Press I to start", {
 })
 let zombie = zombie1
 let player = pistol
+let pgpos
 onInput("i", () => {
   if (level == 0){
   level = 1
@@ -553,7 +554,7 @@ onInput("i", () => {
   clearText(),
   playback.end()}
     
-  else{
+  else if (getFirst(player)) {
     if (level == 2){
     pgpos = getFirst(player)
     addSprite(pgpos.x + 1,pgpos.y+1,bullet)
@@ -576,16 +577,16 @@ onInput("i", () => {
 
 // inputs for player movement control
 onInput("s", () => {
-  getFirst(player).y += 1; // positive y is downwards
+  if (getFirst(player)) getFirst(player).y += 1; // positive y is downwards
 });
 onInput("w", () => {
-  getFirst(player).y -= 1;
+  if (getFirst(player)) getFirst(player).y -= 1;
 });
 onInput("d", () => {
-  getFirst(player).x += 1;
+  if (getFirst(player)) getFirst(player).x += 1;
 });
 onInput("a", () => {
-  getFirst(player).x -= 1;
+  if (getFirst(player)) getFirst(player).x -= 1;
 });
 
 
@@ -593,6 +594,7 @@ onInput("a", () => {
 
 
 function enemyspawn() {
+  if (width() <= 8) return
   const ran =Math.floor(Math.random() * (5 - 1) + 1);
   console.log(ran)
   addSprite(8,ran,zombie)
@@ -655,16 +657,19 @@ catch(err) {
   
 setInterval(() => {
   getAll(bullet).forEach((bulletObj) => {
+    let hitZombie = false
     getTile(bulletObj.x + 1, bulletObj.y).forEach((sprite) => {
       if (sprite.type === zombie) {
         // Zombie detected
        
         sprite.remove()
-        bulletObj.remove()
+        if (!hitZombie) bulletObj.remove()
+        hitZombie = true
        score+=1
         return;
       }
     })
+    if (hitZombie) return
     if (level == 1)
     {if (bulletObj.x === 8) {
       bulletObj.remove();

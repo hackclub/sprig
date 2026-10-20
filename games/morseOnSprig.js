@@ -223,7 +223,7 @@ const levels = [
 
 setMap(levels[level]);
 
-chars = {
+let chars = {
   ".-": "a",
   "-...": "b",
   "-.-.": "c",

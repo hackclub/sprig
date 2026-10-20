@@ -418,19 +418,19 @@ setPushables({
 })
 
 onInput("s", () => {
-  getFirst(player).y += 1
+  if (getFirst(player)) getFirst(player).y += 1
   playTune(movesound)
 })
 onInput("w", () => {
-  getFirst(player).y -= 1
+  if (getFirst(player)) getFirst(player).y -= 1
   playTune(movesound)
 })
 onInput("a", () => {
-  getFirst(player).x -= 1
+  if (getFirst(player)) getFirst(player).x -= 1
   playTune(movesound)
 })
 onInput("d", () => {
-  getFirst(player).x += 1
+  if (getFirst(player)) getFirst(player).x += 1
   playTune(movesound)
 })
 onInput("j", () => {

@@ -265,19 +265,22 @@ function gameLoop() {
         color: color`9`
       })
       clearInterval(timer)
+      return
     }
-    playerWalls.forEach(wall => {
+    playerWalls.some(wall => {
       if (bullet.x === wall.x && bullet.y === wall.y) {
         bullet.remove();
+        return true;
       }
     });
   });
   bullets.forEach(bullet => {
-    walls.forEach(wall => {
+    if (walls.some(wall => {
       if (bullet.x === wall.x && bullet.y === wall.y) {
         bullet.remove();
+        return true;
       }
-    });
+    })) return;
     if (bullet.x === getFirst(jerk).x && bullet.y === getFirst(jerk).y && stillAlive) {
       if (jerkHealth <= 1) {
         // set stillalive to false so it has the same effect as if you died

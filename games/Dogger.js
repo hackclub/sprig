@@ -253,7 +253,7 @@ function MoveCars() {
     if (!playerSprite) return; // Check if the player sprite exists
     
     cars.forEach(carSprite => {
-      if (carSprite.x === playerSprite.x && carSprite.y === playerSprite.y) {
+      if (!Dead && carSprite.x === playerSprite.x && carSprite.y === playerSprite.y) {
         playerSprite.remove(); // Remove the player sprite if hit by a car
         console.log("Player died."); // Display a message and perform game over actions
         Death();
@@ -294,7 +294,7 @@ function moveLogs() {
 
   logs.forEach(logSprite => {
     if (logSprite.x >= width() - 1) {
-      if (playerSprite && playerSprite.x === logSprite.x && playerSprite.y === logSprite.y) {
+      if (playerSprite && !Dead && playerSprite.x === logSprite.x && playerSprite.y === logSprite.y) {
         playerSprite.remove(); // Remove the player sprite if on a log and hitting the right side
         console.log("Player rode the river off the map.");
         Death();
@@ -307,7 +307,7 @@ function moveLogs() {
       logSprite.x += 1; // Move the log sprite to the right
 
       // Check if the player is on the log and move the player with the log
-      if (playerSprite && playerSprite.x === logSprite.x - 1 && playerSprite.y === logSprite.y) {
+      if (playerSprite && !Dead && playerSprite.x === logSprite.x - 1 && playerSprite.y === logSprite.y) {
         playerSprite.x += 1; // Move the player along with the log
       }
     }
@@ -318,6 +318,7 @@ setInterval(moveLogs, 550);
 
 const keyState = {}; // Object to track key states
 
+if (typeof document !== 'undefined') {
 document.addEventListener('keydown', (event) => {
   if (event.key === 'w' || event.key === 'a' || event.key === 's' || event.key === 'd') {
     if (!keyState[event.key] && !Dead) {
@@ -330,6 +331,9 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('keyup', (event) => {
   keyState[event.key] = false;
 });
+} else {
+  ['w', 'a', 's', 'd'].forEach(key => onInput(key, () => { if (!Dead) movePlayer(key) }));
+}
 
 function movePlayer(direction) {
   const playerSprite = getFirst(player);

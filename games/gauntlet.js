@@ -20,6 +20,7 @@ const aw = "?"
 
 let nextTick
 let nextScoreTick
+var lastTick
 
 let score = 0
 

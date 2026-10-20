@@ -110,12 +110,12 @@ setBackground(terminal);
 // --- AUDIO SETUP ---
 let typingSound = tune`
 25,
-12.5: C5^5, // Sharp initial click
-12.5: G4^10, // Deeper resonance
-12.5: E4^5, // Spring return
-12.5: C4^5, // Additional lower note
-12.5: G3^5, // Deep finish
-25: E3^3 // Final resonance
+12.5: C5^5,
+12.5: G4^10,
+12.5: E4^5,
+12.5: C4^5,
+12.5: G3^5,
+25: E3^3
 `;
 
 let enterSound = tune`
@@ -1148,6 +1148,10 @@ function initMap() {
   drawKeyboard();
 }
 
+function addKeySprite(x, y, type) {
+  if (!getTile(x, y).some(s => s.type === type)) addSprite(x, y, type);
+}
+
 function drawKeyboard() {
   // Draw keyboard rows and keys with consistent spacing
   keyboardLayout.forEach((row, rowIndex) => {
@@ -1168,7 +1172,7 @@ function drawKeyboard() {
         const x = 1 + (keyIndex * 2);
         
         // Draw key sprite
-        addSprite(x, y, (selectedRow === rowIndex && selectedKeyInRow === keyIndex) ? keyboardKeyPressed : keyboardKey);
+        addKeySprite(x, y, (selectedRow === rowIndex && selectedKeyInRow === keyIndex) ? keyboardKeyPressed : keyboardKey);
         
         // Draw key label
         const labelColor = (selectedRow === rowIndex && selectedKeyInRow === keyIndex) ? color`2` : color`0`;
@@ -1208,7 +1212,7 @@ function drawKeyboard() {
             }
             
             // Draw the key sprite
-            addSprite(drawX, y, keySprite);
+            addKeySprite(drawX, y, keySprite);
           }
         }
         

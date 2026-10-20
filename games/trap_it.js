@@ -165,7 +165,7 @@ function makeLevel() {
   const maxX = 33; // Maximum x value
   const minY = 0; // Minimum y value
   const maxY = 13; // Maximum y value
-  for (i=0; i <level; i+= 1) {
+  for (let i=0; i <level; i+= 1) {
     const randomCoordinates = generateRandomCoordinates(minX, maxX, minY, maxY);
     addSprite(randomCoordinates.x, randomCoordinates.y, enemy);
     monster_health[i] = 60
@@ -203,7 +203,7 @@ onInput("l", () => {
   moveMonsters()
   const wallSprite = getFirst(wall)
   const curPlayer = getFirst(player)
-  if (wallSprite) {
+  if (wallSprite && curPlayer.x+1 < width()) {
     addSprite(curPlayer.x+1, curPlayer.y+0, wall)
   }
   clearText()
@@ -213,7 +213,7 @@ onInput("i", () => {
   moveMonsters()
   const wallSprite = getFirst(wall)
   const curPlayer = getFirst(player)
-  if (wallSprite) {
+  if (wallSprite && curPlayer.y > 0) {
     addSprite(curPlayer.x+0, curPlayer.y+-1, wall)
   }
   clearText()
@@ -223,13 +223,14 @@ onInput("k", () => {
   moveMonsters()
   const wallSprite = getFirst(wall)
   const curPlayer = getFirst(player)
-  if (wallSprite) {
+  if (wallSprite && curPlayer.y+1 < height()) {
     addSprite(curPlayer.x+0, curPlayer.y+1, wall)
   }
   clearText()
 })
 
 let random_move_2 = 0
+let firstPlayer, monsterList, dead_monsters, idx, deltaX, deltaY, length = 0
 function moveMonsters() {
   let monster_expected_x = 0
   let monster_expected_y = 0
@@ -284,7 +285,7 @@ onInput("j", () => {
   moveMonsters()
   const wallSprite = getFirst(wall)
   const curPlayer = getFirst(player)
-  if (wallSprite) {
+  if (wallSprite && curPlayer.x > 0) {
     addSprite(curPlayer.x+-1, curPlayer.y+0, wall)
   }
   clearText()

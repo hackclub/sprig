@@ -285,6 +285,7 @@ setPushables({
 
 const playback = playTune(backgroundmusic, Infinity)
 let alive = true
+let game_running = true
 onInput("d", () => {
   if (alive) {
   addSprite(getFirst(player).x,getFirst(player).y, background);

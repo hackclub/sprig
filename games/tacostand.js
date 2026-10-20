@@ -530,6 +530,7 @@ function countDigits(num) {
 }
 
 clearText()
+let i
 for (i = 0; i <= countDigits(recipe_answer) + 1; i++) {
   addText("" + recipe_decoded[i], {
     x: 12,

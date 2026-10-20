@@ -127,7 +127,7 @@ function checkGrounded(obj){
 }
 
 onInput("w", () => {
-  if(checkGrounded(getFirst(dino))){
+  if(getFirst(dino) && checkGrounded(getFirst(dino))){
     vy = jumpHeight;
   }
 });

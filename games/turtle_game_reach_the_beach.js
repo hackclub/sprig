@@ -271,20 +271,20 @@ setPushables({
 
 //vertical movement
 onInput("w", () => {
-  getFirst(player).y -= movement
+  if (getFirst(player)) getFirst(player).y -= movement
 })
 
 onInput("s", () => {
-  getFirst(player).y += movement
+  if (getFirst(player)) getFirst(player).y += movement
 })
 
 //horizontal movement
 onInput("a", () => {
-  getFirst(player).x -= movement
+  if (getFirst(player)) getFirst(player).x -= movement
 })
 
 onInput("d", () => {
-  getFirst(player).x += movement
+  if (getFirst(player)) getFirst(player).x += movement
 })
 
 

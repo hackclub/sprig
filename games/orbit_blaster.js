@@ -256,7 +256,7 @@ function startMenu() {
     }
     return
   } else {
-    setInterval(refreshStartMenuText, 50);
+    refreshStartMenuText();
   }
   onInput("k", () => {
     GAMESTARTED = true
@@ -268,6 +268,7 @@ let startMenuInterval;
 let moveBulletsInterval;
 let checkForObstacleInterval;
 let moveObstacleInterval;
+let spawnObstacleInterval;
 
 
 function startGame() {

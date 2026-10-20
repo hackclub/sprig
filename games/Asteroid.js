@@ -153,7 +153,7 @@ function mainMenu() {
 }
 
 function gameStart() {
-  startTime = performance.now();
+  startTime = Date.now();
   clearText();
   gamestarted = true;
   setMap(levels[1]);
@@ -162,7 +162,7 @@ function gameStart() {
 }
 
 function collisionCheck(spr1, spr2) {
-  colliding = tilesWith(spr1, spr2);
+  let colliding = tilesWith(spr1, spr2);
   if (colliding.length > 0) { return true; } else { return false; }
 }
 
@@ -245,7 +245,7 @@ function sP(){
 }
 
 function calculateTime() {
-  elapsedTime = performance.now() - startTime;
+  elapsedTime = Date.now() - startTime;
   timeBetweenUpdate = 1000 * Math.pow(0.75, elapsedTime / 10000); // Adjust the multiplier for desired game speed
   console.log(timeBetweenUpdate);
 }
