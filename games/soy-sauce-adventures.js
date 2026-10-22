@@ -1322,17 +1322,17 @@ onInput("w", () => jump());
 
 onInput("a", () => {
   let sprite = getFirst(gudetama)
-  sprite.x -= 1
+  if (sprite) sprite.x -= 1
 })
 
 onInput("s", () => {
   let sprite = getFirst(gudetama)
-  sprite.y += 1
+  if (sprite) sprite.y += 1
 })
 
 onInput("d", () => {
   let sprite = getFirst(gudetama)
-  sprite.x += 1
+  if (sprite) sprite.x += 1
 })
 
 // game interactive elements (only two :>)
@@ -1459,7 +1459,7 @@ function jump() {
   const playerSprite = getFirst(gudetama); // Assuming 'player' is your character's identifier
 
   // Check if there’s ground below the player
-  if (getTile(playerSprite.x, playerSprite.y + 1) != 0) {
+  if (playerSprite && getTile(playerSprite.x, playerSprite.y + 1) != 0) {
     playerUpwardsVel = maxJump; // Set upward velocity to start jumping
   }
 }
@@ -1487,7 +1487,7 @@ function calculateGravity(playerX, playerY) {
 
 // Periodically apply gravity (if needed) to ensure the player doesn't float in the air when there's no ground beneath
 setInterval(() => {
-  calculateGravity(getFirst(gudetama).x, getFirst(gudetama).y);
+  if (getFirst(gudetama)) calculateGravity(getFirst(gudetama).x, getFirst(gudetama).y);
 }, 150); // Check gravity every 50ms
 
 
@@ -1691,7 +1691,7 @@ afterInput(() => {
   }
 
   // Apply gravity
-  calculateGravity(gudetamaSprite.x, gudetamaSprite.y);
+  if (gudetamaSprite) calculateGravity(gudetamaSprite.x, gudetamaSprite.y);
 });
 
 // Periodically move enemies

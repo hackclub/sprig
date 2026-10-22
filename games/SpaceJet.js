@@ -3,7 +3,8 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: draw
-@author: 
+@author: None
+@description: None
 @tags: []
 @addedOn: 2025-00-00
 */
@@ -322,7 +323,7 @@ function moveMissiles(intervalTime){
 
 /* spons new aliens */
 function setAliens(noOfAliens,intervalTime){
-  setAlien = setInterval(()=>{
+  let setAlien = setInterval(()=>{
     if(status == 0){
       addSprite(0 , 0, alien) 
       noOfAlienCreated += 1

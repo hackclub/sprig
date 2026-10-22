@@ -786,7 +786,7 @@ let first;
 let second;
 let third;
 let fourth;
-let components;
+let components = [];
 let laserQueue = []
 
 function initialize() {

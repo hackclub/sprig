@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Exclude deprecated site from GitHub dependency graph / Dependabot alerts
+hardware/sprig_holiday_case/site/** linguist-generated

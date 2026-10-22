@@ -26,6 +26,7 @@ var Score = 0
 var HighScore = 0
 var gameLoop;
 var playback;
+var StartScreen, MainGame, ExtraGame, StageIndex, options, dcar;
 const Theme = tune`
 187.5: B5^187.5,
 187.5: C4~187.5,
@@ -446,7 +447,7 @@ function Main_Loop(time) {
 }
 
 function GettingPoints() {
-  if (getFirst(player).y === 0) {
+  if (GameStarted && getFirst(player).y === 0) {
     if (StageIndex < 2){ 
       Player_Spawn([3,6])
     } else {

@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: BananaBeatdown
 @author: FammyBoy
+@description: None
 @tags: []
 @addedOn: 2024-00-00
 */
@@ -38,6 +39,7 @@ let startup = true
 let card = "N/A"
 
 let game = false
+let emoveinterval, espawninterval, cardspinning, fireanimr, fireaniml, eaniminterval, skyinterval, scoreinterval
 
 setLegend(
   [player, bitmap`

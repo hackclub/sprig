@@ -26,7 +26,7 @@ interface CaptchaAssessment {
 }
 
 export const assessCaptcha = async (token: string, expectedAction: string): Promise<number> => {
-	const res = await fetch(`https://recaptchaenterprise.googleapis.com/v1/projects/spriggety-sprig/assessments?key=${import.meta.env.RECAPTCHA_API_KEY}`, {
+	const res = await fetch(`https://recaptchaenterprise.googleapis.com/v1/projects/spriggety-sprig/assessments?key=${process.env.RECAPTCHA_API_KEY}`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({

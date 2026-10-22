@@ -3,7 +3,7 @@
 @description: A sandbox game where you use conveyors. The "$" (dollar sign symbol) brings you back to the starting point. The "eraser" (pink rectangle) erases tiles. The arrows with symbols behind them are trampolines that jump 2 spaces ahead.
 @author: koa
 @tags: ['sandbox', 'factory']
-@addedOn: 2025-11-12
+@addedOn: 2025-7-11
 */
 const add = tune`
 178.57142857142858: E4/178.57142857142858,
@@ -504,7 +504,7 @@ addText("K to start \nsimulation", {
   y: 9
 })
 setBackground(pink)
-colors = [orange, yellow, green, blue, purple, pink, black, grey, t, i]
+const colors = [orange, yellow, green, blue, purple, pink, black, grey, t, i]
 
 onInput("i", () => {
   playTune(add)
@@ -512,7 +512,7 @@ onInput("i", () => {
   let y = getFirst(player).y
   clearTile(getFirst(player).x, getFirst(player).y)
   addSprite(x, y, player)
-  addSprite(getFirst(player).x, getFirst(player).y, colors[getFirst(colore).x])
+  if (getFirst(colore)) addSprite(getFirst(player).x, getFirst(player).y, colors[getFirst(colore).x])
 })
 onInput("k", () => {
   let x2 = getFirst(red).x
@@ -522,10 +522,10 @@ onInput("k", () => {
 })
 
 onInput("j", () => {
-  getFirst(colore).x -= 1
+  if (getFirst(colore)) getFirst(colore).x -= 1
 })
 onInput("l", () => {
-  getFirst(colore).x += 1
+  if (getFirst(colore)) getFirst(colore).x += 1
 })
 
 onInput("w", () => {
@@ -632,8 +632,8 @@ var gameLoop = setInterval(() => {
                 addSprite(11, 9, "q")
                 let x2 = getFirst(red).x
                 let y2 = getFirst(red).y
-                getFirst(item).y = [9]
-                getFirst(item).x = [11]
+                getFirst(item).y = 9
+                getFirst(item).x = 11
               }
             }
           }

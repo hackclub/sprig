@@ -10,6 +10,8 @@ https://sprig.hackclub.com/gallery/getting_started
 
 */
 
+let options, random
+
 async function toiletBehaviour(x, y, spriteList, s) {
   while (true) {
     if (gameOver == true) {

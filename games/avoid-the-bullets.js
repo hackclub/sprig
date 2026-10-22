@@ -1,5 +1,10 @@
-/*made by j4mik*/
-
+/*
+@title: Nonemade by j4mik
+@author: None
+@description: None
+@tags: []
+@addedOn: 2025-04-17
+*/
 const tileA = "a";
 const tileB = "b";
 const tileC = "c";

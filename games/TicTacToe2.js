@@ -19,7 +19,7 @@ let board = [
   ["", "", ""],
   ["", "", ""]
 ];
-gameover = false;
+let gameover = false;
 
 setLegend(
   [player, bitmap`
@@ -252,7 +252,7 @@ onInput("j", () => {
 
   //Check for draw
   if (!gameover) {
-    counter = 0
+    let counter = 0
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         if (board[i][j] == "") {

@@ -1,5 +1,7 @@
 /*
 @title: Epic Pixel RPG (Complete with Game Over)
+@author: None
+@description: None
 @tags: ['rpg', 'adventure']
 @img: ""
 @addedOn: 2024-01-01

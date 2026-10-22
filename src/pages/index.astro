@@ -362,18 +362,15 @@ if (session && session.session.full) {
 		<!-- 3D interactive device: -->
 		<script>
 			import * as THREE from 'three'
-			import { Scene, WebGLRenderer, sRGBEncoding, PerspectiveCamera, AmbientLight, DirectionalLight, HemisphereLight, Raycaster, Vector2, Object3D, Mesh, Texture, BufferGeometry, Material } from 'three'
+			import { Scene, WebGLRenderer, SRGBColorSpace, PerspectiveCamera, AmbientLight, DirectionalLight, HemisphereLight, Raycaster, Vector2, Object3D, Mesh, Texture, BufferGeometry, Material } from 'three'
 			import { OrbitControls } from '../lib/orbit-controls'
 			import { type InputKey, VALID_INPUTS } from '../../engine/src/api'
 			import { imageDataEngine } from '../../engine/src/image-data'
 			import { homepageExampleCode } from '../lib/examples'
 
-			// @ts-ignore
-			import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment'
-			// @ts-ignore
-			import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-			// @ts-ignore
-			import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
+			import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
+			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+			import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 
 			var canvas = document.createElement('canvas')
 			var gl = false
@@ -421,8 +418,7 @@ if (session && session.session.full) {
 					});
 					renderer.setSize(width, height, false);
 
-					renderer.outputEncoding = sRGBEncoding;
-					renderer.physicallyCorrectLights = true;
+					renderer.outputColorSpace = SRGBColorSpace;
 
 					const camera = new PerspectiveCamera(
 						75,
@@ -465,7 +461,7 @@ if (session && session.session.full) {
 					scene.add(new HemisphereLight());
 
 					const dracoLoader = new DRACOLoader().setDecoderPath(
-						`https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/libs/draco/gltf/`
+						`https://cdn.jsdelivr.net/npm/three@0.183.2/examples/jsm/libs/draco/gltf/`
 					);
 					const loader = new GLTFLoader().setDRACOLoader(dracoLoader);
 

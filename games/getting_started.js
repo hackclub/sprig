@@ -7,6 +7,8 @@
 
 Check the tutorial in the bottom right, the run button is in the top right.
 Make sure to remix this tutorial if you want to save your progress!
+
+AI policy: Games submitted to the gallery must be primarily created by the person submitting them. Substantially AI-generated games may not be approved.
 */
 
 // define the sprites in our game

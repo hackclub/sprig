@@ -2004,7 +2004,7 @@ function resetGame() {
   addSprite(9, 0, "G");
   addSprite(0, 4, "p");
   banned = false;
-  startTime = performance.now();
+  startTime = Date.now();
   lastSpawn = startTime - 1000;
   lastMove = startTime - 1000;
   malfunction = 0;
@@ -2018,11 +2018,12 @@ let lastSpawn;
 let lastMove;
 let malfunction;
 let score;
-let start;
+let start = true;
 let speed;
+let text;
 
 onInput("w", () => {
-  if (banned || malfunction > 5 || start) return
+  if (banned || malfunction >= 5 || start) return
   if (getFirst(player).y != 3 && Math.random() > malfunction * 0.2) {
     getFirst(player).y -= 1
   }
@@ -2049,9 +2050,9 @@ onInput("d", () => {
 });
 
 function gameLoop() {
-  if (!start && !banned && malfunction < 5 && performance.now()-startTime <= 1000000) {
+  if (!start && !banned && malfunction < 5 && Date.now()-startTime <= 1000000) {
     // Spawning new tickets
-    if (performance.now()-lastSpawn >= Math.max(800/speed, 300)) {
+    if (Date.now()-lastSpawn >= Math.max(800/speed, 300)) {
       const x = 9;
       const y = Math.floor(Math.random()*5)+3;
       const rand = Math.random();
@@ -2062,11 +2063,11 @@ function gameLoop() {
       } else {
         addSprite(x, y, "b");
       }
-      lastSpawn = performance.now();
+      lastSpawn = Date.now();
     }
 
     // Moving everything
-    if (performance.now()-lastMove >= Math.max(700/speed, 300)) {
+    if (Date.now()-lastMove >= Math.max(700/speed, 300)) {
       speed += 0.005;
       const tickets = getAll("t");
       const bans = getAll("b");
@@ -2083,7 +2084,7 @@ function gameLoop() {
       toRemove.forEach(sprite => {
         sprite.remove();
       });
-      lastMove = performance.now();
+      lastMove = Date.now();
     }
 
     // Player collecting 'em

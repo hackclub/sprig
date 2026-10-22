@@ -17,6 +17,22 @@ const blast = "/";
 let laser_anim = 0;
 let bullet = 0;
 
+let mapNumber = 0;
+
+function addLaser(x, y, type) {
+  var sprite = addSprite(x, y, type) || getAll(type)[getAll(type).length - 1];
+  return { sprite: sprite, map: mapNumber, removed: false, anim: null };
+}
+
+function laserGone(laser) {
+  return laser.removed || laser.map !== mapNumber;
+}
+
+function removeLaser(laser) {
+  if (!laserGone(laser)) laser.sprite.remove();
+  laser.removed = true;
+}
+
 const enemy1f = "e";
 const enemy1b = "f";
 const enemy1l = "g";
@@ -162,20 +178,19 @@ class Tank {
 
     if(rand === 0 || this.laser_anim) return; 
     
-    addSprite(this.x, this.y, elaser);
-    var newLaser = getAll(elaser)[getAll(elaser).length - 1];
+    var newLaser = addLaser(this.x, this.y, elaser);
     
     const bullet_travel = (orientation, curlaser) => {    
-      curlaser.x += orientation.x;
-      curlaser.y += orientation.y;
+      if (laserGone(curlaser)) { clearInterval(curlaser.anim); return; }
+      curlaser.sprite.x += orientation.x;
+      curlaser.sprite.y += orientation.y;
 
       this.HandleBulletHit(curlaser);
     }
   
-    this.laser_anim = setInterval(() => bullet_travel(this.GetDirectionFromInput(this.lastInput), newLaser), 30);
+    this.laser_anim = newLaser.anim = setInterval(() => bullet_travel(this.GetDirectionFromInput(this.lastInput), newLaser), 30);
     setTimeout(() => { 
-      if(newLaser) 
-        newLaser.remove(); 
+      removeLaser(newLaser); 
       
       if(this.laser_anim) {
         clearInterval(this.laser_anim); 
@@ -185,7 +200,7 @@ class Tank {
   }
 
   HandleBulletHit(currentLaser) {
-    const laserX = currentLaser.x, laserY = currentLaser.y;
+    const laserX = currentLaser.sprite.x, laserY = currentLaser.sprite.y;
 
     var tiles = getTile(laserX, laserY);
 
@@ -193,14 +208,14 @@ class Tank {
       var tile = tiles[i];
       
       if (tile.type === wall) {
-        currentLaser.remove();
+        removeLaser(currentLaser);
         clearInterval(this.laser_anim);
         return;
       }
     
       if (tile.type === breakable) {
         removeSprite(laserX, laserY, breakable)
-        currentLaser.remove();
+        removeLaser(currentLaser);
         addSprite(laserX, laserY, blast);
         
         setTimeout(() => {
@@ -213,6 +228,7 @@ class Tank {
       }
 
       if (tile.type === player) {
+        mapNumber++;
         setMap(levels[level]);
         InitializeTanks();
         
@@ -777,33 +793,33 @@ onInput("k", () => {
   if(bullet == 0){
     bullet = 1;
   const playerSprite = getFirst(player);
-  addSprite(playerSprite.x, playerSprite.y, plaser);
-  var newLaser = getAll(plaser)[getAll(plaser).length - 1];
+  var newLaser = addLaser(playerSprite.x, playerSprite.y, plaser);
 
   const _copyPframe = Pframe;
   
   const bullet_travel = (orientation, curlaser) => {    
+    if (laserGone(curlaser)) { clearInterval(curlaser.anim); bullet = 0; return; }
     if (orientation == 0) {
-      curlaser.y -= 1
+      curlaser.sprite.y -= 1
     } else if (orientation == 1) {
-      curlaser.x -= 1
+      curlaser.sprite.x -= 1
     } else if (orientation == 2) {
-      curlaser.y += 1
+      curlaser.sprite.y += 1
     } else if (orientation == 3) {
-      curlaser.x += 1
+      curlaser.sprite.x += 1
     }
 
     handleObjectHit(curlaser);
   }
   
-  laser_anim = setInterval(() => bullet_travel(_copyPframe, newLaser), 30);
-  setTimeout(() => { if(newLaser) newLaser.remove(); }, 1000);
+  laser_anim = newLaser.anim = setInterval(() => bullet_travel(_copyPframe, newLaser), 30);
+  setTimeout(() => { removeLaser(newLaser); }, 1000);
 } 
 });
 
 function handleObjectHit(currentLaser)
 {
-  const laserX = currentLaser.x, laserY = currentLaser.y;
+  const laserX = currentLaser.sprite.x, laserY = currentLaser.sprite.y;
 
   var tiles = getTile(laserX, laserY);
 
@@ -812,22 +828,22 @@ function handleObjectHit(currentLaser)
     
     if (tile.type === wall) {
        bullet = 0;
-      currentLaser.remove();
-      clearInterval(laser_anim);
+      removeLaser(currentLaser);
+      clearInterval(currentLaser.anim);
       return;
     }
   
     if (tile.type === breakable) {
        bullet = 0;
       removeSprite(laserX, laserY, breakable)
-      currentLaser.remove();
+      removeLaser(currentLaser);
       addSprite(laserX, laserY, blast);
       
       setTimeout(() => {
          bullet = 0;
         removeSprite(laserX, laserY, blast);
       }, 200);
-      clearInterval(laser_anim);
+      clearInterval(currentLaser.anim);
       return;
     }
   }
@@ -835,8 +851,8 @@ function handleObjectHit(currentLaser)
   currentTanks.forEach(tank => {
     if(tank.TakeHit(laserX, laserY)) {
        bullet = 0;
-      currentLaser.remove();
-      clearInterval(laser_anim);
+      removeLaser(currentLaser);
+      clearInterval(currentLaser.anim);
     }
   });
 }
@@ -855,6 +871,7 @@ afterInput(() => {
     if (level >= levels.length) {
       addText("you have beaten the game", { y: 8, color: color`2` });
     } else {
+      mapNumber++;
       setMap(levels[level]);
       InitializeTanks();
     }

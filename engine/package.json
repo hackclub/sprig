@@ -8,7 +8,7 @@
 		"build": "tsc",
 		"api-reference": "node scripts/api-reference.js",
 		"toc": "markdown-toc -i --bullets '-' README.md",
-		"prepublishOnly": "yarn build && yarn api-reference && yarn toc",
+		"prepublishOnly": "bun run build && bun run api-reference && bun run toc",
 		"dev": "tsc --watch"
 	},
 	"exports": {

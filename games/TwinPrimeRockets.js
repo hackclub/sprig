@@ -174,6 +174,7 @@ function loop(count) {
 loop(2);
 
 onInput("a", () => {
+  if (!getFirst(player)) return
   if(isPrimeNumber(no1) && isPrimeNumber(no2)) {
     getFirst(player).x -= 1
     score += 1
@@ -187,6 +188,7 @@ onInput("a", () => {
 
 
 onInput("d", () => {
+  if (!getFirst(player)) return
   if(!(isPrimeNumber(no1) && isPrimeNumber(no2))) {
     getFirst(player).x -= 1
     score += 1

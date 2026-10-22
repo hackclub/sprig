@@ -13,6 +13,7 @@ let deadStatus = false;
 let score = 0;
 let difficulty = 1;
 let gameStarted = false;
+let gameLoop;
 
 setLegend(
   [ROCK, bitmap`

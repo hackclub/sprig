@@ -1,0 +1,455 @@
+/*
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
+@title: whiteboard
+@description: a small whiteboard where you can draw stuff
+@author: 17sdheeraj
+@tags: ['fun', 'tool']
+@addedOn: 2026-04-25
+*/
+
+// all variables below
+const player = "p"
+const w = "w"
+const b = "b"
+const r = "r"
+const y = "y"
+const g = "g"
+const o = "o"
+//to add remaining colours,using c1 to c9
+const c1 = "c"
+const c2 = "d"
+const c3 = "e"
+const c4 = "f"
+const c5 = "h"
+const c6 = "i"
+const c7 = "j"
+const c8 = "k"
+const c9 = "l"
+let colours = [w,b,r,y,g,o,c1,c2,c3,c4,c5,c6,c7,c8,c9]
+let current = 0
+
+// todo -
+// make the board more big
+
+// sound effects
+const placeTune = tune`
+185.1851851851852,
+185.1851851851852: A4~185.1851851851852,
+5555.555555555556`;
+const clrchangeTune = tune`
+152.28426395939087,
+152.28426395939087: A4~152.28426395939087,
+152.28426395939087: B4~152.28426395939087,
+152.28426395939087: C5~152.28426395939087,
+4263.959390862944`;
+
+//the bitmaps for colours and stuff
+setLegend(
+  [ player, bitmap`
+0000000000000000
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0..............0
+0000000000000000` ],
+
+  [ w, bitmap`
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222
+2222222222222222`],
+
+  [ b, bitmap`
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000
+0000000000000000`],
+
+  [ r, bitmap`
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333
+3333333333333333`],
+
+  [ y, bitmap`
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666
+6666666666666666`],
+
+  [ g, bitmap`
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444
+4444444444444444`],
+
+  [ o, bitmap`
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999
+9999999999999999`],
+
+  [ c1, bitmap`
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL
+LLLLLLLLLLLLLLLL`],
+
+  [ c2, bitmap`
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111`],
+
+  [ c3, bitmap`
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC`],
+
+  [ c4, bitmap`
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777
+7777777777777777`],
+
+  [ c5, bitmap`
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555
+5555555555555555`],
+
+  [ c6, bitmap`
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF
+FFFFFFFFFFFFFFFF`],
+
+  [ c7, bitmap`
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD`],
+
+  [ c8, bitmap`
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888
+8888888888888888`],
+
+  [ c9, bitmap`
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH
+HHHHHHHHHHHHHHHH`]
+  )
+
+let level = 0;
+const levels = [
+  map`
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................
+............................`,
+  map`
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwwwwwwwwwwwwwwwwww
+wwwbrygocdefhijklwww`
+];
+
+const currentLevel = levels[level];
+setMap(currentLevel);
+
+if (level === 0) {
+  addText("WHITEBOARD", { y: 5, color: color`0` });
+  addText("WASD TO MOVE", { y: 7 });
+  addText("I TO DRAW", { y: 8 });
+  addText("K TO ERASE", { y: 9 });
+  addText("J TO PICK", { y: 10 });
+  addText("CLICK L TO START", { y: 13, color: color`3` });
+}
+
+addSprite(0,0,player)
+
+function showSelected() {
+  clearTile(19, 15)
+  addSprite(19, 15, colours[current])
+}
+
+onInput("l", () => {
+  if (level === 0) {
+    level = 1;
+    clearText();
+    setMap(levels[level]);
+    addSprite(0,0,player);
+    showSelected();
+  }
+});
+
+onInput("w", () => getFirst(player).y = Math.max(0, getFirst(player).y - 1))
+onInput("a", () => getFirst(player).x = Math.max(0, getFirst(player).x - 1))
+onInput("s", () => getFirst(player).y = Math.min(19, getFirst(player).y + 1))
+onInput("d", () => getFirst(player).x = Math.min(19, getFirst(player).x + 1))
+
+onInput("i", () => {
+  let p = getFirst(player)
+  if (p.y === 15) return
+  clearTile(p.x, p.y)
+  addSprite(p.x, p.y, colours[current])
+  addSprite(p.x, p.y, player)
+  playTune(placeTune);
+})
+
+onInput("k", () => {
+  let p = getFirst(player)
+  if (p.y === 15) return
+  clearTile(p.x, p.y)
+  addSprite(p.x, p.y, w)
+  addSprite(p.x, p.y, player)
+})
+
+onInput("j", () => {
+  let p = getFirst(player)
+  if (p.y === 15) {
+    let tile = getTile(p.x, p.y).find(s => s.type !== player)
+    if (!tile) return
+    let index = colours.indexOf(tile.type)
+    if (index !== -1) {
+      current = index
+      playTune(clrchangeTune)
+      showSelected()
+    }
+  }
+})
+  
+  
+setPushables({
+  [ player ]: []
+})
+
+afterInput(() => {
+  
+})

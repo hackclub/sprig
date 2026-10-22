@@ -13,6 +13,10 @@ class InputHandler {
     this.addListeners();
   }
   addListeners() {
+    if (typeof window === "undefined") {
+      ["w", "a", "s", "d"].forEach((key) => onInput(key, () => this.keys.push("Key" + key.toUpperCase())));
+      return;
+    }
     window.addEventListener("keydown", ({ code }) => {
       if (
         (code === "KeyW" ||
@@ -75,6 +79,7 @@ class Player {
     }
 
     sprite.type = this.sprites[this.direction];
+    if (typeof window === "undefined") keys.length = 0;
   }
   attack() {
     const sprite = getFirst(this.sprites[this.direction]);
@@ -986,7 +991,8 @@ CC....CC........`,
     this.effectManager.update();
     this.uiManager.update();
 
-    window.requestAnimationFrame((timestamp) => this.animate(timestamp));
+    if (typeof window !== "undefined") window.requestAnimationFrame((timestamp) => this.animate(timestamp));
+    else setTimeout(() => this.animate(Date.now()), 16);
   }
   startDeathSequence() {
     this.deathSequenceInitiated = true;

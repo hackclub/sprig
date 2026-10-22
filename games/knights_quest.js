@@ -1,3 +1,11 @@
+/*
+@title: None
+@author: None
+@description: None
+@tags: []
+@addedOn: 2025-04-28
+*/
+
 const player = "p";
 const wall = "w";
 const key = "k";

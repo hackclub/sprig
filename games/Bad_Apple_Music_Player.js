@@ -1,6 +1,7 @@
 /*
 @title: Bad Apple
 @author: meeplabsdev
+@description: None
 @tags: []
 @addedOn: 2024-03-14
 */

@@ -224,6 +224,7 @@ const Stages = [
 ......`
 ]
 setMap(Stages[Stage])
+let options, tile, alien
 addText("Space Invaders", options = { x: 3, y: 5, color: color`2` })
 addText("Press i to Play", options = { x: 3, y: 7, color: color`2` })
 setPushables({

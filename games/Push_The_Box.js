@@ -476,24 +476,28 @@ const die = tune`
 
 onInput("s", () => {
   moves++;
+  if (!getFirst(player)) { skipAfter = true; return }
   getFirst(player).y += 1
   playTune(walk)
 });
 
 onInput("d", () => {
   moves++;
+  if (!getFirst(player)) { skipAfter = true; return }
   getFirst(player).x += 1;
   playTune(walk)
 });
 
 onInput("w", () => {
   moves++;
+  if (!getFirst(player)) { skipAfter = true; return }
   getFirst(player).y -= 1;
   playTune(walk)
 });
 
 onInput("a", () => {
   moves++;
+  if (!getFirst(player)) { skipAfter = true; return }
   getFirst(player).x -= 1;
   playTune(walk)
 });
@@ -516,7 +520,9 @@ onInput("i", () => {
   }
 });
 
+let skipAfter = false
 afterInput(() => {
+  if (skipAfter) { skipAfter = false; return }
   const targetCovered1 = tilesWith(button, box).length
   const target1 = tilesWith(button).length
 

@@ -403,6 +403,7 @@ let automover;
 
 let levtext
 let LostTxt
+let introText, finishTxt, options
 
 function checkPlayerCollision(obj) {
   let obstacles = getAll(obj);

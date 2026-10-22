@@ -123,10 +123,11 @@ function updateGame() {
   let newTileX = Math.floor(ballPos.x)
   let newTileY = Math.floor(ballPos.y)
   if (newTileX !== prevTile.x || newTileY !== prevTile.y) {
-    clearTile(prevTile.x, prevTile.y)
+    clearTile(prevTile.x, prevTile.y); ballSprite = undefined
     prevTile.x = newTileX
     prevTile.y = newTileY
   }
+  if (newTileY >= height()) return
   if (!ballSprite) { ballSprite = addSprite(newTileX, newTileY, BALL) }
   else { ballSprite.x = newTileX; ballSprite.y = newTileY }
   if (newTileY >= platformY && ballVel > 0) {

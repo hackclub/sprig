@@ -605,16 +605,16 @@ setPushables({
 
 //movement
 onInput("w", () => {
-  getFirst(phil).y -= 1;
+  if (getFirst(phil)) getFirst(phil).y -= 1;
 });
 onInput("a", () => {
-  getFirst(phil).x -= 1;
+  if (getFirst(phil)) getFirst(phil).x -= 1;
 });
 onInput("s", () => {
-  getFirst(phil).y += 1; 
+  if (getFirst(phil)) getFirst(phil).y += 1; 
 });
 onInput("d", () => {
-  getFirst(phil).x += 1;
+  if (getFirst(phil)) getFirst(phil).x += 1;
 });
 
 

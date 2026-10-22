@@ -4,8 +4,9 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: Binx's Timed Maze
 @author: Wafers
-@tags: [Maze]
-@addedOn: 2024-00-00
+@description: None
+@tags: ["Maze"]
+@addedOn: 2024-05-12
 */
 let score = 0;
 
@@ -184,6 +185,7 @@ setPushables({
 })
 
 let removableSpritesCount = getAll(beef).length + getAll(salmon).length + getAll(chicken).length;
+let removeableSpritesCount;
 
 
 
@@ -223,7 +225,7 @@ addText(`Time: ${timer}`, {
       timer--;
   updateTimerText();
   if (timer === 0){
-    removefood();
+    removeFood();
     clearInterval(intervalId);
     phrase = `time ran out`;
     addText(`game over`, {
@@ -327,7 +329,7 @@ afterInput(() => {
       timer--;
   updateTimerText();
   if (timer === 0){
-    removefood();
+    removeFood();
     clearInterval(intervalId);
     phrase = `time ran out`;
     addText(`game over`, {

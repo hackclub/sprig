@@ -60,7 +60,7 @@ var lives = 3
 var inventory = []
 var money = 0
 var freedGrubs = 0
-var lastXInput = ""
+var lastXInput = 0
 var tiktikHealth = 5
 var wallHealth = 3
 var grubJarHealth = 2
@@ -74,6 +74,7 @@ var r9GrubSave = false
 var keyGateOpen = false
 
 var gameWon = false
+var knightCoords, currentLevel, roomDirection, roomInfo, directions, gateCoords, completionRequirements, completionPercent, slashX, slashY, sprite, enemyInfo, enemy
 
 
 const slashSFX = tune`

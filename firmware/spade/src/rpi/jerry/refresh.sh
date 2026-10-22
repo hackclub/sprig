@@ -13,7 +13,7 @@ python3 jerryscript/tools/build.py \
   --toolchain=cmake/toolchain-pico.cmake \
   --builddir=$(pwd)/example_build \
   --cmake-param="-DCMAKE_INSTALL_PREFIX=$(pwd)/example_install/" \
-  --mem-heap=190 \
+  --mem-heap=170 \
   --clean \
   --lto=OFF \
   --error-messages=ON \

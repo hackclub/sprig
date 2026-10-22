@@ -1,18 +1,18 @@
 import type { APIRoute } from "astro";
 import {
+	getFullSession,
 	getGame,
-	getSession,
 	setDocument,
 	updateDocument,
 } from "../../../lib/game-saving/account";
 import { updateEmailListLastModifiedTime } from "../../../lib/game-saving/email";
 import { Timestamp } from "firebase-admin/firestore";
-import { RoomParticipant } from "../../../lib/state";
+import type { RoomParticipant } from "../../../lib/state";
 
 /* This route is used to start saving a game. The way this is done is update some fields on the database,
 and another service will listen to these changes and start savin the game code to the db by connecting
 to the yjs room */
-export const post: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
 	let gameId: string;
 	let tutorialName: string | undefined;
 	let roomParticipants: RoomParticipant[]
@@ -47,7 +47,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 	const trackingDate = new Date().toDateString()
 
 	if (!game.unprotected) {
-		const session = await getSession(cookies);
+		const session = await getFullSession(cookies);
 		if (!session) return new Response("Unauthorized", { status: 401 });
 		if (session.user.id !== game.ownerId)
 			return new Response(`Can't edit a game you don't own`, {
@@ -58,7 +58,7 @@ export const post: APIRoute = async ({ request, cookies }) => {
 
 		//await updateEmailListLastModifiedTime(session.user, new Date());
 	}
-	const session = await getSession(cookies);
+	const session = await getFullSession(cookies);
 	if (!session) return new Response("Unauthorized", { status: 401 });
 	if (session.user.id !== game.ownerId)
 		return new Response(`Can't edit a game you don't own`, {

@@ -10,7 +10,8 @@ there are 3 keys distributed among the map which you need to find to reach Hamad
 
 @title: tung sahur's waking hamada
 @author: 3bdo19 
-@tags: [ platformer ]
+@description: None
+@tags: []
 @addedOn: 2025-05-13
 */
 

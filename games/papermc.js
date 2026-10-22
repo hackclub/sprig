@@ -322,7 +322,7 @@ onInput("w", () => {
 onInput("a", () => {
   if (level == 0) startGame()
   clearText()
-  playerSprite = getFirst(player)
+  let playerSprite = getFirst(player)
   playerSprite.x -= 1
   if (playerSprite) {
     const leftTile = getTile(playerSprite.x - 1, playerSprite.y)
@@ -336,7 +336,7 @@ onInput("a", () => {
 onInput("d", () => {
   if (level == 0) startGame()
   clearText()
-  playerSprite = getFirst(player)
+  let playerSprite = getFirst(player)
   playerSprite.x += 1
 
   if (playerSprite) {
@@ -383,7 +383,7 @@ onInput("k", () => {
     const targetTile = getTile(targetX, targetY)
     const isTargetEmpty = targetTile.length === 0
 
-    if (isTargetEmpty) {
+    if (isTargetEmpty && targetX >= 0 && targetY >= 0 && targetX < width() && targetY < height()) {
       addSprite(targetX, targetY, getCurrentBlock())
     }
   }

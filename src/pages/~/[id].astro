@@ -8,6 +8,7 @@ import { ConnectionStatus, PersistenceStateKind, RoomState, type PersistenceStat
 import MobileUnsupported from '../../components/popups-etc/mobile-unsupported'
 import { mobileUserAgent } from '../../lib/utils/mobile'
 import { isAccountWhitelistedToUseCollabAndSavingBetaFeatures } from '../../lib/game-saving/account'
+import { getGameTutorialContent } from '../../lib/astro-content'
 
 const session = await getSession(Astro.cookies)
 if (!session) {
@@ -21,16 +22,8 @@ let roomState;
 let _persistenceState: PersistenceState | undefined
 
 async function handleTutorial(game: Game) : Promise<[string[] | undefined, number | undefined]>{
-	const fileRegexp = /^.*\/(.+)-(\d+)\.md$/
-
 	if (game.tutorialName) {
-		const files = await Astro.glob('/games/*.md')
-			
-		return [files.filter(file => {
-			const regexedFile = file.file.match(fileRegexp)
-			return regexedFile && regexedFile[1] === game.tutorialName
-		})
-		?.map(md => md.compiledContent()), game.tutorialIndex]
+		return [await getGameTutorialContent(game.tutorialName), game.tutorialIndex]
 	}
 
 	return [undefined, undefined]
@@ -42,7 +35,7 @@ async function handlePersistenceState(isSessionFull : boolean, game : Game, tuto
 			await firestore.collection('games').doc(game.id).update({ unprotected: false })
 			game.unprotected = false
 		}
-		if (Astro.cookies.get('sprigTempGame').value === game.id)
+		if (Astro.cookies.get('sprigTempGame')?.value === game.id)
 			Astro.cookies.delete('sprigTempGame', { path: '/' })
 	} else {
 		if (!game.unprotected) return undefined;
@@ -157,9 +150,9 @@ isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 			persistenceState={persistenceState}
 			roomState={roomState}
 			cookies={{
-				outputAreaSize: Astro.cookies.get('outputAreaSize').number(),
-				helpAreaSize: Astro.cookies.get('helpAreaSize').number(),
-				hideHelp: Astro.cookies.get('hideHelp').boolean()
+				outputAreaSize: Astro.cookies.get('outputAreaSize')?.number(),
+				helpAreaSize: Astro.cookies.get('helpAreaSize')?.number(),
+				hideHelp: Astro.cookies.get('hideHelp')?.boolean()
 			}}
 		/>
 		{isMobile ? <MobileUnsupported /> : null}

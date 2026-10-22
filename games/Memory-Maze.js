@@ -1,5 +1,9 @@
 /*
 @title: Memory Maze
+@author: None
+@description: None
+@tags: []
+@addedOn: 2025-06-03
 */
 
 const startScreenTile = "s"
@@ -513,7 +517,7 @@ function hideWallsAndEnableMovement() {
 function checkWin() {
   const player = getFirst(playerTile)
   const exit = getFirst(exitTile)
-  if (player.x === exit.x && player.y === exit.y) {
+  if (player && exit && player.x === exit.x && player.y === exit.y) {
     showWinScreen()
   }
 }

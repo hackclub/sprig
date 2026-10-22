@@ -166,6 +166,7 @@ setBackground(planks)
 
 setMap(levels[level])
 var currentColour = color`0`
+var options
 
 if (level % 2) {
   setSolids([player1, box, movingBox])

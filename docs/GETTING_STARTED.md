@@ -1,3 +1,6 @@
+> [!WARNING]
+> AI policy: Games submitted to the gallery must be primarily created by the person submitting them. Substantially AI-generated games may not be approved.
+
 # Let's make our first game in [Sprig](https://sprig.hackclub.com/editor)!
 
 All Sprig games take place on a grid of tiles.
@@ -132,7 +135,7 @@ __Make sure you hit run__ to load the legend before editting the map.
 <!-- ![Screen Recording 2022-07-18 at 3 17 36 PM](https://user-images.githubusercontent.com/27078897/179600230-f29db474-9fcb-4829-94e5-d2f283bd03ad.gif) -->
 <!-- ![Screen Recording 2022-10-24 at 3 03 39 PM](https://user-images.githubusercontent.com/27078897/197605676-4c1e7a9b-3acc-41f5-a958-8e15dc55ba91.gif) -->
 
-![Screen Recording 2023-03-06 at 3 03 39 PM](https://cloud-fai1j30ad-hack-club-bot.vercel.app/020230306_170018.gif)
+![Screen Recording 2023-03-06 at 3 03 39 PM](https://cdn.hackclub.com/rescue?url=https://cloud-fai1j30ad-hack-club-bot.vercel.app/020230306_170018.gif)
 
 To set the map use `setMap`.
 
@@ -225,7 +228,7 @@ Let's see what that looks like now.
 <!-- ![Screen Recording 2022-07-18 at 3 22 43 PM](https://user-images.githubusercontent.com/27078897/179601035-0e7b751c-2767-47ea-b2bd-5d0497b4547f.gif) -->
 <!-- ![Screen Recording 2022-10-24 at 3 13 13 PM](https://user-images.githubusercontent.com/27078897/197606970-76f14b26-b3b2-44dd-ac96-a3459613a7b9.gif) -->
 
-![Screen Recording 2023-03-06 at 5 08 53 PM](https://cloud-p3xo8pbbd-hack-club-bot.vercel.app/020230306_170757.gif)
+![Screen Recording 2023-03-06 at 5 08 53 PM](https://cdn.hackclub.com/rescue?url=https://cloud-p3xo8pbbd-hack-club-bot.vercel.app/020230306_170757.gif)
 
 ### Win Condition
 
@@ -270,7 +273,7 @@ p.w.
 <!-- ![Screen Recording 2022-07-18 at 3 24 08 PM](https://user-images.githubusercontent.com/27078897/179601256-55d6a5cd-7135-490a-bb46-1ed3d8537e06.gif) -->
 <!-- ![Screen Recording 2022-10-24 at 3 14 43 PM](https://user-images.githubusercontent.com/27078897/197607684-45683107-fb28-4900-95ff-cd0b1b69c1f5.gif) -->
 
-![Screen Recording 2023-03-06 at 5 43 02 PM](https://cloud-qnqk1plkg-hack-club-bot.vercel.app/020230306_174220.gif)
+![Screen Recording 2023-03-06 at 5 43 02 PM](https://cdn.hackclub.com/rescue?url=https://cloud-qnqk1plkg-hack-club-bot.vercel.app/020230306_174220.gif)
 
 ### Polish
 

@@ -4,6 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: voltorb flip!
 @author: ozzy27
+@description: None
 @tags: []
 @addedOn: 2025-00-00
 */
@@ -898,6 +899,7 @@ onInput("w", () => {
   getFirst(player).y -= 1;
 });
 let easportsitsinthegame=true;
+let saveX, saveY, posnum, savedX, savedY;
 onInput("a", () => {
   getFirst(player).x -= 1;
 });

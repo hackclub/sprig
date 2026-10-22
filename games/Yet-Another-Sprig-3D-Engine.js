@@ -3,7 +3,8 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Yet Another Sprig 3D Engine
-@author: 
+@author: None
+@description: None
 @tags: []
 @addedOn: 2025-00-00
 */

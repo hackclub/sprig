@@ -1,4 +1,4 @@
-import { Signal } from "@preact/signals";
+import type { Signal } from "@preact/signals";
 import styles from "./textarea.module.css"
 
 interface TextareaProps {

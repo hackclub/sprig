@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: epic space invaders
-@author: Anonymous
+@author: iLikeToCode
 @tags: []
 @addedOn: 2024-01-01
 @description: A classic Space Invaders clone where you control a spaceship to shoot down alien invaders. Use 'A' and 'D' to move left and right, and shoot lasers to destroy the enemies. Keep track of your score as you eliminate the alien threats.
@@ -164,7 +164,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false
@@ -174,7 +174,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false
@@ -184,7 +184,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false
@@ -194,7 +194,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false
@@ -204,7 +204,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false
@@ -214,7 +214,7 @@ function doLaser(l) {
     setTimeout(() => {
         if (!won) getFirst(l).y -= 1
         if (enemy_alive && getFirst(l).x == getFirst(enemy).x && getFirst(l).y == getFirst(enemy).y) {
-            getFirst(enemy)?.remove();
+            getFirst(enemy).remove();
             enemiesDead++
             addText(`Enemies Dead: ${enemiesDead}`, {color: color`7`})
             enemy_alive = false

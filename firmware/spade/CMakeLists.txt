@@ -10,6 +10,11 @@ endif()
 # has to be before project() because it makes rpi asm
 # compilation work, and project() has to be top level
 if (SPADE_TARGET STREQUAL "rpi")
+  # Slow QSPI flash clock: divider 4 instead of 2 (67.5 MHz at 270 MHz sysclk
+  # instead of 135 MHz). Clone Pico flash chips are rated 104-133 MHz and fail
+  # marginally at div 2 under overclock. Must be set before pico_sdk_init so
+  # the boot_stage2 build sees it.
+  add_compile_definitions(PICO_FLASH_SPI_CLKDIV=4)
   include(src/rpi/pico_sdk_import.cmake)
   include(src/rpi/pico_extras_import.cmake)
 endif()

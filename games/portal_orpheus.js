@@ -1,7 +1,7 @@
 /*
-@title: Deno Portal
+@title: Portal: Orpheus Edition
 @author: [Lucas11, Art3mis]
-@tags: [puzzle, deno]
+@tags: []
 @description: "An sprig game inspired by portal."
 @addedOn: 2025-00-00
 */
@@ -25,7 +25,6 @@ const finalblueportal = "z"
 const finalredportal = "x"
 const finalbutton = "n"
 const floor = "z"
-
 
 
 setLegend(
@@ -442,31 +441,31 @@ const enter = tune`
 9000`
 setMap(levels[level])
 
-setPushables({
-  [ player ]: [cube],
-  [ cube ]: [cube, player]
-})
-
-onInput("s", () => {
-  getFirst(player).y += 1
-  playTune(melody)
-})
-onInput("d", () => {
-  getFirst(player).x += 1
-  playTune(melody)
-})
-
-onInput("w", () => {
-  getFirst(player).y += -1
-  playTune(melody)
-})
-onInput("a", () => {
-  getFirst(player).x += -1
-  playTune(melody)
-})
+  setPushables({
+    [ player ]: [cube],
+    [ cube ]: [cube, player]
+  })
+  
+  onInput("s", () => {
+    getFirst(player).y += 1
+    playTune(melody)
+  })
+  onInput("d", () => {
+    getFirst(player).x += 1
+    playTune(melody)
+  })
+  
+  onInput("w", () => {
+    getFirst(player).y += -1
+    playTune(melody)
+  })
+  onInput("a", () => {
+    getFirst(player).x += -1
+    playTune(melody)
+  })
 onInput("i", () => {
   // Check if the player can move up and there is no wall in the way
-  if (getFirst(player).x > 0 && (getTile(getFirst(player).x - 1), getFirst(player).y)[0] == undefined || getTile(getFirst(player).x - 1, getFirst(player).y[0].type != wall)) {
+  if (getFirst(player).x > 0 && (getTile(getFirst(player).x - 1, getFirst(player).y), getFirst(player).y)[0] == undefined || getTile(getFirst(player).x - 1, getFirst(player).y[0].type != wall)) {
     getFirst(player).x -= 1; // Move the player up
     
     // Spawn a portal at the player's previous position before the move
@@ -478,7 +477,7 @@ onInput("i", () => {
 onInput("k", () => {
   
   // Check if the player can move up and there is no wall in the way
-  if (getFirst(player).x > 0 && (getTile(getFirst(player).x - 1), getFirst(player).y)[0] == undefined || getTile(getFirst(player).x - 1, getFirst(player).y[0].type != wall)) {
+  if (getFirst(player).x > 0 && (getTile(getFirst(player).x - 1, getFirst(player).y), getFirst(player).y)[0] == undefined || getTile(getFirst(player).x - 1, getFirst(player).y[0].type != wall)) {
     getFirst(player).x -= 1; // Move the player up
     
     // Spawn a portal at the player's previous position before the move
@@ -517,6 +516,7 @@ afterInput(() => {
   const numberCoveredButtonCube = tilesWith(cube, buttonspawner).length;
     if (redPortalsCovered.length >= 1) {
     const bp = getFirst(blueportal);
+    if (!bp) return;
     const pl = getFirst(player);
     
 
@@ -534,30 +534,25 @@ afterInput(() => {
   
   if (redPortalsCoveredcube.length >= 1) {
     const bp = getFirst(blueportal);
+    if (!bp) return;
     const cb = getFirst(cube);
-    
+
         cb.x = bp.x;
         cb.y = bp.y;
         
 }
   if (bluePortalsCovered.length >= 1) {
     const rp = getFirst(redportal);
+    if (!rp) return;
     const pl = getFirst(player);
 
     pl.x = rp.x;
     pl.y = rp.y;
     playTune(enter)
   }
-  if (bluePortalsCovered.length >= 1) {
-    const rp = getFirst(redportal);
-    const pl = getFirst(player);
-
-          pl.x = rp.x;
-          pl.y = rp.y;
-    playTune(enter)
-  }
     if (bluePortalsCoveredcube.length >= 1) {
     const rp = getFirst(redportal);
+    if (!rp) return;
     const cb = getFirst(cube);
 
         cb.x = rp.x;
@@ -566,12 +561,15 @@ afterInput(() => {
         
   }
   if (numberCoveredButton === targetNumber) {
+      if (!getFirst(spawner)) return;
       addSprite(getFirst(spawner).x, getFirst(spawner).y + 1, cube);
   }
-  if (numberCoveredfinal === targetNumber) {
+  else if (numberCoveredfinal === targetNumber) {
+      if (!getFirst(spawner)) return;
       addSprite(getFirst(spawner).x, getFirst(spawner).y + 1, cube);
   }
-  if (numberCoveredButtonCube === targetNumber2) {
+  else if (numberCoveredButtonCube === targetNumber2) {
+      if (!getFirst(spawner)) return;
       addSprite(getFirst(spawner).x, getFirst(spawner).y + 1, cube);
   }
   const nextLevel = levels[level];
@@ -580,15 +578,15 @@ afterInput(() => {
       setMap(levels[level])
       playTune(dies)
     }
-    if (numberCoveredaLazer === targetNumber) {
+    else if (numberCoveredaLazer === targetNumber) {
       setMap(levels[level])
       playTune(dies)
     }
-    if (numberCoveredCube === targetNumber2) {
+    else if (numberCoveredCube === targetNumber2) {
       getFirst(cube).remove();
       playTune(dies)
     }
-    if (numberCoveredaLazerCube === targetNumber3) {
+    else if (numberCoveredaLazerCube === targetNumber3) {
       getFirst(cube).x = getFirst(cube).x + 1
       
     }
@@ -637,6 +635,5 @@ afterInput(() => {
     }
 
   }
-}
-           )
+})
 

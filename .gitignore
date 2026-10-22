@@ -1,10 +1,11 @@
 .vscode
+.astro
 package-lock.json
+yarn.lock
 *.swp
 .DS_Store
 .vercel
 node_modules/
-yarn-error.log
 .env
 dist/
 games/metadata.json
