@@ -1,8 +1,9 @@
 import { useSignal } from '@preact/signals'
 import { useEffect, useRef } from 'preact/hooks'
-import { runGame } from '../../lib/engine'
 import styles from './mobile-player.module.css'
 import {exitFullscreen, fullscreenElement, requestFullscreen} from "../../lib/utils/fullscreen";
+import SandboxedGameFrame from './sandboxed-game-frame'
+import type { SandboxedGameControllerHandle } from '../../lib/engine/sandbox-controller'
 
 interface MobilePlayerProps {
 	code: string
@@ -11,23 +12,23 @@ interface MobilePlayerProps {
 }
 
 export default function MobilePlayer(props: MobilePlayerProps) {
-	const screen = useRef<HTMLCanvasElement>(null)
+	const player = useRef<SandboxedGameControllerHandle | null>(null)
 	const cleanup = useRef<(() => void) | null>(null);
+	const playerVersion = useSignal(0);
 	
 	const run = () => {
 		if (cleanup.current) cleanup.current();
-		const res = runGame(props.code, screen.current!, (_) => { })
-		if (res?.error) console.error(res.error.raw)
-		cleanup.current = res!.cleanup;
-		return res?.cleanup
+		player.current?.run(props.code)
+		cleanup.current = () => player.current?.stop();
+		return cleanup.current
 	}
 
 	useEffect(() => {
 		return run()
-	}, [props.code])
+	}, [props.code, playerVersion.value])
 
 	const pressKey = (key: string) => {
-		screen.current!.dispatchEvent(new KeyboardEvent('keydown', { key }))
+		player.current?.sendKey(key)
 	}
 
 	const keyTouches = useSignal<Record<string, number>>({})
@@ -79,7 +80,14 @@ export default function MobilePlayer(props: MobilePlayerProps) {
 
 			<div class={styles.player} id="player">
 				<div class={styles.screenContainer}>
-					<canvas class={styles.screen} ref={screen} width='1000' height='800' />
+					<SandboxedGameFrame
+						class={styles.screen}
+						onController={(controller) => {
+							player.current = controller;
+							playerVersion.value++;
+						}}
+						onError={(error) => console.error(error.raw)}
+					/>
 				</div>
 
 
