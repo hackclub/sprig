@@ -13,6 +13,9 @@ const wall = "w";
 const key = "k";
 const door = "d";
 
+// Дефиниция на color помощната функция, за да се премахне ReferenceError
+const color = (strings, value) => value;
+
 let levelIndex = 0;
 let moves = 0;
 let hasKey = false;
