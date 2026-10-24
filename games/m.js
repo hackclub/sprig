@@ -1,16 +1,9 @@
 /*
 @title: infinity Friendship!!! <3
-@description: "Friendship!!! <3" is a strategy puzzle game where players control Vera Vertical, who can move up and down, and Horace Horizontal, who can move left and right. The objective is to navigate both characters to their respective goals by working together and pushing each other.
 @author: nooraldeen salman
+@description: Friendship!!! <3" is a strategy puzzle game where players control Vera Vertical, who can move up and down, and Horace Horizontal, who can move left and right. The objective is to navigate both characters to their respective goals by working together and pushing each other.
 @tags: ['strategy']
-@addedOn: 2026-10-23
-Instructions:
-Vera Vertical can only move up & down.
-Horace Horizontal can only move left & right.
-They can push each other.
-They can't get to the goals... unless they work together!
-Welcome...
-to FRIENDSHIP!!!
+@addedOn: 2026-10-24
 */
 
 const vera = "v";
