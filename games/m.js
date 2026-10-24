@@ -1,185 +1,259 @@
 /*
-@title: Coin Chase
-@description: Collect every coin before the red blob catches you. WASD moves, J restarts.
-@author: you
-@tags: ['puzzle']
-@addedOn: 2024-01-01
+@title: infinity Friendship!!! <3
+@description: "Friendship!!! <3" is a strategy puzzle game where players control Vera Vertical, who can move up and down, and Horace Horizontal, who can move left and right. The objective is to navigate both characters to their respective goals by working together and pushing each other.
+@author: nooraldeen salman
+@tags: ['strategy']
+@addedOn: 2026-10-23
+Instructions:
+Vera Vertical can only move up & down.
+Horace Horizontal can only move left & right.
+They can push each other.
+They can't get to the goals... unless they work together!
+Welcome...
+to FRIENDSHIP!!!
 */
 
-const player = "p";
-const enemy = "e";
-const coin = "c";
+const vera = "v";
+const horace = "h";
+const box = "b";
+const goal = "g";
 const wall = "w";
 
 setLegend(
-  [ player, bitmap`
+  [ vera, bitmap`
+..333333333333..
+...3333333333...
+....33666633....
+....33644633....
+....33644633....
+....36444463....
+....36400463....
+....36400463....
+....36400463....
+....36400463....
+....36444463....
+....33644633....
+....33644633....
+....33666633....
+...3333333333...
+..333333333333..`],
+  [ horace, bitmap`
 ................
 ................
-.....000000.....
-....04444440....
-...0444444440...
-...0441144440...
-...0444444440...
-...0444444440...
-....04444440....
-.....000000.....
+3..............3
+33............33
+3333333333333333
+3333366666633333
+3366644444466633
+3364440000444633
+3364440000444633
+3366644444466633
+3333366666633333
+3333333333333333
+33............33
+3..............3
 ................
-................
-................
-................
-................
-................` ],
-  [ enemy, bitmap`
-................
-................
-.....000000.....
-....03333330....
-...0333333330...
-...0331133330...
-...0333333330...
-...0333333330...
-....03333330....
-.....000000.....
-................
-................
-................
-................
-................
-................` ],
-  [ coin, bitmap`
-................
-................
-......0000......
-.....066660.....
-....06666660....
-....06666660....
-....06666660....
-....06666660....
-.....066660.....
-......0000......
+................`],
+  [ box, bitmap`
 ................
 ................
 ................
+...888888888....
+...8...8...8....
+...888888888....
+...888888888....
+...888888888....
+...888888888....
+...8...8...8....
+...8...8...8....
+...888888888....
 ................
 ................
-................` ],
+................
+................`],
+  [ goal, bitmap`
+................
+................
+................
+...2020202020...
+...0........2...
+...2........0...
+...0........2...
+...2........0...
+...0........2...
+...2........0...
+...0........2...
+...2........0...
+...0202020202...
+................
+................
+................`],
   [ wall, bitmap`
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777
-7777777777777777` ]
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111
+1111111111111111`]
 );
 
-setSolids([ player, wall ]);
 
-const level = map`
-wwwwwwwwww
-wp.......w
-w.w.ww.c.w
-w.c...w..w
-w.ww.....w
-w..e...c.w
-w.c...w..w
-wwwwwwwwww`;
+// Game level gen stuff... kinda hacked together but it works lol
+let level = 1;
+let currentMap = "";
 
-let won = false;
-let lost = false;
-let turns = 0;
-
-function isWall(x, y) {
-  return getTile(x, y).some(t => t.type === wall);
+// helper to get random num. always forget if Math.floor is needed
+function randInt(n) {
+  return Math.floor(Math.random() * n);
 }
 
-function collectCoin() {
-  const p = getFirst(player);
-  getTile(p.x, p.y).forEach(t => {
-    if (t.type === coin) t.remove();
-  });
-}
+function makeLevel() {
+  const size = 5;
+  // TODO: clean up these variable names later, too many single letters xD
+  let vx, vy, hx, hy, goalY, goalX, used;
 
-function moveEnemy() {
-  const e = getFirst(enemy);
-  const p = getFirst(player);
-  const dx = Math.sign(p.x - e.x);
-  const dy = Math.sign(p.y - e.y);
+  // retry until all four spots are different cells
+  // NOTE: sometimes this loops a bit too much if size is small, but 5x5 is fine
+  do {
+    vx = randInt(size);
+    vy = randInt(size);
+    hx = randInt(size);
+    hy = randInt(size);
+    goalY = randInt(size); // goal in Vera's column
+    goalX = randInt(size); // goal in Horace's row
+    
+    // creating coordinate strings to check for overlaps
+    let v_coord = vx + "," + vy;
+    let h_coord = hx + "," + hy;
+    let g1_coord = vx + "," + goalY;
+    let g2_coord = goalX + "," + hy;
+    
+    used = [v_coord, h_coord, g1_coord, g2_coord];
+  } while (new Set(used).size < 4); // making sure nothing overlaps awkwardly
 
-  if (dx !== 0 && !isWall(e.x + dx, e.y)) {
-    e.x += dx;
-  } else if (dy !== 0 && !isWall(e.x, e.y + dy)) {
-    e.y += dy;
+  // build an empty grid first
+  const grid = [];
+  for (let y = 0; y < size; y++) {
+    // filling with dots for empty spaces
+    let rowArr = Array(size).fill(".");
+    grid.push(rowArr);
   }
+  
+  // place stuff down on the grid
+  grid[goalY][vx] = goal;
+  grid[hy][goalX] = goal;
+  grid[vy][vx] = vera;
+  grid[hy][hx] = horace;
+
+  // convert 2d array to string map format expected by the engine
+  let mapString = "";
+  for(let i=0; i<grid.length; i++) {
+    mapString += grid[i].join("") + "\n";
+  }
+  
+  // trimming last newline just in case
+  return mapString.trim();
 }
 
-function showStatus() {
+function startLevel() {
   clearText();
-  if (won) {
-    addText("you win! J to play again", { x: 1, y: 9, color: color`4` });
-  } else if (lost) {
-    addText("caught! J to retry", { x: 1, y: 9, color: color`3` });
-  } else {
-    addText("coins left: " + tilesWith(coin).length, { x: 1, y: 9, color: color`6` });
-  }
+  currentMap = makeLevel();
+  setMap(currentMap);
+  
+  // showing current level on screen
+  // 3 is usually yellow/orange depending on palette
+  addText("level " + level, { x: 1, y: 0, color: color`3` });
 }
 
-function restart() {
-  setMap(level);
-  won = false;
-  lost = false;
-  turns = 0;
-  showStatus();
-}
+// kick off the first level!
+startLevel();
+
+
+
+// skip / force new level on 'k' 
+onInput("k", () => {
+  startLevel();
+});
+
+// check win condition after every move
+afterInput(() => {
+  const numGoals = tilesWith(goal).length;
+  
+  // checking what's currently covering the goals
+  const covered =
+    tilesWith(goal, vera).length +
+    tilesWith(goal, horace).length +
+    tilesWith(goal, box).length;
+
+  // if everything is covered, move to next level
+  if (covered === numGoals) {
+    level = level + 1; // level++ also works but whatever
+    startLevel();
+  }
+});
+
 
 onInput("w", () => {
-  if (!won && !lost) getFirst(player).y -= 1;
+  getFirst(vera).y -= 1;
 });
 
 onInput("s", () => {
-  if (!won && !lost) getFirst(player).y += 1;
+  getFirst(vera).y += 1;
 });
 
 onInput("a", () => {
-  if (!won && !lost) getFirst(player).x -= 1;
+  getFirst(horace).x -= 1;
 });
 
 onInput("d", () => {
-  if (!won && !lost) getFirst(player).x += 1;
+  getFirst(horace).x += 1;
 });
 
 onInput("j", () => {
-  restart();
+  const currentLevel = levels[level];
+  if (currentLevel !== undefined) {
+    // setText("");
+    setMap(currentLevel);
+  }
+});
+
+setSolids([ vera, horace, box, wall ]);
+
+setPushables({
+  [ vera ]: [ box, vera, horace ],
+  [ horace ]: [ box, horace, vera ]
 });
 
 afterInput(() => {
-  if (won || lost) return;
 
-  turns++;
-  collectCoin();
+  const numGoals = tilesWith(goal).length;
 
-  if (tilesWith(coin).length === 0) {
-    won = true;
-    showStatus();
-    return;
+  const goalsCoveredByVera = tilesWith(goal, vera).length;
+  const goalsCoveredByHorace = tilesWith(goal, horace).length;
+  const goalsCoveredByBoxes = tilesWith(goal, box).length;
+  const goalsCovered = goalsCoveredByVera + goalsCoveredByHorace + goalsCoveredByBoxes;
+
+  if (goalsCovered === numGoals) {
+    // increase the current level number
+    level = level + 1;
+
+    const currentLevel = levels[level];
+
+    // make sure the level exists and if so set the map
+    if (currentLevel !== undefined) {
+      setMap(currentLevel);
+    } else {
+      addText("you win!", { y: 4 });
+    }
   }
-
-  if (turns % 2 === 0) moveEnemy();
-
-  if (tilesWith(player, enemy).length > 0) {
-    lost = true;
-  }
-
-  showStatus();
 });
-
-restart();
