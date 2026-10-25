@@ -3,6 +3,7 @@
 @author: DotDvn
 @description:MicroMania is a fast-paced arcade game where you collect yellow chips while a red glitch chases you. You have three lives and just five seconds per round to collect all three chips. Survive the chase, clear all five rounds, and try to beat the glitch!
 @addedOn: 2026-09-25
+@tags: ['arcade', 'action']
 */
 
 const hero = "p", chip = "c", glitch = "e", wall = "w", floor = "f";
