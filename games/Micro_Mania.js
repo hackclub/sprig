@@ -2,7 +2,7 @@
 @title: MicroMania
 @author: DotDvn
 @description: What is my game about- MicroMania is a fast-paced arcade game where you collect yellow chips while a red glitch chases you. Each round lasts five seconds, and you have three lives to complete all five rounds.
-How do you play your game-Press J to start or restart. Use WASD to move and collect all three yellow chips before time runs out. Touching the red glitch or running out of time costs one life. Clear all five rounds to win!
+@How do you play your game- Press J to start or restart. Use WASD to move and collect all three yellow chips before time runs out. Touching the red glitch or running out of time costs one life. Clear all five rounds to win!
 @tags: ['arcade', 'action']
 @addedOn: 2026-09-25
 */
