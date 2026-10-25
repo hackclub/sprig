@@ -1439,22 +1439,26 @@ function checkChick() {
 //maybe some day I will find out how to get directions to work lol
 
 onInput("s", () => {
+  if (!getFirst(playerf)) { skipAfter = true; return }
   getFirst(playerf).y += 1
   pdirection = "b"
   playTune(walk)
 })
 onInput("w", () => {
 
+  if (!getFirst(playerf)) { skipAfter = true; return }
   getFirst(playerf).y += -1
   pdirection = "f"
   playTune(walk)
 })
 onInput("a", () => {
+  if (!getFirst(playerf)) { skipAfter = true; return }
   getFirst(playerf).x += -1
   pdirection = "r"
   playTune(walk)
 })
 onInput("d", () => {
+  if (!getFirst(playerf)) { skipAfter = true; return }
   getFirst(playerf).x += 1
   pdirection = "l"
   playTune(walk)
@@ -1462,7 +1466,9 @@ onInput("d", () => {
 
 setBackground(grass)
 
+let skipAfter = false
 afterInput(() => {
+  if (skipAfter) { skipAfter = false; return }
   const touchesDoor1 = tilesWith(playerf, door1);
   if (touchesDoor1.length > 0) {
     setMap(levels[2]);

@@ -588,6 +588,7 @@ function line(word) {
   return iterate
 }
 
+let isWordX, erroredX, posX, positionX, objectX, definitionX, change, position, objecty, definitiony, object, definition
 function sentence() {
   positions = [0, 0, 0, 0, 0]
   //across

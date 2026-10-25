@@ -197,22 +197,26 @@ setPushables({
 })
 
 onInput("s", () => {
+  if (!getFirst(player)) return
   getFirst(player).y += 1
   inputCount = inputCount + 1
 })
 
 onInput("w", () => {
+  if (!getFirst(player)) return
   getFirst(player).y -= 1
   inputCount = inputCount + 1
 })
 
 
 onInput("d", () => {
+  if (!getFirst(player)) return
   getFirst(player).x += 1
   inputCount = inputCount + 1
 })
 
 onInput("a", () => {
+  if (!getFirst(player)) return
   getFirst(player).x -= 1
   inputCount = inputCount + 1
 })
@@ -223,9 +227,9 @@ setBackground(backgroundtiles)
 const heartBomb = (x, y) => {
   hearts = getAll(heart);
 }
-heartPosition = getAll(heart);
-heartX = heart.x
-heartY = heart.y
+let heartPosition = getAll(heart);
+let heartX = heart.x
+let heartY = heart.y
 
 
 addText("collect hearts", {x: 3, y: 6, size: 1, color: color`2`});
@@ -254,7 +258,7 @@ setTimeout(() => {
 }, 2000)
 
 
-newcharactergen = () => {
+const newcharactergen = () => {
   if (gameOver) {
     getAll(heart).forEach(sprite => {
         sprite.remove();
@@ -263,7 +267,7 @@ newcharactergen = () => {
       bombs.remove()
     });
   } else { 
-    randomCharacter = Math.floor(Math.random() * 4) + 1
+    let randomCharacter = Math.floor(Math.random() * 4) + 1
       switch (randomCharacter) {
         case 1:
           newChar = "h";
@@ -299,6 +303,7 @@ afterInput(() => {
   const playerSprite = getFirst(player);
   const heartSprites = getAll(heart);
   const bombSprite = getFirst(bomb);
+  if (!playerSprite) return;
 
   addText(score.toString(), {x: 17, y: 1, size: 1, color: color`1`});
   
@@ -308,6 +313,7 @@ afterInput(() => {
         score += 1;
         console.log('number one:',score)
         heartSprite.remove();
+        return;
       }
       
   

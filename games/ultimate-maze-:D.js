@@ -556,10 +556,10 @@ if (tilesWith(player,trap).length > 0 || tilesWith(playertwo,trap).length > 0) {
   }
 }
 function checkPortal() {
-  pl = getFirst(player); 
-  p2 = getFirst(playertwo); 
-  port1 = getFirst(pone); 
-  port2 = getFirst(ptwo); 
+  let pl = getFirst(player); 
+  let p2 = getFirst(playertwo); 
+  let port1 = getFirst(pone); 
+  let port2 = getFirst(ptwo); 
   if (tilesWith(player,pone).length > 0) {
     pl.x = port2.x; 
     pl.y = port2.y; 
@@ -576,9 +576,9 @@ function checkPortal() {
   }
 }
 function checkFragile() {
-  pl = getFirst(player); 
-  p2 = getFirst(playertwo); 
-  frag = getFirst(fragile); 
+  let pl = getFirst(player); 
+  let p2 = getFirst(playertwo); 
+  let frag = getFirst(fragile); 
   if (tilesWith(player,hole).length > 0) {
     fstate = false; 
     setNewMap(level); 

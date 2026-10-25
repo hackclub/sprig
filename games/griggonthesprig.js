@@ -270,8 +270,9 @@ addText("Press I to begin", {
 level = 0
 Rsmap()
 onInput("w", () => {
+    if (!getFirst(player)) return
     let tAbovePlayer = getTile(getFirst(player).x, getFirst(player).y - 1)
-    if (jumping < 1 && tAbovePlayer[0]?.type != "b") {
+    if (jumping < 1 && (tAbovePlayer[0] || {}).type != "b") {
         speedY = 2
         playTune(tune`
 500: E5^500,
@@ -282,10 +283,10 @@ onInput("w", () => {
 
 })
 onInput("d", () => {
-    getFirst(player).x += 1
+    if (getFirst(player)) getFirst(player).x += 1
 })
 onInput("a", () => {
-    getFirst(player).x -= 1
+    if (getFirst(player)) getFirst(player).x -= 1
 })
 
 onInput("i", () => {
@@ -326,7 +327,7 @@ setInterval(function () {
             speedY = -1
         }
         let tBellowPlayer = getTile(getFirst(player).x, getFirst(player).y + 1)
-        if (tBellowPlayer[0]?.type == "b") {
+        if ((tBellowPlayer[0] || {}).type == "b") {
             jumping = 0
         }
         lastY = getFirst(player).y
@@ -392,10 +393,10 @@ setInterval(function () {
         }
         for (let i = 0; i < getAll(enemy).length; i += 1) {
             let tbe = getTile(getAll(enemy)[i].x, getAll(enemy)[i].y + 1)
-            if (tbe[0]?.type == "b") {
+            if ((tbe[0] || {}).type == "b") {
                 emove[i] = -1
             }
-            if (tbe[0]?.type == "p") {
+            if ((tbe[0] || {}).type == "p") {
                 lives -= 1
                 Rsmap()
                 if (lives <= 0) {
@@ -416,10 +417,10 @@ setInterval(function () {
                 }
             }
             let tbe2 = getTile(getAll(enemy)[i].x, getAll(enemy)[i].y - 1)
-            if (tbe2[0]?.type == "b") {
+            if ((tbe2[0] || {}).type == "b") {
                 emove[i] = 1
             }
-            if (tbe2[0]?.type == "p") {
+            if ((tbe2[0] || {}).type == "p") {
                 lives -= 1
                 Rsmap()
                 if (lives <= 0) {

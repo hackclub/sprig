@@ -39,6 +39,7 @@ let startup = true
 let card = "N/A"
 
 let game = false
+let emoveinterval, espawninterval, cardspinning, fireanimr, fireaniml, eaniminterval, skyinterval, scoreinterval
 
 setLegend(
   [player, bitmap`

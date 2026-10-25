@@ -266,7 +266,7 @@ function replaceSprite(sprite) {
 function getPowerups() {
   let finalTable = []
 
-  for (i = 0; i < powerups.length; i++) {
+  for (let i = 0; i < powerups.length; i++) {
     finalTable = finalTable.concat(getAll(powerups[i]))
   }
 

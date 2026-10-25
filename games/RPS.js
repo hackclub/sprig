@@ -90,6 +90,7 @@ setLegend(
 setSolids([])
 
 let level = 0
+let playerMove
 const levels = [
   map`
 rfc`

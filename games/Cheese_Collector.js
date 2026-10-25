@@ -513,6 +513,7 @@ onInput("d", () => {
 
 // when the player presses "l", it will unlock the safe or fill the milk, depending on the situation
 onInput("l", () => {
+  if (level != 3 && !getFirst(safe)) return
   if (level == 1) {
     unlockSafe();
   } else if (level == 2) {

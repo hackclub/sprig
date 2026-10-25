@@ -388,8 +388,8 @@ printPermanents()
 printLevelNum()
 
 afterInput(() => {
-  b = getFirst(bluey); r = getFirst(redis); bg = getFirst(bGoal); rg = getFirst(rGoal)
-  next = inGoal(b, bg) && inGoal(r, rg)
+  let b = getFirst(bluey), r = getFirst(redis), bg = getFirst(bGoal), rg = getFirst(rGoal)
+  let next = inGoal(b, bg) && inGoal(r, rg)
 
 
   if (next && level < levels.length - 1) {level++; playTune(sWin); setMap(levels[level]); clearText(); printPermanents(); printLevelNum()}

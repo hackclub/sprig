@@ -19,6 +19,7 @@ let moves = []
 
 let blocks = []
 let goals = []
+let player, goal
 
 setLegend(
   [ Player, bitmap`

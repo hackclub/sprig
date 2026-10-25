@@ -255,6 +255,7 @@ addText("Press 'i' to start", { x: 1, y: 8, color: color`7` });
 
 let isInMainMenu = true;
 let isGameStarted = false;
+let currentLevel;
 
 // Start game or select difficulty
 onInput("i", () => {
@@ -341,19 +342,19 @@ function startHardGame() {
 
 // Gameplay controls
 onInput("s", () => {
-  getFirst(player).y += 1; // Move down
+  if (getFirst(player)) getFirst(player).y += 1; // Move down
 });
 
 onInput("w", () => {
-  getFirst(player).y -= 1; // Move up
+  if (getFirst(player)) getFirst(player).y -= 1; // Move up
 });
 
 onInput("d", () => {
-  getFirst(player).x += 1; // Move right
+  if (getFirst(player)) getFirst(player).x += 1; // Move right
 });
 
 onInput("a", () => {
-  getFirst(player).x -= 1; // Move left
+  if (getFirst(player)) getFirst(player).x -= 1; // Move left
 });
 
 // Reset the current level when 'k' is pressed

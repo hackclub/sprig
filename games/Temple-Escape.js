@@ -443,7 +443,6 @@ onInput("j", () => {
     score = 0
     speed = 400
     rows = [0, 0, 0, 0, 0, 0]
-    next_obstacle = 3
     loop();
   }
 })

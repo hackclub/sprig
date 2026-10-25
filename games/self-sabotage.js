@@ -181,6 +181,7 @@ onInput("d", () => movePlayer(1, 0));
 function movePlayer(dx, dy) {
   const p = getFirst(player);
   const t = getFirst(target);
+  if (!p || !t) return;
   const newX = p.x + dx;
   const newY = p.y + dy;
 
@@ -199,7 +200,7 @@ function movePlayer(dx, dy) {
 // Shooting mechanism
 onInput("i", () => {
   const p = getFirst(player);
-  if (p) addSprite(p.x, p.y - 1, bullet);
+  if (p && p.y > 0) addSprite(p.x, p.y - 1, bullet);
 });
 
 setInterval(() => {

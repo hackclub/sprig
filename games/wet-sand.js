@@ -268,7 +268,7 @@ let tick = () => {
     }
   }
   
-  setTimeout(tick, 0);
+  setTimeout(tick, 1);
 }
 
 tick();

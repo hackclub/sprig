@@ -190,7 +190,7 @@ onInput("i", () => {
   let s = getFirst(shield);
   let promise = new Promise(() => {
     setTimeout(() => {
-      s.remove();
+      try { s.remove(); } catch (e) {}
     }, 2500);
   });
 });
@@ -246,7 +246,7 @@ function wallSpawn() {
   
   let promise = new Promise(() => {
       setTimeout(() => {
-        walls[randomWall].remove();
+        try { walls[randomWall].remove(); } catch (e) {}
       }, 1000)
     });
     

@@ -374,10 +374,10 @@
         // Store previous position
         playerState.lastX = player.x
         playerState.lastY = player.y
-        playerState.lastMoveTime = performance.now()
+        playerState.lastMoveTime = Date.now()
         
         // Update movement history
-        playerState.movementHistory.unshift({ x: player.x, y: player.y, time: performance.now() })
+        playerState.movementHistory.unshift({ x: player.x, y: player.y, time: Date.now() })
         if (playerState.movementHistory.length > 5) playerState.movementHistory.pop()
         
         player.x = newX
@@ -796,7 +796,7 @@
     const handleExit = () => {
     clearText()
     addText("Thanks for playing!", { y: 8, color: color`3` })
-    setTimeout(() => window.location.reload(), 1000)
+    setTimeout(() => { if (typeof window !== 'undefined') window.location.reload() }, 1000)
     }
 
     const handleRestart = () => {

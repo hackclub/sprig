@@ -157,9 +157,9 @@ HHHHHHHHHHHHHHHH`],
 
 )
 
-var map;
+var mapText;
 function generateMap(){
-  map = `
+  mapText = `
 cssssssssssssssssc
 ssssssssssssssssss
 ssssssssssssssssss
@@ -173,7 +173,7 @@ pssssssssssssssssd
 gssssssssssssssssg
 gssssssssssssssssg`;
   setBackground(sky);
-  setMap(map);
+  setMap(mapText);
   for (let i = 1;i < width()-1;i++){
   addSprite(i, height()-1, ground)
   addSprite(i, height()-2, ground)

@@ -112,6 +112,7 @@ const levels = [
 ............................`
 ]
 
+var level, power, angle, xcoord, ycoord;
 level = 1;
 
 reset();

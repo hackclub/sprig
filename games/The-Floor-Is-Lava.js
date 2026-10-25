@@ -257,7 +257,7 @@ function spreadLava() {
   while (removedLavaCount < 3 && lavaTiles.length > 0) {
     const randomLava = lavaTiles[Math.floor(Math.random() * lavaTiles.length)];
     if (randomLava) {
-      randomLava[0].remove();
+      if (getTile(randomLava[0].x, randomLava[0].y).includes(randomLava[0])) randomLava[0].remove();
       removedLavaCount++;
     }
   }
@@ -270,7 +270,7 @@ function checkFurniture() {
     const key = `${couchTile.x}-${couchTile.y}`;
     if (!furnitureTimers[key]) {
       furnitureTimers[key] = setTimeout(() => {
-        couchTile.remove();
+        if (getTile(couchTile.x, couchTile.y).includes(couchTile)) couchTile.remove();
         delete furnitureTimers[key];
       }, 2000); // Sink furniture after 2 seconds
     }
@@ -280,7 +280,7 @@ function checkFurniture() {
     const key = `${tableTile.x}-${tableTile.y}`;
     if (!furnitureTimers[key]) {
       furnitureTimers[key] = setTimeout(() => {
-        tableTile.remove();
+        if (getTile(tableTile.x, tableTile.y).includes(tableTile)) tableTile.remove();
         delete furnitureTimers[key];
       }, 2000);
     }
