@@ -1,9 +1,9 @@
 /*
 @title: Food Hunt
+@author: Rishik Theranikal
 @description: This game is called Food Hunt! Navigate through the yucky food(fruits) to complete the yummy meal!
-@author:Rishik Theranikal 
-@tags: ['tag1', 'tag2']
-@addedOn: 10/25/2026
+@tags: ['music', 'maze']
+@addedOn: 2026-10-25
 */
 
 const player = "p"
