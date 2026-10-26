@@ -60,7 +60,7 @@
         "@types/node-statsd": "^0.1.7",
         "@types/three": "^0.183.1",
         "@types/throttle-debounce": "^5.0.2",
-        "@types/w3c-web-serial": "^1.0.8",
+        "@types/w3c-web-serial": "^1.0.9",
         "typescript": "5.9.3",
         "vitest-canvas-mock": "^1.1.4",
       },
@@ -609,7 +609,7 @@
 
     "@types/unist": ["@types/unist@3.0.3", "", {}, "sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q=="],
 
-    "@types/w3c-web-serial": ["@types/w3c-web-serial@1.0.8", "", {}, "sha512-QQOT+bxQJhRGXoZDZGLs3ksLud1dMNnMiSQtBA0w8KXvLpXX4oM4TZb6J0GgJ8UbCaHo5s9/4VQT8uXy9JER2A=="],
+    "@types/w3c-web-serial": ["@types/w3c-web-serial@1.0.9", "", {}, "sha512-IVPnnhE1IC3Za0j+ykQDMvRwe3m92hcDIAJjUA4aZW+7f+osL48SDS+02Xsqj5dHluXOCsEA9HS10isX4O59EA=="],
 
     "@types/webxr": ["@types/webxr@0.5.21", "", {}, "sha512-geZIAtLzjGmgY2JUi6VxXdCrTb99A7yP49lxLr2Nm/uIK0PkkxcEi4OGhoGDO4pxCf3JwGz2GiJL2Ej4K2bKaA=="],
 
