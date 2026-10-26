@@ -38,7 +38,7 @@
         "rehype-external-links": "^3.0.0",
         "sass": "^1.99.0",
         "svelte": "5.57.2",
-        "three": "0.183.2",
+        "three": "0.186.1",
         "throttle-debounce": "^5.0.2",
         "tinykeys": "^3.1.0",
         "vitest": "^4.1.7",
@@ -1511,7 +1511,7 @@
 
     "text-decoding": ["text-decoding@1.0.0", "", {}, "sha512-/0TJD42KDnVwKmDK6jj3xP7E2MG7SHAOG4tyTgyUCRPdHwvkquYNLEQltmdMa3owq3TkddCVcTsoctJI8VQNKA=="],
 
-    "three": ["three@0.183.2", "", {}, "sha512-di3BsL2FEQ1PA7Hcvn4fyJOlxRRgFYBpMTcyOgkwJIaDOdJMebEFPA+t98EvjuljDx4hNulAGwF6KIjtwI5jgQ=="],
+    "three": ["three@0.186.1", "", {}, "sha512-blFeqb49wRCSGUGj7gtpfnSGHy2lwDk94RhUmS1c/hTby70kvChbWpkJ4Pm1390LqzzvTmzgXKHPEafJwCb8jA=="],
 
     "throttle-debounce": ["throttle-debounce@5.0.2", "", {}, "sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A=="],
 
