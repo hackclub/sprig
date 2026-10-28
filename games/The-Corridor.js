@@ -3,6 +3,8 @@
 @author: Jona Noack
 @tags: ['meta', 'puzzle', 'story', 'cinematic']
 @description: The Corridor  fuer Sprig
+@addedOn: 2026-10-28
+
 */
 
 const p1 = "p";
