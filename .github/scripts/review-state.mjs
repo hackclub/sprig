@@ -47,8 +47,8 @@ export function autoReviewLabelChanges({ labels, validationOk, eventAction, revi
 	}
 }
 
-export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha }) {
-	if (!reviewers || reviewers.size === 0) return "unknown";
+export function getActiveReviews({ reviews, reviewers, authorLogin }) {
+	if (!reviewers || reviewers.size === 0) return [];
 	const lowerReviewers = new Set([...reviewers].map((u) => u.toLowerCase()));
 	const lowerAuthor = authorLogin?.toLowerCase();
 
@@ -63,11 +63,32 @@ export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha
 		}
 	}
 
-	const active = [...latestByReviewer.values()];
-	if (active.some((r) => r.state === "CHANGES_REQUESTED")) {
+	return [...latestByReviewer.values()];
+}
+
+export function getActiveReviewCommits({ reviews, reviewers, authorLogin, headSha }) {
+	const active = getActiveReviews({ reviews, reviewers, authorLogin });
+	const commits = new Set();
+	for (const r of active) {
+		if ((r.state === "APPROVED" || r.state === "CHANGES_REQUESTED") && r.commit_id && r.commit_id !== headSha) {
+			commits.add(r.commit_id);
+		}
+	}
+	return [...commits];
+}
+
+export function reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha, isCommitOutdated }) {
+	if (!reviewers || reviewers.size === 0) return "unknown";
+
+	// ponytail: missing commit ID or mismatch defaults to outdated; upgrade path is passing isCommitOutdated comparing game files
+	const isOutdated = (commitId) =>
+		!commitId || (isCommitOutdated ? isCommitOutdated(commitId) : Boolean(headSha) && commitId !== headSha);
+
+	const active = getActiveReviews({ reviews, reviewers, authorLogin });
+	if (active.some((r) => r.state === "CHANGES_REQUESTED" && !isOutdated(r.commit_id))) {
 		return "changes_requested";
 	}
-	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && r.commit_id === headSha)) {
+	if (active.some((r) => r.state === "APPROVED" && Boolean(headSha) && !isOutdated(r.commit_id))) {
 		return "approved";
 	}
 	if (active.some((r) => r.state === "DISMISSED")) {
