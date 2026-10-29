@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Office Eclipse
 @description: Make sure your job is done, and please do not meet him.
 @author: uservin333
-@tags: ['tag1', 'tag2']
+@tags: ['puzzle','office','eclipse','koma']
 @addedOn: 2026-10-28
 */
 
