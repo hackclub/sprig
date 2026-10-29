@@ -114,7 +114,7 @@ async function handleOlderDuplicate(pullRequest, labels) {
 	await commentOnce({
 		issueNumber: pullRequest.number,
 		marker: "<!-- sprig-duplicate-auto-close -->",
-		body: `Closing this older submission so your newer PR (#${latestNumber}) can move forward. If you would rather keep this game instead, close #${latestNumber} and ask a reviewer to reopen this PR.`,
+		body: `Closing this older submission so your newer PR (#${latestNumber}) can move forward. If you would rather keep this game instead, close #${latestNumber} and ask in #sprig on Slack (with your PR number) or tag \`@LucasHT22\` here to reopen this PR.`,
 	});
 	await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, { state: "closed" });
 	closedDuplicateNumbers.add(pullRequest.number);
@@ -140,7 +140,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 	if (!since) return;
 
 	const authorLogin = pullRequest.user?.login;
-	const lastAuthorActivity = await latestAuthorCommentTime(pullRequest.number, authorLogin);
+	const lastAuthorActivity = await latestAuthorActivityTime(pullRequest.number, authorLogin);
 	if (lastAuthorActivity && new Date(lastAuthorActivity).getTime() > new Date(since).getTime()) {
 		since = lastAuthorActivity;
 	}
@@ -153,7 +153,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: `<!-- sprig-auto-close-${cycle} -->`,
-			body: "Closing this submission for now since there has been no activity for 14 days. Whenever you want to return to it, push your fixes and ping a reviewer to reopen it. We would love to see your game in the gallery!",
+			body: "Closing this submission for now since there has been no activity for 14 days. Whenever you want to return to it, push your fixes and ask in #sprig on Slack (with your PR number) or tag `@LucasHT22` here to reopen it. We would love to see your game in the gallery!",
 		});
 		await githubRequest(token, "PATCH", `/repos/${owner}/${repo}/issues/${pullRequest.number}`, {
 			state: "closed",
@@ -166,7 +166,7 @@ async function handleNeedsAuthor(pullRequest, labels) {
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: `<!-- sprig-stale-reminder-${cycle} -->`,
-			body: "Just checking in! This submission has been waiting for updates for 7 days. Whenever you have time, push your fixes so we can get your game reviewed. If there is no response after 14 days, the PR will close automatically, but you can always ask a reviewer to reopen it whenever you are ready!",
+			body: "Just checking in! This submission has been waiting for updates for 7 days. Whenever you have time, push your fixes so we can get your game reviewed. If there is no response after 14 days, the PR will close automatically, but you can always ask in #sprig on Slack (with your PR number) or tag `@LucasHT22` here to reopen it whenever you are ready!",
 		});
 	} else if (hasLabel(labels, "Stale")) {
 		await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Stale" });
@@ -175,6 +175,8 @@ async function handleNeedsAuthor(pullRequest, labels) {
 
 function newestDate(dates) {
 	return dates
+		.filter(Boolean)
+		.filter((d) => !Number.isNaN(new Date(d).getTime()))
 		.sort((a, b) => new Date(b).getTime() - new Date(a).getTime())[0] ?? null;
 }
 
@@ -211,7 +213,7 @@ async function handleClaimed(pullRequest) {
 async function handleUntouchedSubmission(pullRequest, labels) {
 	if (hasLabel(labels, "Stale")) {
 		const authorLogin = pullRequest.user?.login;
-		const lastAuthorActivity = await latestAuthorCommentTime(pullRequest.number, authorLogin);
+		const lastAuthorActivity = await latestAuthorActivityTime(pullRequest.number, authorLogin);
 		const staleTime = await latestLabelTime(pullRequest.number, "Stale");
 		if (lastAuthorActivity && staleTime && new Date(lastAuthorActivity).getTime() > new Date(staleTime).getTime()) {
 			await removeLabel({ owner, repo, token, issueNumber: pullRequest.number, label: "Stale" });
@@ -222,12 +224,17 @@ async function handleUntouchedSubmission(pullRequest, labels) {
 		return;
 	}
 
-	if (daysBetween(pullRequest.updated_at) >= 30) {
+	if (daysBetween(pullRequest.created_at) < 30) {
+		return;
+	}
+
+	const lastActivity = await latestSubmissionActivityTime(pullRequest);
+	if (daysBetween(lastActivity) >= 30) {
 		await addLabels({ owner, repo, token, issueNumber: pullRequest.number, labels: ["Stale"] });
 		await commentOnce({
 			issueNumber: pullRequest.number,
 			marker: STALE_REMINDER_MARKER,
-			body: "This submission hasn't had any activity in over 30 days. Marking as Stale to get reviewer attention.",
+			body: "This submission hasn't had any activity in over 30 days. Marking as Stale to get reviewer attention. If your submission is ready for review, ask in #sprig on Slack (with your PR number) or tag `@LucasHT22` here.",
 		});
 	}
 }
@@ -240,16 +247,63 @@ async function latestLabelTime(issueNumber, labelName) {
 	return matching[0]?.created_at ?? null;
 }
 
-async function latestAuthorCommentTime(issueNumber, authorLogin) {
+async function latestAuthorActivityTime(issueNumber, authorLogin) {
 	if (!authorLogin) return null;
+	const lowerAuthor = authorLogin.toLowerCase();
+	const maintainerLogins = new Set([...roles.maintainers, ...roles.triagers].map((u) => u.toLowerCase()));
 	try {
-		const comments = await githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`);
+		const [comments, commits] = await Promise.all([
+			githubPaginated(token, `/repos/${owner}/${repo}/issues/${issueNumber}/comments`),
+			githubPaginated(token, `/repos/${owner}/${repo}/pulls/${issueNumber}/commits`),
+		]);
 		const authorComments = comments
-			.filter((c) => c.user?.login?.toLowerCase() === authorLogin.toLowerCase())
-			.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-		return authorComments[0]?.created_at ?? null;
+			.filter((c) => c.user?.login?.toLowerCase() === lowerAuthor)
+			.map((c) => c.created_at);
+		const authorCommits = commits
+			.filter((c) => {
+				const isAuthor = c.author?.login?.toLowerCase() === lowerAuthor;
+				const isCommitter = c.committer?.login?.toLowerCase() === lowerAuthor;
+				const gitAuthorName = c.commit?.author?.name?.toLowerCase();
+				const isGitAuthor = gitAuthorName && gitAuthorName === lowerAuthor;
+				const isUnlinkedAuthor = !c.author?.login && !maintainerLogins.has(c.committer?.login?.toLowerCase());
+				return isAuthor || isCommitter || isGitAuthor || isUnlinkedAuthor;
+			})
+			.map((c) => c.commit?.author?.date || c.commit?.committer?.date)
+			.filter(Boolean);
+		return newestDate([...authorComments, ...authorCommits]);
 	} catch {
 		return null;
+	}
+}
+
+async function latestSubmissionActivityTime(pullRequest) {
+	const fallback = pullRequest.created_at;
+	const authorLogin = pullRequest.user?.login;
+	const lowerAuthor = authorLogin?.toLowerCase();
+	const maintainerLogins = new Set([...roles.maintainers, ...roles.triagers].map((u) => u.toLowerCase()));
+	try {
+		const [comments, commits] = await Promise.all([
+			githubPaginated(token, `/repos/${owner}/${repo}/issues/${pullRequest.number}/comments`),
+			githubPaginated(token, `/repos/${owner}/${repo}/pulls/${pullRequest.number}/commits`),
+		]);
+		const humanComments = comments
+			.filter((c) => c.user?.type !== "Bot")
+			.map((c) => c.created_at);
+		const authorCommits = commits
+			.filter((c) => {
+				if (!lowerAuthor) return true;
+				const isAuthor = c.author?.login?.toLowerCase() === lowerAuthor;
+				const isCommitter = c.committer?.login?.toLowerCase() === lowerAuthor;
+				const gitAuthorName = c.commit?.author?.name?.toLowerCase();
+				const isGitAuthor = gitAuthorName && gitAuthorName === lowerAuthor;
+				const isUnlinkedAuthor = !c.author?.login && !maintainerLogins.has(c.committer?.login?.toLowerCase());
+				return isAuthor || isCommitter || isGitAuthor || isUnlinkedAuthor;
+			})
+			.map((c) => c.commit?.author?.date || c.commit?.committer?.date)
+			.filter(Boolean);
+		return newestDate([...humanComments, ...authorCommits, fallback]);
+	} catch {
+		return pullRequest.updated_at ?? fallback;
 	}
 }
 
