@@ -2,7 +2,7 @@
     @title: Trash Collector
     @author: ionr747
     @description: Navigate a spaceship in a maze to collect all the trash and keep the place tidy
-    @tags: [space]
+    @tags: ['space', 'maze', 'cleaning']
     @addedOn: 2026-10-27
     */
 
