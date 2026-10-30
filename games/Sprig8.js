@@ -2,7 +2,7 @@
 @title: Sprig-8
 @author: sircheetodust
 @tags: ['emulation']
-@addedOn: 2026-01-01
+@addedOn: 2026-10-14
 @description: Chip-8 Emulator for the Sprig
 */
 /* 
