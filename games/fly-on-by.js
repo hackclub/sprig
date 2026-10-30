@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: fly-by
+@title: fly-on-by
 @description: my first and likely only game here, a simple plane target shooter
 @author: rockbeast9000
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@tags: ['plane', 'shooter']
+@addedOn: 2026-10-29
 */
 
 const player = "p"
