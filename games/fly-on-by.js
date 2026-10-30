@@ -4,7 +4,7 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: fly-on-by
 @description: this is a simple target shooting game. wasd to move, i to shoot, j to start. shoot 20 targets to win.
-@author: rockbeast9000
+@author: @rockbeast9000
 @tags: ['plane', 'shooter']
 @addedOn: 2026-10-29
 */
