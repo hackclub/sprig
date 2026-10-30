@@ -3,7 +3,7 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: fly-on-by
-@description: my first and likely only game here, a simple plane target shooter
+@description: this is a simple target shooting game. wasd to move, i to shoot, j to start. shoot 20 targets to win.
 @author: rockbeast9000
 @tags: ['plane', 'shooter']
 @addedOn: 2026-10-29
