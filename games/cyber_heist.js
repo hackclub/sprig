@@ -1,9 +1,9 @@
 /*
 @title: Cyber Heist: Protocol Zero
 @author: Mohammed Touffeq
-@tags: ['stealth', 'action', 'puzzle', 'cyberpunk', 'boss']
+@tags: ['stealth', 'action', 'puzzle', 'cyberpunk', 'tactical']
 @addedOn: 2026-10-31
-@description: A 6-floor tactical stealth game! Infiltrate corporate mega-vaults, evade patrolling robotic guards, push EMP power cells to disable deadly laser grids, and hack the central AI core!
+@description: AAA tactical stealth game in 16x16 retro cyber aesthetics. Infiltrate 6 corporate security sectors, evade patrolling heavy mechs, bypass high-voltage laser grids using EMP battery cells, and extract the Quantum AI Mainframe!
 */
 
 const player = "p";
@@ -18,166 +18,166 @@ const core = "c";
 
 setLegend(
   [player, bitmap`
-................
-....00000000....
-...0888888880...
-..083388883380..
-..083388883380..
-..088888888880..
-..088888888880..
-...0880000880...
+.....000000.....
+....01111110....
+...0188888810...
+...088DDDD880...
+...088DDDD880...
+...0188888810...
 ....00111100....
 ...0199999910...
-...0999999990...
-...0999999990...
+..0199DDDD9910..
+..0199DDDD9910..
+..019999999910..
+...0199009910...
 ....09900990....
 ....09900990....
-....000..000....
-................
+...0110..0110...
+...000....000...
 `],
   [guard, bitmap`
-................
-....00000000....
-...0555555550...
-..053355553350..
-..053355553350..
-..055555555550..
-...0550000550...
-....00444400....
-...0411111140...
-...0111111110...
-...0110000110...
-...0110000110...
-....01100110....
-....01100110....
-....000..000....
-................
+.....000000.....
+....01111110....
+...0155555510...
+...0553333550...
+...0553333550...
+...0155555510...
+....00111100....
+...0144444410...
+..014455554410..
+..014455554410..
+..014444444410..
+...0144004410...
+....04400440....
+....04400440....
+...0110..0110...
+...000....000...
 `],
   [box, bitmap`
 0000000000000000
-0DDDDDDDDDDDDDD0
-0D000000000000D0
-0D099999999990D0
-0D09..0990..90D0
-0D09..0990..90D0
-0D090009900090D0
-0D099999999990D0
-0D099999999990D0
-0D090009900090D0
-0D09..0990..90D0
-0D09..0990..90D0
-0D099999999990D0
-0D000000000000D0
-0DDDDDDDDDDDDDD0
+0111111111111110
+01DDDDDDDDDDDD10
+01D0000000000D10
+01D0999999990D10
+01D09.0880.90D10
+01D09.0880.90D10
+01D0900880090D10
+01D0900880090D10
+01D09.0880.90D10
+01D09.0880.90D10
+01D0999999990D10
+01D0000000000D10
+01DDDDDDDDDDDD10
+0111111111111110
 0000000000000000
 `],
   [swtch, bitmap`
 ................
 .00000000000000.
-.06666666666660.
-.06000000000060.
-.06077777777060.
-.0607......7060.
-.0607..66..7060.
-.0607.6666.7060.
-.0607.6666.7060.
-.0607..66..7060.
-.0607......7060.
-.06077777777060.
-.06000000000060.
-.06666666666660.
+.01111111111110.
+.01666666666610.
+.01600000000610.
+.01607777770610.
+.01607.66.70610.
+.01607666670610.
+.01607666670610.
+.01607.66.70610.
+.01607777770610.
+.01600000000610.
+.01666666666610.
+.01111111111110.
 .00000000000000.
 ................
 `],
   [laser, bitmap`
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
-.....05500550...
+0000000000000000
+0111111111111110
+....00555500....
+....05533550....
+....05533550....
+....05533550....
+....05533550....
+....05533550....
+....05533550....
+....05533550....
+....05533550....
+....05533550....
+....05533550....
+....00555500....
+0111111111111110
+0000000000000000
 `],
   [wall, bitmap`
 0000000000000000
 0111111111111110
-0199999999999910
-0190000000000910
-0190888888880910
-0190800000080910
-019080....080910
-019080....080910
-019080....080910
-019080....080910
-0190800000080910
-0190888888880910
-0190000000000910
-0199999999999910
+0100000000000010
+0109999999999010
+0109000000009010
+0109088888809010
+0109080000809010
+0109080..0809010
+0109080..0809010
+0109080000809010
+0109088888809010
+0109000000009010
+0109999999999010
+0100000000000010
 0111111111111110
 0000000000000000
 `],
   [key, bitmap`
 ................
-................
-.....55555......
-....55...55.....
-....55...55.....
-.....55555......
-......555.......
-......555.......
-......55555.....
-......555.......
-......55555.....
-......555.......
-......555.......
-................
-................
+.....000000.....
+....05555550....
+...0550000550...
+...050....050...
+...050....050...
+...0550000550...
+....05555550....
+.....005500.....
+.......0500.....
+.......05550....
+.......0500.....
+.......05550....
+.......050......
+.......00.......
 ................
 `],
   [door, bitmap`
 0000000000000000
-0444444444444440
-0400000000000040
-0405555555555040
-0405.......55040
-0405...00..55040
-0405..0550.55040
-0405..0550.55040
-0405...00..55040
-0405.......55040
-0405.......55040
-0405555555555040
-0400000000000040
-0444444444444440
-0000000000000000
+0111111111111110
+0144444444444410
+0140000000000410
+0140555555550410
+01405......50410
+01405..00..50410
+01405.0550.50410
+01405.0550.50410
+01405..00..50410
+01405......50410
+0140555555550410
+0140000000000410
+0144444444444410
+0111111111111110
 0000000000000000
 `],
   [core, bitmap`
-................
-.......00.......
-.....00DD00.....
-....0DDDDDD0....
-...0DD3333DD0...
-..0DDD3553DDD0..
-..0DDD3553DDD0..
-.0DDDD3553DDDD0.
-.0DDDD3553DDDD0.
-..0DDD3553DDD0..
-..0DDD3553DDD0..
-...0DD3333DD0...
-....0DDDDDD0....
-.....00DD00.....
-.......00.......
-................
+......0000......
+....00111100....
+...0188DD8810...
+..018DDDDDD810..
+..08DD3333DD80..
+.01DD355553DD10.
+.01DD355553DD10.
+.08DD355553DD80.
+.08DD355553DD80.
+.01DD355553DD10.
+.01DD355553DD10.
+..08DD3333DD80..
+..018DDDDDD810..
+...0188DD8810...
+....00111100....
+......0000......
 `]
 );
 
@@ -185,7 +185,7 @@ setSolids([player, wall, door, laser, guard, box]);
 setPushables({ [player]: [box] });
 
 const levels = [
-  // Sector 1: Cyber Security Infiltration
+  // Sector 1: Perimeter Infiltration
   map`
 wwwwwwwwwwwwwwww
 wp.............w
@@ -204,7 +204,7 @@ w...w..d....cw.w
 w.k.w..w.....w.w
 wwwwwwwwwwwwwwww
 `,
-  // Sector 2: Robotic Guard Patrol
+  // Sector 2: Sentry Drone Patrol
   map`
 wwwwwwwwwwwwwwww
 wp.............w
@@ -223,7 +223,7 @@ w...wd......cw.w
 w...w........w.w
 wwwwwwwwwwwwwwww
 `,
-  // Sector 3: EMP Power Grid & Lasers
+  // Sector 3: Laser Grid & Power Coupling
   map`
 wwwwwwwwwwwwwwww
 wp.............w
@@ -242,7 +242,7 @@ w...wd......cw.w
 w...w..........w
 wwwwwwwwwwwwwwww
 `,
-  // Sector 4: Double Guard Matrix
+  // Sector 4: Double Enforcer Corridors
   map`
 wwwwwwwwwwwwwwww
 wp.............w
@@ -261,7 +261,7 @@ w...wd......cw.w
 w...w..........w
 wwwwwwwwwwwwwwww
 `,
-  // Sector 5: Reactor Core Complex
+  // Sector 5: High-Voltage Coolant Core
   map`
 wwwwwwwwwwwwwwww
 wp...w.s.....w.w
@@ -280,7 +280,7 @@ w...wd......cw.w
 w...w..........w
 wwwwwwwwwwwwwwww
 `,
-  // Sector 6: Final Boss AI Chamber
+  // Sector 6: Central AI Supercomputer Vault
   map`
 wwwwwwwwwwwwwwww
 wp.............w
@@ -304,6 +304,8 @@ wwwwwwwwwwwwwwww
 let currentLevel = 0;
 let hasKey = false;
 let shields = 3;
+let stealthScore = 1000;
+let stepsTaken = 0;
 let guardDirections = [1, -1, 1, -1];
 
 setMap(levels[currentLevel]);
@@ -360,7 +362,7 @@ function checkEMP() {
     if (lasers.length > 0) {
       lasers.forEach(l => l.remove());
       playTune(sndEmp);
-      addText("EMP ONLINE: LASERS DOWN", { y: 1, color: "6" });
+      addText("EMP ONLINE: LASERS OFFLINE", { y: 1, color: "6" });
     }
   }
 }
@@ -369,16 +371,16 @@ function checkCollisions() {
   const p = getFirst(player);
   if (!p) return;
 
-  // Key pickup
+  // Keycard pickup
   const keysOnTile = getTile(p.x, p.y).filter(s => s.type === key);
   if (keysOnTile.length > 0) {
     keysOnTile.forEach(k => k.remove());
     hasKey = true;
     playTune(sndKey);
-    addText("KEYCARD ACQUIRED", { y: 1, color: "5" });
+    addText("ENCRYPTION KEYCARD ACQUIRED", { y: 1, color: "5" });
   }
 
-  // Guard detection / Alert
+  // Guard proximity alert
   const guardsNear = getAll(guard).filter(g => {
     let dist = Math.abs(g.x - p.x) + Math.abs(g.y - p.y);
     return dist <= 1;
@@ -386,9 +388,10 @@ function checkCollisions() {
 
   if (guardsNear.length > 0) {
     shields--;
+    stealthScore = Math.max(0, stealthScore - 150);
     playTune(sndAlert);
     if (shields <= 0) {
-      addText("SHIELD DEPLETED! RESTARTING SECTOR...", { y: 7, color: "3" });
+      addText("BREACH DETECTED! RESETTING SECTOR...", { y: 7, color: "3" });
       shields = 3;
       hasKey = false;
       setMap(levels[currentLevel]);
@@ -400,7 +403,7 @@ function checkCollisions() {
     }
   }
 
-  // Core reached -> Next level
+  // AI Core extracted -> Sector clear
   const coresOnTile = getTile(p.x, p.y).filter(s => s.type === core);
   if (coresOnTile.length > 0) {
     playTune(sndWin);
@@ -410,10 +413,10 @@ function checkCollisions() {
       shields = 3;
       setMap(levels[currentLevel]);
       clearText();
-      addText("SECTOR " + (currentLevel + 1) + " INFILTRATED!", { y: 1, color: "6" });
+      addText("SECTOR " + (currentLevel + 1) + " BREACHED! SCORE: " + stealthScore, { y: 1, color: "6" });
     } else {
       clearText();
-      addText("MISSION COMPLETE! AI CORE EXTRACTED!", { y: 7, color: "5" });
+      addText("MISSION COMPLETE! RANK: GHOST OPERATIVE", { y: 7, color: "5" });
     }
   }
 }
@@ -424,13 +427,14 @@ function tryOpenDoor(targetX, targetY) {
     doors.forEach(d => d.remove());
     hasKey = false;
     playTune(sndDoor);
-    addText("GATE UNLOCKED", { y: 1, color: "6" });
+    addText("SECURITY BLAST DOOR UNLOCKED", { y: 1, color: "6" });
     return true;
   }
   return false;
 }
 
 afterInput(() => {
+  stepsTaken++;
   moveGuards();
   checkEMP();
   checkCollisions();
