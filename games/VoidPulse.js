@@ -284,6 +284,7 @@ const fire = bitmap`
 // 2. SPRIG ENGINE CONFIGURATION
 // ==========================================
 
+// Note: '.' is Sprig's reserved void/empty character and is NOT declared in setLegend
 setLegend(
   [ '0', darkBg ],
   [ 'p', player ],
@@ -504,12 +505,10 @@ const levels = [
 // 4. TIMING & AUDIO UTILITIES
 // ==========================================
 
-function after(ms, callback) {
-  return setTimeout(callback, ms);
-}
-
-function every(ms, callback) {
-  return setInterval(callback, ms);
+// Sprig provides after(ms, callback) natively.
+// Fallback for running in non-Sprig environments:
+if (typeof after === 'undefined') {
+  globalThis.after = (ms, callback) => setTimeout(callback, ms);
 }
 
 function sfx(tuneData) {
@@ -533,7 +532,7 @@ function showMessage(text, x = 1, y = 1) {
 }
 
 // ==========================================
-// 5. GAME STATE
+// 5. GAME STATE & RECURSIVE SESSION CONTROL
 // ==========================================
 
 let currentStage = 0;
@@ -582,6 +581,13 @@ let stageCleared = false;
 let audioTimer = 0;
 let nextHeartbeatTime = 0;
 let nextAmbientTime = 6000;
+
+// Timing Accumulators
+let elapsedStalkerTimer = 0;
+let passiveBatteryTimer = 0;
+
+// Session ID prevents old recursive timers from stacking and freezing the browser on restart
+let gameSessionId = 0;
 
 // Speed progression: stages become progressively faster and tighter
 const stalkerSpeeds = [
@@ -663,7 +669,7 @@ function drawScreen() {
         continue;
       }
 
-      // Pitch black darkness
+      // Pitch black darkness (shows background '0')
       rowChars += '.';
     }
     renderedRows.push(rowChars);
@@ -677,6 +683,9 @@ function drawScreen() {
 // ==========================================
 
 function initStage(stageIndex) {
+  // Increment session ID to immediately cancel all previous recursive loops
+  const session = ++gameSessionId;
+
   currentStage = stageIndex;
   const mapData = levels[currentStage];
 
@@ -693,6 +702,8 @@ function initStage(stageIndex) {
   audioTimer = 0;
   nextHeartbeatTime = 0;
   nextAmbientTime = 6000;
+  elapsedStalkerTimer = 0;
+  passiveBatteryTimer = 0;
 
   keyX = -1; keyY = -1;
   stalkerX = -1; stalkerY = -1;
@@ -730,6 +741,11 @@ function initStage(stageIndex) {
   // HUD announcement
   const keyMsg = keyX !== -1 ? " | KEY: REQ" : "";
   showMessage("STAGE " + (currentStage + 1) + "/10" + keyMsg + " | ECHO:" + echoCharges);
+
+  // Launch clean recursive loops for this new session
+  scheduleStalkerLoop(session);
+  scheduleAudioLoop(session);
+  scheduleBatteryLoop(session);
 }
 
 // ==========================================
@@ -761,7 +777,7 @@ function triggerEcho() {
   const keyMsg = keyX !== -1 ? (hasKey ? " | KEY: YES" : " | KEY: REQ") : "";
   showMessage("STAGE " + (currentStage + 1) + "/10" + keyMsg + " | ECHO:" + echoCharges);
 
-  // Wave fades back to dark after 1.1 seconds
+  // Wave fades back to dark after 1.1 seconds via after()
   after(1100, () => {
     isEchoing = false;
     drawScreen();
@@ -1020,7 +1036,82 @@ function getClosestStalkerDist() {
 }
 
 // ==========================================
-// 12. INPUT MAPPINGS & DYNAMIC GAME TICK
+// 12. RECURSIVE TIMING LOOPS (REPLACING EVERY)
+// ==========================================
+
+// Recursive 50ms stalker movement and stun timer countdown loop
+function scheduleStalkerLoop(sessionId) {
+  if (sessionId !== gameSessionId) return; // Discard outdated loops from previous stages
+
+  if (!isGameOver && !isGameWon && !stageCleared) {
+    if (stunTimer > 0) {
+      stunTimer--;
+    } else {
+      elapsedStalkerTimer += 50;
+      const currentSpeed = stalkerSpeeds[currentStage] || 800;
+      if (elapsedStalkerTimer >= currentSpeed) {
+        elapsedStalkerTimer = 0;
+        updateStalkers();
+      }
+    }
+  }
+
+  after(50, () => scheduleStalkerLoop(sessionId));
+}
+
+// Recursive 100ms dynamic audio heartbeat & cavern ambient drone loop
+function scheduleAudioLoop(sessionId) {
+  if (sessionId !== gameSessionId) return;
+
+  if (!isGameOver && !isGameWon && !stageCleared) {
+    audioTimer += 100;
+
+    if (stunTimer <= 0) {
+      const dist = getClosestStalkerDist();
+
+      if (dist <= 3) {
+        if (audioTimer >= nextHeartbeatTime) {
+          sfx('110:50, 75:80, 55:100'); // Rapid panic heartbeat
+          nextHeartbeatTime = audioTimer + 700; // Pulse every 700ms
+        }
+      } else if (dist <= 5) {
+        if (audioTimer >= nextHeartbeatTime) {
+          sfx('85:60, 60:90'); // Tense rhythmic thud
+          nextHeartbeatTime = audioTimer + 1400; // Pulse every 1.4s
+        }
+      } else {
+        if (audioTimer >= nextAmbientTime) {
+          sfx('98:120, 110:140, 82:200'); // Creepy subterranean cavern resonance
+          nextAmbientTime = audioTimer + 9000; // Plays every 9 seconds
+        }
+      }
+    }
+  }
+
+  after(100, () => scheduleAudioLoop(sessionId));
+}
+
+// Recursive 1000ms passive battery trickle charge loop (1 charge every 4s)
+function scheduleBatteryLoop(sessionId) {
+  if (sessionId !== gameSessionId) return;
+
+  if (!isGameOver && !isGameWon && !stageCleared) {
+    passiveBatteryTimer++;
+    if (passiveBatteryTimer >= 4) {
+      passiveBatteryTimer = 0;
+      const maxCharges = currentStage < 3 ? 8 : currentStage < 6 ? 6 : 5;
+      if (echoCharges < maxCharges) {
+        echoCharges++;
+        drawScreen();
+      }
+    }
+  }
+
+  after(1000, () => scheduleBatteryLoop(sessionId));
+}
+
+// ==========================================
+// 13. INPUT MAPPINGS & INITIALIZATION
 // ==========================================
 
 onInput('w', () => move(0, -1));
@@ -1046,66 +1137,6 @@ onInput('i', () => {
 
 onInput('k', () => fireFrostfire());
 onInput('l', () => initStage(currentStage));
-
-// Dynamic 50ms game loop accumulator for accurate per-stage monster speeds
-let elapsedStalkerTimer = 0;
-every(50, () => {
-  if (isGameOver || isGameWon || stageCleared) return;
-
-  if (stunTimer > 0) {
-    stunTimer--;
-    return;
-  }
-
-  elapsedStalkerTimer += 50;
-  const currentSpeed = stalkerSpeeds[currentStage] || 800;
-  if (elapsedStalkerTimer >= currentSpeed) {
-    elapsedStalkerTimer = 0;
-    updateStalkers();
-  }
-});
-
-// Dynamic audio loop: proximity heartbeat warning and subtle cavern ambient drone
-every(100, () => {
-  if (isGameOver || isGameWon || stageCleared) return;
-  audioTimer += 100;
-
-  if (stunTimer > 0) return;
-
-  const dist = getClosestStalkerDist();
-
-  if (dist <= 3) {
-    if (audioTimer >= nextHeartbeatTime) {
-      sfx('110:50, 75:80, 55:100'); // Rapid panic heartbeat
-      nextHeartbeatTime = audioTimer + 700; // Pulse every 700ms
-    }
-  } else if (dist <= 5) {
-    if (audioTimer >= nextHeartbeatTime) {
-      sfx('85:60, 60:90'); // Tense rhythmic thud
-      nextHeartbeatTime = audioTimer + 1400; // Pulse every 1.4s
-    }
-  } else {
-    if (audioTimer >= nextAmbientTime) {
-      sfx('98:120, 110:140, 82:200'); // Creepy subterranean cavern resonance
-      nextAmbientTime = audioTimer + 9000; // Plays every 9 seconds
-    }
-  }
-});
-
-// Passive battery trickle charge: restore 1 charge every 4 seconds
-let passiveBatteryTimer = 0;
-every(1000, () => {
-  if (isGameOver || isGameWon || stageCleared) return;
-  passiveBatteryTimer++;
-  if (passiveBatteryTimer >= 4) {
-    passiveBatteryTimer = 0;
-    const maxCharges = currentStage < 3 ? 8 : currentStage < 6 ? 6 : 5;
-    if (echoCharges < maxCharges) {
-      echoCharges++;
-      drawScreen();
-    }
-  }
-});
 
 // Start game on Stage 1
 initStage(0);
