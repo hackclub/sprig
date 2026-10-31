@@ -2,6 +2,7 @@
 @title: Cyber Heist: Protocol Zero
 @author: Mohammed Touffeq
 @tags: ['stealth', 'action', 'puzzle', 'cyberpunk', 'boss']
+@addedOn: 2026-10-31
 @description: A 6-floor tactical stealth game! Infiltrate corporate mega-vaults, evade patrolling robotic guards, push EMP power cells to disable deadly laser grids, and hack the central AI core!
 */
 
