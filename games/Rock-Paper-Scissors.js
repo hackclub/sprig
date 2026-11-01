@@ -1,12 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Test
-@description: 
-@author: 
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@title: Rock paper scissors
+@author: james
+@description: It's a simple Rock Paper Scissors game, and it's the first game I've ever coded, so sorry if it seems a little simple!
+@tags: ['2 players game']
+@addedOn: 2026-11-01
 */
 
 const rock = "r"
@@ -48,7 +45,7 @@ setLegend(
 .....1221.......
 ......11........
 ................`],
-  [ scissoors, bitmap`
+  [ scissors, bitmap`
 ................
 ..1.........11..
 ..11.......11...
