@@ -3,7 +3,7 @@
 @description: Dont get hit by untextured blocks
 @author: Kitulik
 @tags: ['Untextured', 'road', 'easy']
-@addedOn: 2025-00-00
+@addedOn: 2026-11-01
 */
 
 /*Variables*/
