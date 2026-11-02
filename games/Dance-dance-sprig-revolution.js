@@ -1,3 +1,11 @@
+/*
+@title: Dance dance sprig revolution
+@author: chokymilkyway
+@description: A little ddr clone i made in a day to test out this silly fantasy console
+@tags: ['music']
+@addedOn: 2026-11-02
+*/
+
 const lefttouch = "o";
 const left = "l";
 const up = "u";
