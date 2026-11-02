@@ -3,18 +3,9 @@ First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
 @title: Egg Saves
-@description: An Egg saving Turtle named bro , player Egg collects some tools to defuse bombs that are blocking turtles way home and keeping tutle caged, 
-              rocks are also obstacles that can be pushed to clear ways to home or to create one through 5 levels. 
-              Egg's mission is to get 'Bro' to the house and earn "Together Again!" ending but if 
-              - we get to home alone warning appears "No Life Without Bro" and you can continue saving bro.
-              - we get to home alone but with tools, ending unlocks "Survivor" and you passed and failed at the same -> press 'K' continuw to next level.
-              - we get to home with bro and tools, ending unlocks "Prepared for Anything" -> press 'K' continuw to next level.
-              - if somehow we push rock over the house, ending unlocks "House Curshed!" and automatic we get are at level 1. 
-              - also remember tools are rare and important so if you push rock ove it, it will crush it. 
-              press "J" to reset the level , "I" to mute and unmute background tune.
-              Egg movement -> "W" for UP ; "A" for Left ; "S" for Down ; "D" for Right. 
+@description: A five-level puzzle adventure where Egg must collect tools, defuse bombs, push rocks, and help his turtle friend Bro reach home.
 @author: Khaja Yousuf Uddin
-@tags: ['tag1', 'tag2']
+@tags: ['puzzle', 'adventure', 'strategy']
 @addedOn: 2026-11-03
 */
 
