@@ -39469,11 +39469,11 @@ const levels = [
 ];
 
 
-// Load the initial frame/level
+// Load the level
 setMap(levels[level]);
 
-// Advance frames automatically using setInterval
+// Play the frames
 setInterval(() => {
   level = (level + 1) % levels.length;
   setMap(levels[level]);
-}, 100); // 100ms per frame (adjust this number to make the animation faster or slower)
+}, 100); 
