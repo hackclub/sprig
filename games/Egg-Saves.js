@@ -12,11 +12,10 @@ https://sprig.hackclub.com/gallery/getting_started
               - if somehow we push rock over the house, ending unlocks "House Curshed!" and automatic we get are at level 1. 
               - also remember tools are rare and important so if you push rock ove it, it will crush it. 
               press "J" to reset the level , "I" to mute and unmute background tune.
-              Egg movement -> "W" for UP ; "A" for Right ; "S" for Down ; "D" for Left. 
-@author: Khaja Yousuf Uddin 
-@Github: YousufProjs-exe 
+              Egg movement -> "W" for UP ; "A" for Left ; "S" for Down ; "D" for Right. 
+@author: Khaja Yousuf Uddin
 @tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@addedOn: 2026-11-03
 */
 
 const player = "p"
