@@ -14,6 +14,7 @@ import {
 	githubRequest,
 	hasLabel,
 	inferSubmissionMetadata,
+	isReviewCommitOutdated,
 	parseTags,
 	readGitHubEvent,
 	removeLabel,
@@ -32,7 +33,7 @@ import {
 	findDuplicateGroup,
 	parseOlderNotice,
 } from "./duplicate-detection.mjs";
-import { autoReviewLabelChanges, reconcileReviewStatus } from "./review-state.mjs";
+import { autoReviewLabelChanges, getActiveReviewCommits, reconcileReviewStatus } from "./review-state.mjs";
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
@@ -523,11 +524,31 @@ function readFileSafe(filePath) {
 	}
 }
 
-async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha }) {
+async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha, pullFiles }) {
 	if (!reviewers || reviewers.size === 0) return "unknown";
 	try {
 		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
-		return reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha });
+		const pendingCommits = getActiveReviewCommits({ reviews, reviewers, authorLogin, headSha });
+		const outdatedCommitIds = new Set();
+		for (const commitId of pendingCommits) {
+			const isOutdated = await isReviewCommitOutdated({
+				owner,
+				repo,
+				token,
+				prNumber,
+				commitId,
+				headSha,
+				submissionFiles: pullFiles,
+			});
+			if (isOutdated) outdatedCommitIds.add(commitId);
+		}
+		return reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin,
+			headSha,
+			isCommitOutdated: (cid) => !cid || (cid !== headSha && outdatedCommitIds.has(cid)),
+		});
 	} catch (e) {
 		console.warn("Unable to fetch reviews; skipping review reconciliation:", e.message);
 		return "unknown";
@@ -545,6 +566,7 @@ async function applyLabels(result) {
 		reviewers,
 		authorLogin: pullRequest.user?.login,
 		headSha: pullRequest.head?.sha,
+		pullFiles,
 	});
 	const changes = autoReviewLabelChanges({
 		labels: currentLabels,

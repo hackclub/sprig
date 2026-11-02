@@ -276,6 +276,49 @@ export function daysBetween(start, end = new Date()) {
 	return Math.floor((endTime - startTime) / 86_400_000);
 }
 
+export async function isReviewCommitOutdated({ owner, repo, token, prNumber, commitId, headSha, submissionFiles }) {
+	if (!commitId || !headSha || commitId === headSha) return false;
+	try {
+		const files = submissionFiles ?? (await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/files`));
+		const submissionFileObjects = files.filter((f) => {
+			const fn = typeof f === "string" ? f : f.filename;
+			return fn.toLowerCase().startsWith("games/");
+		});
+		if (submissionFileObjects.length === 0) return true;
+
+		for (const file of submissionFileObjects) {
+			const filename = typeof file === "string" ? file : file.filename;
+			const targetHeadSha =
+				typeof file === "object" && file?.sha
+					? file.sha
+					: await getFileBlobSha({ owner, repo, token, path: filename, ref: headSha });
+			if (!targetHeadSha) return true;
+
+			const commitBlobSha = await getFileBlobSha({ owner, repo, token, path: filename, ref: commitId });
+			if (!commitBlobSha || commitBlobSha !== targetHeadSha) {
+				return true;
+			}
+		}
+
+		return false;
+	} catch {
+		return true;
+	}
+}
+
+async function getFileBlobSha({ owner, repo, token, path: filePath, ref }) {
+	try {
+		const data = await githubRequest(
+			token,
+			"GET",
+			`/repos/${owner}/${repo}/contents/${filePath.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(ref)}`
+		);
+		return data?.sha ?? null;
+	} catch {
+		return null;
+	}
+}
+
 export function getMetadataValue(content, key) {
 	const match = content.match(new RegExp(String.raw`@${key}:[^\S\r\n]*([\s\S]*?)(?=\r?\n\s*\*?\s*@|\r?\n\s*\*\/|\*\/)`, "i"));
 	if (!match?.[1]) return "";
