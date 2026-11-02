@@ -1,3 +1,11 @@
+/*
+@title: Badapple
+@author: ProPro9
+@description: Bad apple but on the sprig (no audio)
+@tags: ['music']
+@addedOn: 2026-11-02
+*/
+
 const player = "p";
 
 setLegend(
