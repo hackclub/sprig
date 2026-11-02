@@ -76,10 +76,18 @@ const level = map`
 ..........
 ..........`;
 
+const GAP = 3;      // how tall the hole is
+const SPACING = 8;  // ticks between pipes
+
 let score = 0;
 let dead = false;
 
 setMap(level);
+
+// is Mario standing inside a pipe right now?
+function hitPipe(m) {
+  return getTile(m.x, m.y).some(s => s.type === pipe);
+}
 
 // flap
 function flap() {
@@ -91,16 +99,20 @@ function flap() {
     clearText();
     return;
   }
-  getFirst(mario).y -= 2;
+  const m = getFirst(mario);
+  m.y -= 2;
+
+  // flapping into a pipe counts too
+  if (hitPipe(m)) die();
 }
 
 ["w", "a", "s", "d", "i", "j", "k", "l"].forEach(k => onInput(k, flap));
 
 // make a pipe on the right with a hole in it
 function makePipe() {
-  const hole = Math.floor(Math.random() * 6);
+  const hole = Math.floor(Math.random() * (8 - GAP));
   for (let i = 0; i < 8; i++) {
-    if (i !== hole && i !== hole + 1) addSprite(9, i, pipe);
+    if (i < hole || i >= hole + GAP) addSprite(9, i, pipe);
   }
 }
 
@@ -121,26 +133,30 @@ setInterval(() => {
     return;
   }
 
+  // fell into a pipe
+  if (hitPipe(m)) {
+    die();
+    return;
+  }
+
   // move pipes
   getAll(pipe).forEach(p => {
-    if (p.x === 0) p.remove();
-    else p.x -= 1;
+    if (p.x === 0) {
+      // the bottom block of every pipe is always there, so count once per pipe
+      if (p.y === 7) {
+        score++;
+        clearText();
+        addText("" + score, { x: 1, y: 1, color: color`0` });
+      }
+      p.remove();
+    } else p.x -= 1;
   });
 
-  // new pipe every 6 ticks
-  if (t % 6 === 0) makePipe();
+  // new pipe every SPACING ticks
+  if (t % SPACING === 0) makePipe();
 
-  // hit a pipe?
-  getTile(m.x, m.y).forEach(s => {
-    if (s.type === pipe) die();
-  });
-
-  // score
-  if (t % 6 === 3 && t > 20) {
-    score++;
-    clearText();
-    addText("" + score, { x: 1, y: 1, color: color`0` });
-  }
+  // a pipe moved into Mario?
+  if (hitPipe(m)) die();
 }, 250);
 
 function die() {
