@@ -4,7 +4,7 @@
 @description: Used the maze template and added my own twists to end up with this!
 @author: Noah Basilio Oliveira
 @tags: ["maze", "puzzle"]
-@addedOn: 2023-08-08
+@addedOn: 2026-11-04
 */
 
 const player = "p"
