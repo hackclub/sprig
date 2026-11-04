@@ -3,7 +3,7 @@
 @title: Maze Game
 @description: Used the maze template and added my own twists to end up with this!
 @author: Noah Basilio Oliveira
-@tags: []
+@tags: ["maze", "puzzle"]
 @addedOn: 2023-08-08
 */
 
