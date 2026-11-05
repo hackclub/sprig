@@ -1,6 +1,6 @@
 /* 
 @title: Maze Game
-@description: Used the maze template and added my own twists to end up with this!
+@description: You are a person who (somehow) ended up deep inside a cave; you have no idea where you are, and now, you must escape, or else you may never see the light of day ever again! Good luck!
 @author: Noah Basilio Oliveira
 @tags: ["maze", "puzzle"]
 @addedOn: 2026-11-04
