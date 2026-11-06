@@ -1,252 +1,317 @@
 /*
-@title: infinity Friendship!!! <3
-@author: nooraldeen salman
-@description: Friendship!!! <3" is a strategy puzzle game where players control Vera Vertical, who can move up and down, and Horace Horizontal, who can move left and right. The objective is to navigate both characters to their respective goals by working together and pushing each other.
-@tags: ['strategy']
-@addedOn: 2026-10-24
+@title: robot escape67676767
+@description: robot escape 67676767is a game that you need to escape from fire and get to the portal to win 
+@author: miqdad salman
+@tags: ['action']
+@addedOn: 2026-11-6
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 */
 
-const vera = "v";
-const horace = "h";
-const box = "b";
-const goal = "g";
-const wall = "w";
+const player = "p"
+const knife = "k"
+const wall = "w"
+const portal = "e"
+const key = "y"
+const black = "b";
+let score = 0;
+let totalKeysCollected = 0; 
+const colors = [ color`L`, color`1`, color`3`, color`C`, color`7`, color`5`, color`6`, color`F`, color`4`, color`D`, color`8`, color`H`, color`9` ]
+var win = false;
+var pointsInt = 0;
+var notCheating = false;
+var text = addText("points: ", { y: 14, x: 2, color: color`0` });
+
+const melody = tune `
+500: C4-500,
+500: D4-500 + C4^500 + G4~500 + F4~500,
+500: D4-500 + E4-500 + C4^500 + G4~500 + A4~500,
+500: E4-500 + F4-500 + D4^500 + C4-500 + B4~500,
+500: F4-500 + G4-500 + D4^500 + C4-500 + D5~500,
+500: G4-500 + A4-500 + E4^500 + F4^500 + D4-500,
+500: A4-500 + F4^500 + E4-500 + C4~500 + D4~500,
+500: B4-500 + G4^500 + A4^500 + E4-500 + D4~500,
+500: C5-500 + D5-500 + A4^500 + F4-500 + G4-500,
+500: D5-500 + E5-500 + A4^500 + B4^500 + G4-500,
+500: E5-500 + C5^500 + B4^500 + G4-500 + F4~500,
+500: E5-500 + D5-500 + B4^500 + A4^500 + F4-500,
+500: D5-500 + C5-500 + A4^500 + G4^500 + E4-500,
+500: C5-500 + B4-500 + G4^500 + F4^500 + E4-500,
+500: B4-500 + A4-500 + F4^500 + D4-500 + C5/500,
+500: A4-500 + G4-500 + F4^500 + E4^500 + C4-500,
+500: F4-500 + E4^500 + D4^500 + C4^500 + G4/500,
+500: E4-500 + D4^500 + C4^500 + F4/500,
+500: D4-500 + C4-500 + E4/500,
+500: C4-500 + D4/500,
+500: D4/500,
+5500`
+
+const background = tune `
+500: A4~500,
+500: C5~500 + A4~500,
+500: D5-500 + A4~500 + B4~500 + C5/500,
+500: E5-500 + B4~500 + G4~500 + A4~500 + D5~500,
+500: F5-500 + B4~500 + A4~500 + D5~500 + C5^500,
+500: G5-500 + B4~500 + C5^500 + E5~500 + A4^500,
+500: G5-500 + B4~500 + D5^500 + E5~500 + C5^500,
+500: G5-500 + C5~500 + D5^500 + E5^500 + A4^500,
+500: G5-500 + C5~500 + D5~500 + E5~500 + A4^500,
+500: G5-500 + C5^500 + D5^500 + E5^500 + B4^500,
+500: D5^500 + C5^500 + F5^500 + E5^500 + A4^500,
+500: A5-500 + D5^500 + C5^500 + F5^500 + E5^500,
+500: D5^500 + C5^500 + F5^500 + E5^500 + A4^500,
+500: G5-500 + E5~500 + C5~500 + D5^500 + F5^500,
+500: F5-500 + E5^500 + C5~500 + D5^500 + G5^500,
+500: E5^500 + C5~500 + G5^500 + D5^500 + B4^500,
+500: D5-500 + E5^500 + C5~500 + F5^500 + G5^500,
+500: C5~500 + F5^500 + D5~500 + G5^500 + E5^500,
+500: C5-500 + F5^500 + D5~500 + G5^500 + E5^500,
+500: C5~500 + E5~500 + D5~500 + G5^500 + A5^500,
+500: C5~500 + E5~500 + D5~500 + F5~500 + A5^500,
+500: C5^500 + D5~500 + E5~500 + A5^500 + E4^500,
+500: F5-500 + E5~500 + C5~500 + B5^500 + A5^500,
+500: E5~500 + B4~500 + A4~500 + B5^500 + C5^500,
+500: D5~500 + C5^500 + B5^500 + B4^500 + G5/500,
+500: C5^500 + B5^500 + D5^500 + G5/500 + A5/500,
+500: C5^500 + B4~500 + D5^500 + G5/500 + A5/500,
+500: E4-500 + C5~500 + B4~500 + D5^500 + A5/500,
+500: C5-500 + D5^500 + A5/500 + B5/500,
+500: E4-500 + B5/500,
+500: C5-500 + B5/500,
+500: E4-500`
+const playback = playTune(background, Infinity);
 
 setLegend(
-  [ vera, bitmap`
-..333333333333..
-...3333333333...
-....33666633....
-....33644633....
-....33644633....
-....36444463....
-....36400463....
-....36400463....
-....36400463....
-....36400463....
-....36444463....
-....33644633....
-....33644633....
-....33666633....
-...3333333333...
-..333333333333..`],
-  [ horace, bitmap`
+  [player, bitmap`
+0000000000000000
+0111111111111110
+0166LLLLLLLL6610
+0166LL3LL3LL6610
+0166LLLLLLLL6610
+01663LLLLLL36610
+0166333333336610
+0166444444446610
+01664L4L4L4L6610
+0166444444446610
+0166666666666610
+0166666666666610
+0166666666666610
+0166666666666610
+0111111111111110
+0000000000000000`],
+  [knife, bitmap`
 ................
 ................
-3..............3
-33............33
-3333333333333333
-3333366666633333
-3366644444466633
-3364440000444633
-3364440000444633
-3366644444466633
-3333366666633333
-3333333333333333
-33............33
-3..............3
+................
+................
+................
+................
+................
+.......33.......
+......3663......
+.....369963.....
+....36933963....
+...3693663963...
+..369369963963..
+.369369CC963963.
+369369CCCC963963
+4444444444444444`],
+  [wall, bitmap`
+................
+................
+................
+.......D.D......
+.....DDDDDD.....
+....DD3DDDDD....
+....DDDDD3DD....
+...D3DDCDDDD....
+...DDDCCCCD.....
+...DD3DCCCD.....
+...D3DDCC.3D....
+...DDD.CC..D....
+....D..CC.......
+.......CC.......
+.......CC.......
+................`],
+  [portal, bitmap`
+.......4........
+.....44444......
+....44DDD4......
+....4DD44D4.....
+....4DD44D4.....
+...44D444D4.....
+...4D4474D44....
+...4D44744D4....
+...4DD4744D4....
+...44DD44DD4....
+....44DDDD44....
+......44DD4.....
+........444.....
+................
 ................
 ................`],
-  [ box, bitmap`
+  [key, bitmap`
 ................
 ................
 ................
-...888888888....
-...8...8...8....
-...888888888....
-...888888888....
-...888888888....
-...888888888....
-...8...8...8....
-...8...8...8....
-...888888888....
 ................
 ................
+.......6........
+......6.6.......
+.......6........
+.......6........
+......66........
+.......6........
 ................
-................`],
-  [ goal, bitmap`
 ................
-................
-................
-...2020202020...
-...0........2...
-...2........0...
-...0........2...
-...2........0...
-...0........2...
-...2........0...
-...0........2...
-...2........0...
-...0202020202...
 ................
 ................
 ................`],
-  [ wall, bitmap`
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111
-1111111111111111`]
+
 );
 
 
-// Game level gen stuff... kinda hacked together but it works lol
-let level = 1;
-let currentMap = "";
+let level = 0
+const levels = [
+  map`
+..e.........
+............
+..y...k.....
+......kk....
+............
+............
+............
+..p...y..e..`,
+  map`
+.ew..
+.www.
+p..k.
+y....`,
+  map`
+....k
+.....
+.ye..
+.....
+p....`,
+  map`
+kw.w.
+..w.w
+.wwww
+py...
+.wwww
+....e`,
+  map`
+............
+.w.w.y.www..
+.wyy..y..www
+w.yyywyyw...
+wew..y.www.w
+.wp.w.kyww..
+.w.w.w..yy..
+..w.....y...`,
+  map`
+kw.......
+.w.w.w.w.
+.w.w.wyw.
+pw.wyw.w.
+.w.w.w.wy
+.w.w.w.w.
+.y.....ey`,
+  map`
+.........w..
+....ww....w.
+.....w...y..
+www.ww.ww.ew
+...w...y.www
+.www.....ww.
+....y.......
+k.p.........`,
+];
 
-// helper to get random num. always forget if Math.floor is needed
-function randInt(n) {
-  return Math.floor(Math.random() * n);
-}
-
-function makeLevel() {
-  const size = 5;
-  // TODO: clean up these variable names later, too many single letters xD
-  let vx, vy, hx, hy, goalY, goalX, used;
-
-  // retry until all four spots are different cells
-  // NOTE: sometimes this loops a bit too much if size is small, but 5x5 is fine
-  do {
-    vx = randInt(size);
-    vy = randInt(size);
-    hx = randInt(size);
-    hy = randInt(size);
-    goalY = randInt(size); // goal in Vera's column
-    goalX = randInt(size); // goal in Horace's row
-    
-    // creating coordinate strings to check for overlaps
-    let v_coord = vx + "," + vy;
-    let h_coord = hx + "," + hy;
-    let g1_coord = vx + "," + goalY;
-    let g2_coord = goalX + "," + hy;
-    
-    used = [v_coord, h_coord, g1_coord, g2_coord];
-  } while (new Set(used).size < 4); // making sure nothing overlaps awkwardly
-
-  // build an empty grid first
-  const grid = [];
-  for (let y = 0; y < size; y++) {
-    // filling with dots for empty spaces
-    let rowArr = Array(size).fill(".");
-    grid.push(rowArr);
-  }
-  
-  // place stuff down on the grid
-  grid[goalY][vx] = goal;
-  grid[hy][goalX] = goal;
-  grid[vy][vx] = vera;
-  grid[hy][hx] = horace;
-
-  // convert 2d array to string map format expected by the engine
-  let mapString = "";
-  for(let i=0; i<grid.length; i++) {
-    mapString += grid[i].join("") + "\n";
-  }
-  
-  // trimming last newline just in case
-  return mapString.trim();
-}
-
-function startLevel() {
-  clearText();
-  currentMap = makeLevel();
-  setMap(currentMap);
-  
-  // showing current level on screen
-  // 3 is usually yellow/orange depending on palette
-  addText("level " + level, { x: 1, y: 0, color: color`3` });
-}
-
-// kick off the first level!
-startLevel();
-
-
-
-// skip / force new level on 'k' 
-onInput("k", () => {
-  startLevel();
-});
-
-// check win condition after every move
-afterInput(() => {
-  const numGoals = tilesWith(goal).length;
-  
-  // checking what's currently covering the goals
-  const covered =
-    tilesWith(goal, vera).length +
-    tilesWith(goal, horace).length +
-    tilesWith(goal, box).length;
-
-  // if everything is covered, move to next level
-  if (covered === numGoals) {
-    level = level + 1; // level++ also works but whatever
-    startLevel();
-  }
-});
-
-
-onInput("w", () => {
-  getFirst(vera).y -= 1;
-});
+setMap(levels[level]);
+setSolids([player, wall]);
+let keysCollected = 0; 
 
 onInput("s", () => {
-  getFirst(vera).y += 1;
+  movePlayer(0, 1);
+});
+
+onInput("w", () => {
+  movePlayer(0, -1);
 });
 
 onInput("a", () => {
-  getFirst(horace).x -= 1;
+  movePlayer(-1, 0);
 });
 
 onInput("d", () => {
-  getFirst(horace).x += 1;
+  movePlayer(1, 0);
 });
 
-onInput("j", () => {
-  const currentLevel = levels[level];
-  if (currentLevel !== undefined) {
-    // setText("");
-    setMap(currentLevel);
+function movePlayer(dx, dy) {
+  const pSpr = getFirst(player);
+  const nTile = getTile(pSpr.x + dx, pSpr.y + dy);
+  
+  if (win) return
+  if (nTile.some(s => s.type === key)) {
+    nTile.filter(s => s.type === key).forEach(s => s.remove());
+    keysCollected++;
+    totalKeysCollected++;
+    playTune(melody)
+    score++;
   }
-});
-
-setSolids([ vera, horace, box, wall ]);
-
-setPushables({
-  [ vera ]: [ box, vera, horace ],
-  [ horace ]: [ box, horace, vera ]
-});
-
-afterInput(() => {
-
-  const numGoals = tilesWith(goal).length;
-
-  const goalsCoveredByVera = tilesWith(goal, vera).length;
-  const goalsCoveredByHorace = tilesWith(goal, horace).length;
-  const goalsCoveredByBoxes = tilesWith(goal, box).length;
-  const goalsCovered = goalsCoveredByVera + goalsCoveredByHorace + goalsCoveredByBoxes;
-
-  if (goalsCovered === numGoals) {
-    // increase the current level number
-    level = level + 1;
-
-    const currentLevel = levels[level];
-
-    // make sure the level exists and if so set the map
-    if (currentLevel !== undefined) {
-      setMap(currentLevel);
+  
+  if (nTile.some(s => s.type === portal)) {
+    pSpr.x = 0;
+    pSpr.y = 0;
+    
+    if (level < levels.length - 1) {
+      level++;
+      setMap(levels[level]);
+      keysCollected = 0; 
     } else {
-      addText("you win!", { y: 4 });
+      console.log("beat game lol");
+      clearText()
+      addText("Final Score: "+score, {y:4, color: color`3`});
+      win = true;
+      addText("you won67676767676767!", {x: 5, y: 0, color: color`3`});
+      pointsInt -= 6767676767;
+      addText(pointsInt.toString(), { y: 14, x: 10, color: colors[Math.floor(Math.random() * colors.length)] });
+      if (playback) playback.end();
     }
   }
-});
+  
+  if (nTile.every(s => s.type !== wall)) {
+    pSpr.x += dx;
+    pSpr.y += dy;
+  }
+  
+  if (keysCollected === 2 && pSpr.x === 2 && pSpr.y === 0) {
+    // TODO: cleanup log later
+    console.log("reached level dest");
+  }
+}
+
+afterInput(() => {
+  if (win) return
+  clearText();
+  addText("score: "+score, { y: 4 , color: color`3`} );
+  const pSpr = getFirst(player);
+  const kSpr = getFirst(knife);
+
+  if (kSpr) {
+    const dx = pSpr.x - kSpr.x;
+    const dy = pSpr.y - kSpr.y;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      kSpr.x += Math.sign(dx);
+    } else {
+      kSpr.y += Math.sign(dy);
+    }
+
+    if (pSpr.x === kSpr.x && pSpr.y === kSpr.y) {
+      setMap(levels[level]);
+    }
+  }
+});//please aprove it that the best game for me
