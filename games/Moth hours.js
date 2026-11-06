@@ -1,12 +1,13 @@
 /*
-title: moth hours
-author: Sushank Sukesh
-tags: ['survival', 'arcade']
-date submitted: 11-5-2026
+    @title: Moth hours
+    @author: Sushank Sukesh
+    @description: An insect survival game where you play as a moth hunting down fireflies
+    @tags: ['survival', 'arcade']
+    @addedOn: 2025-11-05
 */
 
 //you are a moth and it is a long night.
-//eat the fireflies, dodge the spiders, and try to live until dawn.
+//eat the fireflies, dodge the spiders, and try to live until dawn
 //controls: w a s d to fly, j to start/play again
 
 const moth = "m";
