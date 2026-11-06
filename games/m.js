@@ -1,12 +1,9 @@
 /*
 @title: robot escape67676767
-@description: robot escape 67676767is a game that you need to escape from fire and get to the portal to win 
 @author: miqdad salman
+@description: robot escape 67676767is a game that you need to escape from fire and get to the portal to win
 @tags: ['action']
-@addedOn: 2026-11-6
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
+@addedOn: 2026-11-06
 */
 
 const player = "p"
