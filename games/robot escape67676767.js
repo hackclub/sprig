@@ -1,9 +1,9 @@
 /*
-@title: Banana runner
-@description: "Among Us Maze" was made for Hack Club's Hackathon Assemble. You navigate a maze with an Among Us character in the middle trying not to hit the walls because they deduct points from your total.
-@author: Aaron Lei
-@tags: ['endless']
-@addedOn: 2024-07-11
+@title: robot escape67676767
+@description: robot escape67676767 is a maze game that you need to escape from the fire that chases you an get to the robot
+@author: miqdad
+@tags: ['action']
+@addedOn: 2026-11-6
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
