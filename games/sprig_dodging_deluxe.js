@@ -1,9 +1,9 @@
  /*
-@title: sprig_dodging
+@title: sprig_dodging_deluxe
 @description: Dodge the obstacles and learn how to use Sprig with an enhanced dodge game! Use W, A, S, D to move, avoid obstacles, and survive as long as possible.
 @author: sam liu, lucas, and you
 @tags: ['tutorial', 'arcade']
-@addedOn: 2022-12-15
+@addedOn: 2026-11-06
 */
 
 // define the sprites in our game
