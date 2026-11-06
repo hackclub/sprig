@@ -1,3 +1,10 @@
+/*
+@title: A Little Birthday Adventure
+@author: Rupak Jena
+@description: A cozy fairytale adventure with quests, flowers, stars, and a special surprise.
+@tags: ['adventure', 'exploration']
+@addedOn: 2026-11-06
+*/
 
 const player = "p";
 const grass = "g";
