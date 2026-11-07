@@ -37,6 +37,7 @@ export class SandboxedGameController implements SandboxedGameControllerHandle {
 	private readonly queuedMessages: ParentToSandboxMessage[] = []
 	private ready = false
 	private muted = false
+	private lastRun: ParentToSandboxMessage | null = null
 
 	constructor(
 		private readonly iframe: HTMLIFrameElement,
@@ -46,6 +47,7 @@ export class SandboxedGameController implements SandboxedGameControllerHandle {
 		if (!frameWindow) throw new Error('Sandbox iframe is not ready')
 		this.frameWindow = frameWindow
 		window.addEventListener('message', this.handleMessage)
+		this.frameWindow.postMessage({ type: 'PING' } satisfies ParentToSandboxMessage, '*')
 	}
 
 	markReady(): void {
@@ -57,11 +59,14 @@ export class SandboxedGameController implements SandboxedGameControllerHandle {
 	}
 
 	run(code: string): void {
-		this.send({ type: 'RUN_GAME', channelId: this.channelId, code, muted: this.muted })
+		const message: ParentToSandboxMessage = { type: 'RUN_GAME', channelId: this.channelId, code, muted: this.muted }
+		this.lastRun = message
+		this.send(message)
 		this.focus()
 	}
 
 	stop(): void {
+		this.lastRun = null
 		this.send({ type: 'STOP_GAME', channelId: this.channelId })
 	}
 
@@ -97,9 +102,6 @@ export class SandboxedGameController implements SandboxedGameControllerHandle {
 	}
 
 	private post(message: ParentToSandboxMessage): void {
-		// Sandboxed iframes without allow-same-origin have an opaque origin, so
-		// targetOrigin must be '*'. The receiving window and channel id are still
-		// validated on both sides.
 		this.frameWindow.postMessage(message, '*')
 	}
 
@@ -108,7 +110,13 @@ export class SandboxedGameController implements SandboxedGameControllerHandle {
 		if (!isSandboxToParentMessage(event.data)) return
 
 		if (event.data.type === 'READY') {
-			this.markReady()
+			if (!this.ready) {
+				this.markReady()
+				return
+			}
+			this.post({ type: 'INIT', channelId: this.channelId })
+			this.post({ type: 'MUTE_CHANGED', channelId: this.channelId, muted: this.muted })
+			if (this.lastRun) this.post({ ...this.lastRun, muted: this.muted } as ParentToSandboxMessage)
 			return
 		}
 
