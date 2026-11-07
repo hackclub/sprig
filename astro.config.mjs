@@ -34,6 +34,18 @@ export default defineConfig({
       host: true, // Allow access from non-localhost domains
       cors: true, // Allow CORS (optional)
     },
+		resolve: {
+			dedupe: [
+				'@codemirror/state',
+				'@codemirror/view',
+				'@codemirror/language',
+				'@codemirror/lint',
+				'@codemirror/autocomplete',
+				'@lezer/common',
+				'@lezer/highlight',
+				'@lezer/lr'
+			]
+		},
 		optimizeDeps: {
 			exclude: ['https']
 		},
