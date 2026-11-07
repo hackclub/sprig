@@ -124,5 +124,6 @@ window.addEventListener('keydown', (event) => {
 const secret = location.hash.slice(1)
 if (secret) {
 	const ready: SandboxReadyMessage = { type: 'READY', secret }
-	window.parent.postMessage(ready, '*', [channel.port2])
+	const parentOrigin = new URL(location.href).origin
+	window.parent.postMessage(ready, parentOrigin, [channel.port2])
 }
