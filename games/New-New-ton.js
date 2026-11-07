@@ -1,5 +1,6 @@
 /*
 @title: New New Ton
+@description: A simple maze game. Find your way through the maze and reach the red flag to win.
 @author: Himanshu Sapkota
 @tags: ['beginner']
 @addedOn: 2026-11-08
