@@ -48,12 +48,10 @@ export default function SandboxedGameFrame(props: SandboxedGameFrameProps) {
 			ref={iframe}
 			class={props.class}
 			style={{ border: 'none', ...props.style }}
-			src="/game-sandbox"
 			title={props.title ?? 'Sprig game sandbox'}
 			sandbox={sandboxFlags}
 			allow="autoplay"
 			referrerPolicy="no-referrer"
-			onLoad={() => controller.current?.markReady()}
 		/>
 	)
 }

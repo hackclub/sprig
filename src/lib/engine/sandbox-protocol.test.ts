@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { isParentToSandboxMessage, isSandboxToParentMessage, serializeLogArg } from './sandbox-protocol'
+import { isParentToSandboxMessage, isSandboxReadyMessage, isSandboxToParentMessage, serializeLogArg } from './sandbox-protocol'
 
 test('validates parent to sandbox messages', () => {
 	expect(isParentToSandboxMessage({ type: 'RUN_GAME', channelId: 'abc', code: 'setMap(map``)', muted: false })).toBe(true)
@@ -11,7 +11,7 @@ test('validates parent to sandbox messages', () => {
 })
 
 test('validates sandbox to parent messages', () => {
-	expect(isSandboxToParentMessage({ type: 'READY' })).toBe(true)
+	expect(isSandboxToParentMessage({ type: 'READY', secret: 'abc' })).toBe(false)
 	expect(isSandboxToParentMessage({
 		type: 'GAME_ERROR',
 		channelId: 'abc',
@@ -21,6 +21,17 @@ test('validates sandbox to parent messages', () => {
 	expect(isSandboxToParentMessage({ type: 'CONSOLE_LOG', channelId: 'abc', args: ['hi'], nums: [1, 2], isErr: true })).toBe(false)
 	expect(isSandboxToParentMessage({ type: 'SHORTCUT_KEY', channelId: 'abc', key: 'Enter', ctrlKey: false, metaKey: true, shiftKey: false, altKey: false })).toBe(true)
 	expect(isSandboxToParentMessage({ type: 'OPEN_POPUP', channelId: 'abc' })).toBe(false)
+})
+
+test('only accepts READY with a secret', () => {
+	expect(isSandboxReadyMessage({ type: 'READY', secret: 'abc' })).toBe(true)
+	expect(isSandboxReadyMessage({ type: 'READY' })).toBe(false)
+	expect(isSandboxReadyMessage({ type: 'READY', secret: '' })).toBe(false)
+	expect(isSandboxReadyMessage({ type: 'READY', secret: 1 })).toBe(false)
+})
+
+test('no longer accepts PING', () => {
+	expect(isParentToSandboxMessage({ type: 'PING' })).toBe(false)
 })
 
 test('serializes console log arguments safely', () => {

@@ -2,6 +2,7 @@ import type { NormalizedError } from '../state'
 import {
 	type ParentToSandboxMessage,
 	type SandboxToParentMessage,
+	isSandboxReadyMessage,
 	isSandboxToParentMessage,
 } from './sandbox-protocol'
 
@@ -23,50 +24,41 @@ export interface SandboxedGameControllerHandle {
 	destroy(): void
 }
 
-const makeChannelId = (): string => {
-	if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') return crypto.randomUUID()
+export const SANDBOX_PATH = '/game-sandbox'
 
-	const bytes = new Uint8Array(16)
-	crypto.getRandomValues(bytes)
-	return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('')
+const randomHex = (bytes: number): string => {
+	const buffer = new Uint8Array(bytes)
+	crypto.getRandomValues(buffer)
+	return Array.from(buffer, byte => byte.toString(16).padStart(2, '0')).join('')
 }
 
 export class SandboxedGameController implements SandboxedGameControllerHandle {
-	private readonly channelId = makeChannelId()
+	private readonly channelId = randomHex(16)
+	private readonly secret = randomHex(32)
 	private readonly frameWindow: Window
 	private readonly queuedMessages: ParentToSandboxMessage[] = []
-	private ready = false
+	private port: MessagePort | null = null
+	private bound = false
+	private destroyed = false
 	private muted = false
-	private lastRun: ParentToSandboxMessage | null = null
 
 	constructor(
 		private readonly iframe: HTMLIFrameElement,
 		private readonly options: SandboxedGameControllerOptions = {}
 	) {
 		const frameWindow = iframe.contentWindow
-		if (!frameWindow) throw new Error('Sandbox iframe is not ready')
+		if (!frameWindow) throw new Error('Sandbox iframe is not attached')
 		this.frameWindow = frameWindow
-		window.addEventListener('message', this.handleMessage)
-		this.frameWindow.postMessage({ type: 'PING' } satisfies ParentToSandboxMessage, '*')
-	}
-
-	markReady(): void {
-		if (this.ready) return
-		this.ready = true
-		this.post({ type: 'INIT', channelId: this.channelId })
-		while (this.queuedMessages.length > 0) this.post(this.queuedMessages.shift()!)
-		this.options.onReady?.()
+		window.addEventListener('message', this.handleWindowMessage)
+		iframe.src = `${SANDBOX_PATH}#${this.secret}`
 	}
 
 	run(code: string): void {
-		const message: ParentToSandboxMessage = { type: 'RUN_GAME', channelId: this.channelId, code, muted: this.muted }
-		this.lastRun = message
-		this.send(message)
+		this.send({ type: 'RUN_GAME', channelId: this.channelId, code, muted: this.muted })
 		this.focus()
 	}
 
 	stop(): void {
-		this.lastRun = null
 		this.send({ type: 'STOP_GAME', channelId: this.channelId })
 	}
 
@@ -88,38 +80,49 @@ export class SandboxedGameController implements SandboxedGameControllerHandle {
 	}
 
 	destroy(): void {
+		if (this.destroyed) return
 		this.stop()
-		window.removeEventListener('message', this.handleMessage)
+		this.destroyed = true
+		window.removeEventListener('message', this.handleWindowMessage)
 		this.queuedMessages.length = 0
+		if (this.port) {
+			this.port.onmessage = null
+			this.port.close()
+			this.port = null
+		}
 	}
 
 	private send(message: ParentToSandboxMessage): void {
-		if (!this.ready) {
+		if (this.destroyed) return
+		if (!this.port) {
 			this.queuedMessages.push(message)
 			return
 		}
-		this.post(message)
+		this.port.postMessage(message)
 	}
 
-	private post(message: ParentToSandboxMessage): void {
-		this.frameWindow.postMessage(message, '*')
-	}
-
-	private handleMessage = (event: MessageEvent): void => {
+	private handleWindowMessage = (event: MessageEvent): void => {
+		if (this.bound || this.destroyed) return
 		if (event.source !== this.frameWindow) return
+		if (!isSandboxReadyMessage(event.data)) return
+		if (event.data.secret !== this.secret) return
+
+		const port = event.ports[0]
+		if (!port) return
+
+		this.bound = true
+		window.removeEventListener('message', this.handleWindowMessage)
+
+		this.port = port
+		port.onmessage = this.handlePortMessage
+		port.postMessage({ type: 'INIT', channelId: this.channelId } satisfies ParentToSandboxMessage)
+		port.postMessage({ type: 'MUTE_CHANGED', channelId: this.channelId, muted: this.muted } satisfies ParentToSandboxMessage)
+		while (this.queuedMessages.length > 0) port.postMessage(this.queuedMessages.shift()!)
+		this.options.onReady?.()
+	}
+
+	private handlePortMessage = (event: MessageEvent): void => {
 		if (!isSandboxToParentMessage(event.data)) return
-
-		if (event.data.type === 'READY') {
-			if (!this.ready) {
-				this.markReady()
-				return
-			}
-			this.post({ type: 'INIT', channelId: this.channelId })
-			this.post({ type: 'MUTE_CHANGED', channelId: this.channelId, muted: this.muted })
-			if (this.lastRun) this.post({ ...this.lastRun, muted: this.muted } as ParentToSandboxMessage)
-			return
-		}
-
 		if (event.data.channelId !== this.channelId) return
 
 		switch (event.data.type) {

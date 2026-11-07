@@ -4,7 +4,19 @@ export async function onRequest({ request }: any, next: () => any) {
   const path = new URL(request.url).pathname.slice(1);
   let response = await next();
 
-  if (path === "game-sandbox" || path === "game-sandbox/") {
+  const isSandbox = path === "game-sandbox" || path === "game-sandbox/";
+
+  if (!isSandbox && response.headers.get("content-type")?.includes("text/html")) {
+	response.headers.set("X-Frame-Options", "SAMEORIGIN");
+	const csp = response.headers.get("Content-Security-Policy");
+	if (!csp) {
+		response.headers.set("Content-Security-Policy", "frame-ancestors 'self'");
+	} else if (!/frame-ancestors/i.test(csp)) {
+		response.headers.set("Content-Security-Policy", `${csp}; frame-ancestors 'self'`);
+	}
+  }
+
+  if (isSandbox) {
 	response.headers.set(
 		"Content-Security-Policy",
 		[

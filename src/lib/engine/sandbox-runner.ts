@@ -2,6 +2,7 @@ import type { NormalizedError } from '../state'
 import { runGame, runGameHeadless } from '.'
 import {
 	type ParentToSandboxMessage,
+	type SandboxReadyMessage,
 	type SandboxToParentMessage,
 	isParentToSandboxMessage,
 	serializeLogArg,
@@ -29,8 +30,11 @@ const serializeError = (error: NormalizedError): NormalizedError => ({
 		: String(error.raw),
 })
 
+const channel = new MessageChannel()
+const port = channel.port1
+
 const post = (message: SandboxToParentMessage): void => {
-	window.parent.postMessage(message, '*')
+	port.postMessage(message)
 }
 
 const stopGame = (): void => {
@@ -67,20 +71,12 @@ const run = (message: Extract<ParentToSandboxMessage, { type: 'RUN_GAME' }>): vo
 	if (result?.error) post({ type: 'GAME_ERROR', channelId: message.channelId, error: serializeError(result.error) })
 }
 
-window.addEventListener('message', (event) => {
-	if (event.source !== window.parent) return
+port.onmessage = (event: MessageEvent) => {
 	if (!isParentToSandboxMessage(event.data)) return
 
 	const message = event.data
-	// The parent may have hydrated after this frame already loaded and missed
-	// our initial READY, so it asks again.
-	if (message.type === 'PING') {
-		post({ type: 'READY' })
-		return
-	}
-
 	if (message.type === 'INIT') {
-		channelId = message.channelId
+		if (!channelId) channelId = message.channelId
 		return
 	}
 
@@ -106,7 +102,7 @@ window.addEventListener('message', (event) => {
 			})
 			break
 	}
-})
+}
 
 window.addEventListener('keydown', (event) => {
 	if (event.ctrlKey || event.metaKey || event.key === 'Escape') {
@@ -125,4 +121,9 @@ window.addEventListener('keydown', (event) => {
 	}
 })
 
-post({ type: 'READY' })
+const secret = location.hash.slice(1)
+if (secret) {
+	const ready: SandboxReadyMessage = { type: 'READY', secret }
+	const parentOrigin = new URL(location.href).origin
+	window.parent.postMessage(ready, parentOrigin, [channel.port2])
+}
