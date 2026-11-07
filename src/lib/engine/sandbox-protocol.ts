@@ -16,7 +16,6 @@ export const serializeLogArg = (arg: unknown): SerializableLogArg => {
 }
 
 export type ParentToSandboxMessage =
-	| { type: 'PING' }
 	| { type: 'INIT', channelId: string }
 	| { type: 'RUN_GAME', channelId: string, code: string, muted: boolean }
 	| { type: 'STOP_GAME', channelId: string }
@@ -24,8 +23,9 @@ export type ParentToSandboxMessage =
 	| { type: 'MUTE_CHANGED', channelId: string, muted: boolean }
 	| { type: 'EXTRACT_BITMAPS', channelId: string, code: string }
 
+export type SandboxReadyMessage = { type: 'READY', secret: string }
+
 export type SandboxToParentMessage =
-	| { type: 'READY' }
 	| { type: 'STOPPED', channelId: string }
 	| { type: 'GAME_ERROR', channelId: string, error: NormalizedError }
 	| { type: 'CONSOLE_LOG', channelId: string, args: SerializableLogArg[], nums: number[], isErr: false }
@@ -39,7 +39,6 @@ export const isParentToSandboxMessage = (value: unknown): value is ParentToSandb
 	const message = value as Record<string, unknown>
 	if (typeof message.type !== 'string') return false
 
-	if (message.type === 'PING') return true
 	if (message.type === 'INIT') return typeof message.channelId === 'string'
 	if (typeof message.channelId !== 'string') return false
 
@@ -63,7 +62,6 @@ export const isSandboxToParentMessage = (value: unknown): value is SandboxToPare
 	if (!value || typeof value !== 'object') return false
 
 	const message = value as Record<string, unknown>
-	if (message.type === 'READY') return true
 	if (typeof message.type !== 'string' || typeof message.channelId !== 'string') return false
 
 	switch (message.type) {
@@ -82,4 +80,10 @@ export const isSandboxToParentMessage = (value: unknown): value is SandboxToPare
 		default:
 			return false
 	}
+}
+
+export const isSandboxReadyMessage = (value: unknown): value is SandboxReadyMessage => {
+	if (!value || typeof value !== 'object') return false
+	const message = value as Record<string, unknown>
+	return message.type === 'READY' && typeof message.secret === 'string' && message.secret.length > 0
 }
