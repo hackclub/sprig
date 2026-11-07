@@ -35,10 +35,6 @@ export default defineConfig({
       cors: true, // Allow CORS (optional)
     },
 		resolve: {
-			// CodeMirror breaks silently when more than one copy of these is bundled:
-			// extensions registered by one copy (syntax parsing, highlighting, themes)
-			// are invisible to the EditorView from another copy, so the editor ends up
-			// with no syntax tree -> grey text and no bitmap/tune/map widgets.
 			dedupe: [
 				'@codemirror/state',
 				'@codemirror/view',
