@@ -72,6 +72,13 @@ window.addEventListener('message', (event) => {
 	if (!isParentToSandboxMessage(event.data)) return
 
 	const message = event.data
+	// The parent may have hydrated after this frame already loaded and missed
+	// our initial READY, so it asks again.
+	if (message.type === 'PING') {
+		post({ type: 'READY' })
+		return
+	}
+
 	if (message.type === 'INIT') {
 		channelId = message.channelId
 		return
