@@ -1,5 +1,9 @@
 /*
-@title: Chest Cleanser Snake
+@title: Snake
+@author: Jainil
+@description: A fast-paced survival twist on classic Snake where you must dodge spawning spikes and collect timed chests to clear the board!
+@tags: ['snake', 'arcade', 'survival']
+@addedOn: 2026-11-07
 */
 
 const head = "h";
