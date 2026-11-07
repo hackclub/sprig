@@ -37,6 +37,18 @@ export default defineConfig({
 				"Access-Control-Allow-Origin": "*"
 			}
     },
+		resolve: {
+			dedupe: [
+				'@codemirror/state',
+				'@codemirror/view',
+				'@codemirror/language',
+				'@codemirror/lint',
+				'@codemirror/autocomplete',
+				'@lezer/common',
+				'@lezer/highlight',
+				'@lezer/lr'
+			]
+		},
 		optimizeDeps: {
 			exclude: ['https']
 		},
