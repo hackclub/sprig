@@ -32,22 +32,6 @@ const randomHex = (bytes: number): string => {
 	return Array.from(buffer, byte => byte.toString(16).padStart(2, '0')).join('')
 }
 
-/**
- * Talks to the game sandbox iframe.
- *
- * Security model: the iframe's WindowProxy survives navigation, so anything sent
- * to it with postMessage(…, '*') can reach a document an ancestor frame swapped in.
- * Instead, this controller:
- *  1. loads the sandbox itself, with a one-time secret in the URL fragment
- *     (fragments are never sent to the server, and the iframe's src can't be read
- *     cross-origin);
- *  2. accepts exactly one READY that echoes that secret and transfers a MessagePort
- *     created by the sandbox document;
- *  3. sends everything (game code included) over that port only.
- * A port belongs to the document that created it: if the frame is navigated away,
- * the port dies with it and the replacement document never receives it. After the
- * first valid READY no further READY is accepted, so there is no re-handshake.
- */
 export class SandboxedGameController implements SandboxedGameControllerHandle {
 	private readonly channelId = randomHex(16)
 	private readonly secret = randomHex(32)
