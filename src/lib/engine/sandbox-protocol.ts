@@ -16,6 +16,7 @@ export const serializeLogArg = (arg: unknown): SerializableLogArg => {
 }
 
 export type ParentToSandboxMessage =
+	| { type: 'PING' }
 	| { type: 'INIT', channelId: string }
 	| { type: 'RUN_GAME', channelId: string, code: string, muted: boolean }
 	| { type: 'STOP_GAME', channelId: string }
@@ -38,6 +39,7 @@ export const isParentToSandboxMessage = (value: unknown): value is ParentToSandb
 	const message = value as Record<string, unknown>
 	if (typeof message.type !== 'string') return false
 
+	if (message.type === 'PING') return true
 	if (message.type === 'INIT') return typeof message.channelId === 'string'
 	if (typeof message.channelId !== 'string') return false
 
