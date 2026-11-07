@@ -186,24 +186,21 @@ function step() {
   const nx = (snake[0].x + dir.x + W) % W;
   const ny = (snake[0].y + dir.y + H) % H;
 
-  // खुद से टकराने पर गेम ओवर
   if (snake.some((s, i) => i > 0 && s.x === nx && s.y === ny)) {
     gameOver();
     return;
   }
 
-  // स्पाइक से टकराने पर पॉइंट कम होगा, गेम एंड नहीं होगी
   let hitSpikeIndex = spikes.findIndex(s => s.x === nx && s.y === ny);
   if (hitSpikeIndex !== -1) {
-    spikes.splice(hitSpikeIndex, 1); // उस स्पाइक को हटा दें
-    if (score > 0) score--; // पॉइंट काटें
+    spikes.splice(hitSpikeIndex, 1);
+    if (score > 0) score--;
   }
 
   snake.unshift({ x: nx, y: ny });
 
-  // चेस्ट कलेक्ट करने पर
   if (chestActive && chestPos && nx === chestPos.x && ny === chestPos.y) {
-    spikes = []; // सारे स्पाइक्स साफ़!
+    spikes = [];
     chestActive = false;
     chestPos = null;
     clearTimeout(chestTimer);
