@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: Space Escape
-@description: 
-@author: 
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@title: Space_Escape.js
+@description:Explore the maze map, grab the hidden fuel to automatically unlock the solid door, and reach the escape pod to win!
+@author:Eshal
+@tags: [@maze,@escape,@pod]
+@addedOn: 2026-11-8
 */
 
 const player = "p"
