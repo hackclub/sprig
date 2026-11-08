@@ -7,7 +7,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @author:Eshal
 @tags:['maze', 'escape']
 
-@addedOn: 2026-11-8
+@addedOn: 2026-11-08
 */
 
 const player = "p"
