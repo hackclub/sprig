@@ -1,12 +1,9 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Neon runner
-@description: A endless running game where you dodge obstacles.
-@author: Masti-Dev
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@title: HYPERLANE
+@author: Masti
+@description: A neon-inspired endless runner where players dodge obstacles, collect coins, and use protective shields while the game gets progressively faster.
+@tags: ['arcade', 'runner', 'pixel-art', 'survival']
+@addedOn: 2026-11-08
 */
 
 const player = "p"
@@ -182,7 +179,7 @@ function updateScore() {
 function showStartScreen() {
   clearText();
 
-  addText("NEON RUNNER", {
+addText("HYPERLANE", {
     x: 2,
     y: 2,
     color: color`3`
