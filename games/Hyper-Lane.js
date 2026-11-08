@@ -1,7 +1,7 @@
 /*
 @title: HYPERLANE
-@author: Masti
-@description: A neon-inspired endless runner where players dodge obstacles, collect coins, and use protective shields while the game gets progressively faster.
+@author: Masti-Dev
+@description: A neon-themed endless runner where players dodge obstacles, collect coins, and use shields to survive as the speed increases.
 @tags: ['arcade', 'runner', 'pixel-art', 'survival']
 @addedOn: 2026-11-08
 */
