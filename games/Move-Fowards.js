@@ -2,7 +2,7 @@
 @title: Move Forwards
 @author: GameMaker3001
 @description: solve the maze while only moving forwards
-@tags: ['maze', Puzzle]
+'@tags: ['maze', Puzzle]'
 @addedOn: 2026-11-09
 */
 
