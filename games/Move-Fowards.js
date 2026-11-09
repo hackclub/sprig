@@ -2,11 +2,11 @@
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
 
-@title: untitled
-@description: 
-@author: 
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@title: Move Forwards
+@author: GameMaker3001
+@description: solve the maze while only moving forwards
+@tags: ['music', 'maze']
+@addedOn: 2026-11-09
 */
 
 const player = "p"
