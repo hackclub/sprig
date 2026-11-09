@@ -1,7 +1,4 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: Move Forwards
 @author: GameMaker3001
 @description: solve the maze while only moving forwards
