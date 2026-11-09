@@ -1,9 +1,10 @@
 /*
-@title: getting_started
-@description: "Getting Started" is a tutorial game that guides players through basic game mechanics.
-@author: leo, edits
+@title: a actual tutorial that is finished for you
+@author: therealbaguette
+@description: Getting Started" is a tutorial game that guides players through basic game mechanics.
 @tags: ['tutorial']
-@addedOn: 2022-07-26
+@addedOn: 2026-11-09
+*/
 
 Check the tutorial in the bottom right, the run button is in the top right.
 Make sure to remix this tutorial if you want to save your progress!
