@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "preact/hooks";
 import { loadThumbnailUrl } from "../lib/thumbnail";
+import { IoHeart } from "react-icons/io5";
 
 type GalleryGameProps = {
 	filename: string
@@ -8,11 +9,12 @@ type GalleryGameProps = {
 	tags: string[]
 	isNew: boolean
 	show: boolean
+	likes?: number
 	filter: any,
 	setFilter: Function
 }
 
-export default function GalleryGame({ setFilter, filter, show, filename, title, author, tags, isNew }: GalleryGameProps) {
+export default function GalleryGame({ setFilter, filter, show, filename, title, author, tags, isNew, likes }: GalleryGameProps) {
 	const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
 	const gameRef = useRef<HTMLDivElement>(null);
 
@@ -51,7 +53,14 @@ export default function GalleryGame({ setFilter, filter, show, filename, title, 
 			{thumbnailUrl && <img src={thumbnailUrl} alt="thumbnail" data-loaded='true' /> }
 
 			<h3>{title}</h3>
-			<p class="author">by @{author}</p>
+			<div class="game-meta-row">
+				<p class="author">by @{author}</p>
+				{likes !== undefined && (
+					<span class="game-likes" title={`${likes} ${likes === 1 ? "like" : "likes"}`}>
+						<IoHeart aria-hidden="true" />{likes}
+					</span>
+				)}
+			</div>
 			<p class="tags" onClick={(e) => e.stopPropagation()}>
 
 				{tags.map((tag) =>

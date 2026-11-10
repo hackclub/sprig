@@ -1,9 +1,9 @@
 import {useEffect, useRef} from 'preact/hooks'
+import { runGame } from '../../lib/engine'
 import styles from './desktop-player.module.css'
 import {
 	IoExpandOutline,
-	IoHeart,
-	IoHeartOutline, IoLink, IoLogoFacebook, IoLogoLinkedin,
+	IoLink, IoLogoFacebook, IoLogoLinkedin,
 	IoLogoTwitter,
 	IoOpen,
 	IoPlay,
@@ -21,9 +21,7 @@ import {exitFullscreen, fullscreenElement, requestFullscreen} from "../../lib/ut
 import Button from "../design-system/button";
 import {VscLoading} from "react-icons/vsc";
 import {upload, uploadState} from "../../lib/upload";
-import SandboxedGameFrame from "./sandboxed-game-frame";
-import type { SandboxedGameControllerHandle } from "../../lib/engine/sandbox-controller";
-import { logInfo } from "../popups-etc/help";
+import LikeButton from "../like-button";
 
 interface DesktopPlayerProps {
 	code: string
@@ -31,21 +29,22 @@ interface DesktopPlayerProps {
 	authorName: string
 	filename: string
 	isLoggedIn: boolean
-	hearted: boolean
+	// set false when the page renders its own LikeButton (or the game can't be liked)
+	showLike?: boolean
 }
 
 export default function DesktopPlayer(props: DesktopPlayerProps) {
-	const player = useRef<SandboxedGameControllerHandle | null>(null)
+	const screen = useRef<HTMLCanvasElement>(null)
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
-	const playerVersion = useSignal(0);
 	
 	// acts a bit like a timer; if >0, shake game canvas
 	// activated when a game is run to show it's being run
 	const screenShake = useSignal(0);
 
 	const onStop = async () => {
+		if (!screen.current) return;
 		if (cleanupRef.value) cleanupRef.value?.();
 	};
 
@@ -55,13 +54,14 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 	});
 
 	const onRun = async () => {
-		if (!player.current) return;
+		if (!screen.current) return;
 		if (cleanupRef.value) cleanupRef.value?.();
 		errorLog.value = [];
-		logInfo.value = [];
-		player.current.run(props.code);
+		const res = runGame(props.code, screen.current!, (error) => {
+			errorLog.value = [...errorLog.value, error];
+		});
 
-		player.current.focus();
+		screen.current!.focus();
 		if (screenShake) {
 			screenShake.value++;
 		}
@@ -71,12 +71,16 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 			}
 		}, 200);
 
-		cleanupRef.value = () => player.current?.stop();
+		cleanupRef.value = res?.cleanup;
+		if (res && res.error) {
+			console.error(res.error.raw);
+			errorLog.value = [...errorLog.value, res.error];
+		}
 	};
 
 	useEffect(() => {
 		onRun()
-	}, [props.code, playerVersion.value])
+	}, [props.code])
 	
 	// mouse move timeout for auto-hiding fullscreen controls
 	const mouseMoveTimeout = useSignal(0);
@@ -102,30 +106,6 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 			requestFullscreen(screenContainer.current!);
 		}
 	};
-	
-	const hearted = useSignal(props.hearted)
-	
-	const upvoteGame = () => {
-		hearted.value = true
-		return fetch("/api/games/upvote", {
-			method: "POST",
-			body: JSON.stringify({
-				action: "upvote",
-				filename: props.filename
-			})
-		})
-	}
-	
-	const removeUpvote = () => {
-		hearted.value = false
-		return fetch("/api/games/upvote", {
-			method: "POST",
-			body: JSON.stringify({
-				action: "remove",
-				filename: props.filename
-			})
-		})
-	}
 	
 	const shareMenuOpen = useSignal(false)
 	const shareMenuRef = useRef<HTMLDivElement>(null);
@@ -163,8 +143,8 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 				maxHeight: canvasScreenSize.value.maxHeight,
 			} : {}} className={styles.screenContainer}>
 				<div className={styles.canvasWrapper}>
-					<SandboxedGameFrame
-						class={`${styles.screen} ${
+					<canvas
+						className={`${styles.screen} ${
 							screenShake.value > 0 ? "shake" : ""
 						}`}
 						style={outputArea.current ? {
@@ -173,14 +153,10 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 							width: (1.25 * canvasScreenSize.value.height),
 							maxWidth: "100%",
 						} : {}}
-						onController={(controller) => {
-							player.current = controller;
-							playerVersion.value++;
-						}}
-						onError={(error) => {
-							console.error(error.raw);
-							errorLog.value = [...errorLog.value, error];
-						}}
+						ref={screen}
+						tabIndex={0}
+						width="1000"
+						height="800"
 					/>
 				</div>
 				<div ref={screenControls} className={`${styles.screenControls} ${showFullscreenControls.value && styles.enabled}`}>
@@ -230,11 +206,9 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 					<div class={styles.title}>
 					<h1>{props.gameName}</h1>
 					<div class={styles.titleButtons}>
-						<div class={`${styles.button} ${hearted.value && styles.hearted} ${props.isLoggedIn || styles.heartDisabled}`}
-							 onClick={() => {
-								 props.isLoggedIn && (hearted.value ? removeUpvote() : upvoteGame())
-							 }}
-						>{hearted.value ? <IoHeart/> : <IoHeartOutline/>}</div>
+						{props.showLike !== false && (
+							<LikeButton class={styles.button} filename={props.filename} isLoggedIn={props.isLoggedIn} />
+						)}
 						
 						<div ref={shareMenuRef} class={styles.shareButtonContainer}>
 							
