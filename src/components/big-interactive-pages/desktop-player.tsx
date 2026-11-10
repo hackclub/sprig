@@ -1,5 +1,4 @@
 import {useEffect, useRef} from 'preact/hooks'
-import { runGame } from '../../lib/engine'
 import styles from './desktop-player.module.css'
 import {
 	IoExpandOutline,
@@ -22,6 +21,9 @@ import {exitFullscreen, fullscreenElement, requestFullscreen} from "../../lib/ut
 import Button from "../design-system/button";
 import {VscLoading} from "react-icons/vsc";
 import {upload, uploadState} from "../../lib/upload";
+import SandboxedGameFrame from "./sandboxed-game-frame";
+import type { SandboxedGameControllerHandle } from "../../lib/engine/sandbox-controller";
+import { logInfo } from "../popups-etc/help";
 
 interface DesktopPlayerProps {
 	code: string
@@ -33,17 +35,17 @@ interface DesktopPlayerProps {
 }
 
 export default function DesktopPlayer(props: DesktopPlayerProps) {
-	const screen = useRef<HTMLCanvasElement>(null)
+	const player = useRef<SandboxedGameControllerHandle | null>(null)
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
+	const playerVersion = useSignal(0);
 	
 	// acts a bit like a timer; if >0, shake game canvas
 	// activated when a game is run to show it's being run
 	const screenShake = useSignal(0);
 
 	const onStop = async () => {
-		if (!screen.current) return;
 		if (cleanupRef.value) cleanupRef.value?.();
 	};
 
@@ -53,14 +55,13 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 	});
 
 	const onRun = async () => {
-		if (!screen.current) return;
+		if (!player.current) return;
 		if (cleanupRef.value) cleanupRef.value?.();
 		errorLog.value = [];
-		const res = runGame(props.code, screen.current!, (error) => {
-			errorLog.value = [...errorLog.value, error];
-		});
+		logInfo.value = [];
+		player.current.run(props.code);
 
-		screen.current!.focus();
+		player.current.focus();
 		if (screenShake) {
 			screenShake.value++;
 		}
@@ -70,16 +71,12 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 			}
 		}, 200);
 
-		cleanupRef.value = res?.cleanup;
-		if (res && res.error) {
-			console.error(res.error.raw);
-			errorLog.value = [...errorLog.value, res.error];
-		}
+		cleanupRef.value = () => player.current?.stop();
 	};
 
 	useEffect(() => {
 		onRun()
-	}, [props.code])
+	}, [props.code, playerVersion.value])
 	
 	// mouse move timeout for auto-hiding fullscreen controls
 	const mouseMoveTimeout = useSignal(0);
@@ -166,8 +163,8 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 				maxHeight: canvasScreenSize.value.maxHeight,
 			} : {}} className={styles.screenContainer}>
 				<div className={styles.canvasWrapper}>
-					<canvas
-						className={`${styles.screen} ${
+					<SandboxedGameFrame
+						class={`${styles.screen} ${
 							screenShake.value > 0 ? "shake" : ""
 						}`}
 						style={outputArea.current ? {
@@ -176,10 +173,14 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 							width: (1.25 * canvasScreenSize.value.height),
 							maxWidth: "100%",
 						} : {}}
-						ref={screen}
-						tabIndex={0}
-						width="1000"
-						height="800"
+						onController={(controller) => {
+							player.current = controller;
+							playerVersion.value++;
+						}}
+						onError={(error) => {
+							console.error(error.raw);
+							errorLog.value = [...errorLog.value, error];
+						}}
 					/>
 				</div>
 				<div ref={screenControls} className={`${styles.screenControls} ${showFullscreenControls.value && styles.enabled}`}>

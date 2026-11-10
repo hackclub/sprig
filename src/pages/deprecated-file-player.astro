@@ -1,10 +1,14 @@
 ---
 import '../global.css'
 import StandardHead from '../components/standard-head.astro'
+import StandaloneSandboxPlayer from '../components/big-interactive-pages/standalone-sandbox-player'
 
 const file = Astro.url.searchParams.get('file') ?? ''
 const codeRes = await fetch(file)
 const code = await codeRes.text()
+const watchMs = Astro.url.searchParams.has('watch')
+	? Number(Astro.url.searchParams.get('watch') || 1000)
+	: undefined
 ---
 
 <html lang='en'>
@@ -19,7 +23,7 @@ const code = await codeRes.text()
 				align-items: center;
 			}
 
-			#screen {
+			.screen {
 				max-width: 100%;
 				max-height: 100%;
 				background: black;
@@ -28,36 +32,13 @@ const code = await codeRes.text()
 	</head>
 	<body>
 		<div id='screen-container'>
-			<canvas id='screen' width='1000' height='800' tabindex='-1' />
+			<StandaloneSandboxPlayer
+				client:load
+				code={code}
+				watchFile={watchMs ? file : undefined}
+				watchMs={watchMs}
+				class="screen"
+			/>
 		</div>
-
-		<script define:vars={{ code }}>
-			window.__sprig_intitial_code__ = code
-		</script>
-		<script>
-			import { runGame } from '../lib/engine'
-
-			const screen = document.getElementById('screen') as HTMLCanvasElement
-			const { __sprig_intitial_code__ } = window as unknown as { __sprig_intitial_code__: string }
-			
-			let runRes = runGame(__sprig_intitial_code__, screen, (_) => {})
-			if (runRes.error) console.error(runRes.error.raw)
-			
-			const params = new URLSearchParams(window.location.search)
-			if (params.has('watch')) {
-				let oldCode = __sprig_intitial_code__
-				setInterval(async () => {
-					const codeRes = await fetch(params.get('file') || '')
-					const code = await codeRes.text()
-
-					if (oldCode !== code) {
-						oldCode = code
-						runRes.cleanup()
-						runRes = runGame(code, screen, (_) => {})
-						if (runRes.error) console.error(runRes.error.raw)
-					}
-				}, Number(params.get('watch') || 1000))
-			}
-		</script>
 	</body>
 </html>

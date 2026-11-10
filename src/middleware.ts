@@ -2,7 +2,41 @@ import metrics from "../metrics";
 
 export async function onRequest({ request }: any, next: () => any) {
   const path = new URL(request.url).pathname.slice(1);
-  const response = await next();
+  let response = await next();
+
+  const isSandbox = path === "game-sandbox" || path === "game-sandbox/";
+
+  if (!isSandbox && response.headers.get("content-type")?.includes("text/html")) {
+	response.headers.set("X-Frame-Options", "SAMEORIGIN");
+	const csp = response.headers.get("Content-Security-Policy");
+	if (!csp) {
+		response.headers.set("Content-Security-Policy", "frame-ancestors 'self'");
+	} else if (!/frame-ancestors/i.test(csp)) {
+		response.headers.set("Content-Security-Policy", `${csp}; frame-ancestors 'self'`);
+	}
+  }
+
+  if (isSandbox) {
+	response.headers.set(
+		"Content-Security-Policy",
+		[
+			"default-src 'none'",
+			"script-src 'self' 'unsafe-eval'",
+			"style-src 'self' 'unsafe-inline'",
+			"img-src 'self' data:",
+			"media-src 'none'",
+			"font-src 'none'",
+			"connect-src 'none'",
+			"frame-src 'none'",
+			"object-src 'none'",
+			"base-uri 'none'",
+			"form-action 'none'",
+			"frame-ancestors 'self'",
+		].join("; ")
+	);
+	response.headers.set("Referrer-Policy", "no-referrer");
+	response.headers.set("X-Content-Type-Options", "nosniff");
+  }
 
   if(path.includes("~") || path.includes("editor")) {
 	response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
