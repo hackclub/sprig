@@ -2,6 +2,7 @@
 @title: Glacial Slide
 @author: Rudra
 @tags: ['puzzle']
+@description: Slide across slippery ice rooms to reach the fish across 7 levels.
 @addedOn: 2026-11-10
 */
 
