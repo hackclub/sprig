@@ -1,5 +1,6 @@
 import {useEffect, useRef} from 'preact/hooks'
-import { runGame } from '../../lib/engine'
+import SandboxedGameFrame from './sandboxed-game-frame'
+import type { SandboxedGameControllerHandle } from '../../lib/engine/sandbox-controller'
 import styles from './desktop-player.module.css'
 import {
 	IoExpandOutline,
@@ -34,7 +35,9 @@ interface DesktopPlayerProps {
 }
 
 export default function DesktopPlayer(props: DesktopPlayerProps) {
-	const screen = useRef<HTMLCanvasElement>(null)
+	// Game code is untrusted: it only ever runs inside the opaque-origin sandbox iframe
+	const player = useRef<SandboxedGameControllerHandle | null>(null)
+	const playerVersion = useSignal(0)
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
@@ -44,8 +47,8 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 	const screenShake = useSignal(0);
 
 	const onStop = async () => {
-		if (!screen.current) return;
 		if (cleanupRef.value) cleanupRef.value?.();
+		cleanupRef.value = undefined;
 	};
 
 	const canvasScreenSize = useSignal({
@@ -54,14 +57,12 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 	});
 
 	const onRun = async () => {
-		if (!screen.current) return;
+		if (!player.current) return;
 		if (cleanupRef.value) cleanupRef.value?.();
 		errorLog.value = [];
-		const res = runGame(props.code, screen.current!, (error) => {
-			errorLog.value = [...errorLog.value, error];
-		});
+		player.current.run(props.code);
+		player.current.focus();
 
-		screen.current!.focus();
 		if (screenShake) {
 			screenShake.value++;
 		}
@@ -71,16 +72,13 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 			}
 		}, 200);
 
-		cleanupRef.value = res?.cleanup;
-		if (res && res.error) {
-			console.error(res.error.raw);
-			errorLog.value = [...errorLog.value, res.error];
-		}
+		cleanupRef.value = () => player.current?.stop();
 	};
 
+	// (re)run when the code changes or the sandbox controller becomes available
 	useEffect(() => {
 		onRun()
-	}, [props.code])
+	}, [props.code, playerVersion.value])
 	
 	// mouse move timeout for auto-hiding fullscreen controls
 	const mouseMoveTimeout = useSignal(0);
@@ -143,8 +141,8 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 				maxHeight: canvasScreenSize.value.maxHeight,
 			} : {}} className={styles.screenContainer}>
 				<div className={styles.canvasWrapper}>
-					<canvas
-						className={`${styles.screen} ${
+					<SandboxedGameFrame
+						class={`${styles.screen} ${
 							screenShake.value > 0 ? "shake" : ""
 						}`}
 						style={outputArea.current ? {
@@ -153,10 +151,15 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 							width: (1.25 * canvasScreenSize.value.height),
 							maxWidth: "100%",
 						} : {}}
-						ref={screen}
-						tabIndex={0}
-						width="1000"
-						height="800"
+						title={`${props.gameName} (Sprig game)`}
+						onController={(controller) => {
+							player.current = controller;
+							playerVersion.value++;
+						}}
+						onError={(error) => {
+							console.error(error.raw);
+							errorLog.value = [...errorLog.value, error];
+						}}
 					/>
 				</div>
 				<div ref={screenControls} className={`${styles.screenControls} ${showFullscreenControls.value && styles.enabled}`}>
