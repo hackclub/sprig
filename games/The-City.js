@@ -4,8 +4,9 @@ https://sprig.hackclub.com/gallery/getting_started
 
 @title: The City
 @author: Nicholas Garnsworthy
-@tags: [sandbox, building]
-@addedOn: 2025-00-00
+@desciption: Build your city! Harvest wood and stone. Smelt stone into metal before finally selling it all to make money! Watch your citizens move and work. Move with WSAD; place and pick buildings with K and I.
+@tags: ['sandbox', 'building', 'agent simulation']
+@addedOn: 2026-11-09
 */
 
 const wood = "w"
