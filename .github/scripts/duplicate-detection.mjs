@@ -39,7 +39,7 @@ To keep reviews fair and fast for everyone, authors can only have one submission
 
 - **Same game?** You do not need to open a new PR to update your game! Pushing commits or editing files in your existing PR updates it automatically. Usually your newer PR (**#${latestNumber}**) has your latest changes, but please check which PR has your best version, keep that one, and close the other.
 - **Different games?** That is awesome, but our review team can only review one game per author at a time. Please choose which game you would like reviewed first, keep that PR open, and close the other. You can submit your next game once this one is merged!
-- **Next steps:** If no action is taken, this older PR will close automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days so your newest PR can move forward. If you prefer to keep this older PR instead, please close #${latestNumber}. If you need any help, feel free to ask in the #sprig channel on Slack!`;
+- **Next steps:** If no action is taken, this older PR will close automatically in ${DUPLICATE_CLOSE_AFTER_DAYS} days so your newest PR can move forward. If you prefer to keep this older PR instead, please close #${latestNumber}. If you need any help, feel free to ask in #sprig on Slack (with your PR number) or tag \`@LucasHT22\` here!`;
 }
 
 export function buildLatestWarning({ older }) {

@@ -276,6 +276,49 @@ export function daysBetween(start, end = new Date()) {
 	return Math.floor((endTime - startTime) / 86_400_000);
 }
 
+export async function isReviewCommitOutdated({ owner, repo, token, prNumber, commitId, headSha, submissionFiles }) {
+	if (!commitId || !headSha || commitId === headSha) return false;
+	try {
+		const files = submissionFiles ?? (await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/files`));
+		const submissionFileObjects = files.filter((f) => {
+			const fn = typeof f === "string" ? f : f.filename;
+			return fn.toLowerCase().startsWith("games/");
+		});
+		if (submissionFileObjects.length === 0) return true;
+
+		for (const file of submissionFileObjects) {
+			const filename = typeof file === "string" ? file : file.filename;
+			const targetHeadSha =
+				typeof file === "object" && file?.sha
+					? file.sha
+					: await getFileBlobSha({ owner, repo, token, path: filename, ref: headSha });
+			if (!targetHeadSha) return true;
+
+			const commitBlobSha = await getFileBlobSha({ owner, repo, token, path: filename, ref: commitId });
+			if (!commitBlobSha || commitBlobSha !== targetHeadSha) {
+				return true;
+			}
+		}
+
+		return false;
+	} catch {
+		return true;
+	}
+}
+
+async function getFileBlobSha({ owner, repo, token, path: filePath, ref }) {
+	try {
+		const data = await githubRequest(
+			token,
+			"GET",
+			`/repos/${owner}/${repo}/contents/${filePath.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(ref)}`
+		);
+		return data?.sha ?? null;
+	} catch {
+		return null;
+	}
+}
+
 export function getMetadataValue(content, key) {
 	const match = content.match(new RegExp(String.raw`@${key}:[^\S\r\n]*([\s\S]*?)(?=\r?\n\s*\*?\s*@|\r?\n\s*\*\/|\*\/)`, "i"));
 	if (!match?.[1]) return "";
@@ -487,16 +530,7 @@ export function inferSubmissionMetadata({ content, filename, pullRequest, existi
 	if (existingMetadata?.title && !/^getting(_|\s)started$/i.test(existingMetadata.title.trim()) && !/^template$/i.test(existingMetadata.title.trim()) && !/^my game$/i.test(existingMetadata.title.trim())) {
 		title = existingMetadata.title.trim();
 	} else {
-		if (content) {
-			const commentMatch = content.match(/^\s*(?:\/\/|\/\*)\s*([A-Za-z0-9][A-Za-z0-9\s-_']{2,40})(?:\s*\([^)]*\))?\s*(?:\*\/|$)/m);
-			if (commentMatch) {
-				const candidate = cleanGameTitle(commentMatch[1]);
-				if (!candidate.startsWith("@") && !/^eslint/i.test(candidate) && !/^prettier/i.test(candidate) && !/^sprig/i.test(candidate)) {
-					title = candidate;
-				}
-			}
-		}
-		if (!title && pullRequest?.title) {
+		if (pullRequest?.title) {
 			const cleanedPr = cleanGameTitle(pullRequest.title);
 			if (cleanedPr && cleanedPr.length >= 2 && !/^my game$/i.test(cleanedPr)) {
 				title = cleanedPr;
@@ -506,6 +540,16 @@ export function inferSubmissionMetadata({ content, filename, pullRequest, existi
 			const basename = cleanGameTitle(path.basename(filename, ".js"));
 			if (basename && !/^my game$/i.test(basename)) {
 				title = basename;
+			}
+		}
+		if (!title && content) {
+			const firstLine = content.split("\n").find((line) => line.trim().length > 0) || "";
+			const commentMatch = firstLine.match(/^\s*(?:\/\/|\/\*)\s*([A-Za-z0-9][A-Za-z0-9\s-_']{2,40})(?:\s*\([^)]*\))?\s*(?:\*\/|$)/);
+			if (commentMatch) {
+				const candidate = cleanGameTitle(commentMatch[1]);
+				if (!candidate.startsWith("@") && !/^eslint/i.test(candidate) && !/^prettier/i.test(candidate) && !/^sprig/i.test(candidate)) {
+					title = candidate;
+				}
 			}
 		}
 		if (!title) title = "Sprig Game";

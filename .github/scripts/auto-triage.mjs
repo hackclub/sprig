@@ -14,6 +14,7 @@ import {
 	githubRequest,
 	hasLabel,
 	inferSubmissionMetadata,
+	isReviewCommitOutdated,
 	parseTags,
 	readGitHubEvent,
 	removeLabel,
@@ -32,7 +33,7 @@ import {
 	findDuplicateGroup,
 	parseOlderNotice,
 } from "./duplicate-detection.mjs";
-import { autoReviewLabelChanges, reconcileReviewStatus } from "./review-state.mjs";
+import { autoReviewLabelChanges, getActiveReviewCommits, reconcileReviewStatus } from "./review-state.mjs";
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) throw new Error("GITHUB_TOKEN is required");
@@ -156,7 +157,7 @@ try {
 Auto triage could not complete validation for this submission:
 > ${error.message}
 
-Please check that submitted files can be accessed, or ask a maintainer for assistance.`,
+Please check that submitted files can be accessed, or ask in #sprig on Slack (with your PR number) or tag \`@LucasHT22\` here for assistance.`,
 	});
 	process.exit(1);
 }
@@ -523,11 +524,31 @@ function readFileSafe(filePath) {
 	}
 }
 
-async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha }) {
+async function getLatestReviewStatus({ owner, repo, token, prNumber, reviewers, authorLogin, headSha, pullFiles }) {
 	if (!reviewers || reviewers.size === 0) return "unknown";
 	try {
 		const reviews = await githubPaginated(token, `/repos/${owner}/${repo}/pulls/${prNumber}/reviews`);
-		return reconcileReviewStatus({ reviews, reviewers, authorLogin, headSha });
+		const pendingCommits = getActiveReviewCommits({ reviews, reviewers, authorLogin, headSha });
+		const outdatedCommitIds = new Set();
+		for (const commitId of pendingCommits) {
+			const isOutdated = await isReviewCommitOutdated({
+				owner,
+				repo,
+				token,
+				prNumber,
+				commitId,
+				headSha,
+				submissionFiles: pullFiles,
+			});
+			if (isOutdated) outdatedCommitIds.add(commitId);
+		}
+		return reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin,
+			headSha,
+			isCommitOutdated: (cid) => !cid || (cid !== headSha && outdatedCommitIds.has(cid)),
+		});
 	} catch (e) {
 		console.warn("Unable to fetch reviews; skipping review reconciliation:", e.message);
 		return "unknown";
@@ -545,6 +566,7 @@ async function applyLabels(result) {
 		reviewers,
 		authorLogin: pullRequest.user?.login,
 		headSha: pullRequest.head?.sha,
+		pullFiles,
 	});
 	const changes = autoReviewLabelChanges({
 		labels: currentLabels,
@@ -643,7 +665,12 @@ function buildComment(result) {
 			});
 			const snippet = buildMetadataSnippet(inferred);
 
-			checksSection += `> [!TIP]\n> **How to fix metadata:**\n> Click **[Edit Game File](${editUrl})** and paste this block at the very top (line 1) of \`${result.gameFile}\`.\n>\n> *Note: We generated this header automatically from your PR details to help you out. Please review it and update any details (like your title, description, or tags) to make sure they match your game before committing!*\n> \`\`\`javascript\n> ${snippet.split("\n").join("\n> ")}\n> \`\`\`\n\n`;
+			const hasMissingHeader = failedChecks.some((c) => c.name === "Metadata header");
+			const actionStep = hasMissingHeader
+				? `Paste the header below at line 1 of \`${result.gameFile}\`.`
+				: `Replace the comment header at the top of \`${result.gameFile}\` with the block below.`;
+
+			checksSection += `> [!TIP]\n> **How to fix metadata:**\n> 1. Click **[Edit Game File](${editUrl})**.\n> 2. ${actionStep}\n> 3. Check the details, then commit your changes.\n\n> [!IMPORTANT]\n> **Auto-generated header: please review before committing!**\n> We drafted this header from your PR details, but it may not be 100% accurate. Verify that \`@title\`, \`@description\`, and \`@tags\` match your actual game before saving.\n\n\`\`\`javascript\n${snippet}\n\`\`\`\n\n`;
 		}
 	}
 
@@ -696,7 +723,7 @@ ${links.join("\n")}
 
 ${checksSection}${warningLines.join("\n")}
 
-${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes." : `@${pullRequest.user.login}: you can update your game right here ([edit file](${editUrl})) or push new commits. Once you do, these checks will rerun automatically! If you get stuck or have questions, ask in the #sprig channel on Slack or ping @LucasHT22 here.`}
+${result.ok ? "Reviewers: please use the play link to playtest, then approve or request changes.\n\nAuthor: if your PR has been waiting for review for more than a few days, ask in #sprig on Slack (with your PR number) or tag `@LucasHT22` here." : `@${pullRequest.user.login}: you can update your game right here ([edit file](${editUrl})) or push new commits. Once you do, these checks will rerun automatically! If you get stuck or have questions, ask in #sprig on Slack (with your PR number) or tag \`@LucasHT22\` here.`}
 `;
 }
 
