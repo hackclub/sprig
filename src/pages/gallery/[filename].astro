@@ -1,16 +1,15 @@
 ---
-import '../../global.css'
-import Editor from '../../components/big-interactive-pages/editor'
-import StandardHead from '../../components/standard-head.astro'
-import { signal } from '@preact/signals'
-import type { PersistenceState } from '../../lib/state'
-import { getSession } from '../../lib/game-saving/account'
-import { getGalleryGames } from '../../lib/game-saving/gallery'
-import { mobileUserAgent } from '../../lib/utils/mobile'
-import { getGameTutorialContent } from '../../lib/astro-content'
-import MobilePlayer from "../../components/big-interactive-pages/mobile-player";
+import '../../../global.css'
+import DesktopPlayer from "../../../components/big-interactive-pages/desktop-player";
+import StandardHead from '../../../components/standard-head.astro'
+import { getSession } from '../../../lib/game-saving/account'
+import { getGalleryGames } from '../../../lib/game-saving/gallery'
+import MobilePlayer from '../../../components/big-interactive-pages/mobile-player'
+import { mobileUserAgent } from '../../../lib/utils/mobile'
+import { getGameTutorialContent } from '../../../lib/astro-content'
 import fs from 'fs'
 import path from 'path'
+import Navbar from "../../../components/navbar-main";
 
 const session = await getSession(Astro.cookies)
 
@@ -30,27 +29,25 @@ const metadata = games.find(game => game.filename === filename)
 const name = metadata?.title
 const authorName = metadata?.author
 
-const persistenceState = signal<PersistenceState>({
-	kind: 'SHARED',
-	name: (name ?? filename) || 'Untitled',
-	authorName: authorName || '',
-	code: code,
-	stale: false,
-	tutorial,
-	tutorialName: tutorial ? filename : undefined,
-	tutorialIndex: 0,
-	session
-})
 const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 
-// if (isMobile) return Astro.redirect(`/gallery/${filename}`, 302)
+const isLoggedIn = !!session?.session.full
+
 ---
 
 <html lang='en'>
 <head>
 	<StandardHead title={(name ?? filename) || 'Untitled'} />
+	<script>
+		import {theme, switchTheme} from "../../../lib/state";
+		import type {ThemeType} from "../../../lib/state";
+		const currentTheme = localStorage.getItem("theme") ?? localStorage.getItem("isDark") ?? "light"
+		theme.value = currentTheme as ThemeType;
+
+		switchTheme(theme.value);
+	</script>
 </head>
-<body>
+<body style="display: flex; flex-direction: column">
 {isMobile ? (
 	<MobilePlayer
 		client:load
@@ -59,13 +56,14 @@ const isMobile = mobileUserAgent(Astro.request.headers.get('user-agent') ?? '')
 		authorName={authorName || ''}
 	/>
 ) : (
-	<Editor
+	<Navbar session={session} />
+	<DesktopPlayer
 		client:load
-		persistenceState={persistenceState}
-		cookies={{
-			outputAreaSize: Astro.cookies.get('outputAreaSize')?.number(),
-			hideHelp: Astro.cookies.get('hideHelp')?.boolean()
-		}}
+		code={code}
+		gameName={(name ?? filename) || 'Untitled'}
+		authorName={authorName || ''}
+		filename={filename}
+		isLoggedIn={isLoggedIn}
 	/>
 )}
 </body>
