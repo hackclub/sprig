@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
-import { autoReviewLabelChanges, reconcileReviewStatus } from "./review-state.mjs";
+import { describe, expect, it, vi } from "vitest";
+import { autoReviewLabelChanges, getActiveReviewCommits, getActiveReviews, reconcileReviewStatus } from "./review-state.mjs";
+import { isReviewCommitOutdated } from "./review-utils.mjs";
 
 describe("autoReviewLabelChanges", () => {
 	it("sets Ready for Playtest on passing validation for new submissions", () => {
@@ -86,6 +87,18 @@ describe("autoReviewLabelChanges", () => {
 		expect(changes.approvalInvalidated).toBe(true);
 	});
 
+	it("resets Needs Author to Ready for Playtest on synchronize when reviewStatus is none", () => {
+		const changes = autoReviewLabelChanges({
+			labels: ["Submission", "Verified", "Needs Author"],
+			validationOk: true,
+			eventAction: "synchronize",
+			reviewStatus: "none",
+		});
+		expect(changes.state).toBe("Ready for Playtest");
+		expect(changes.add).toContain("Ready for Playtest");
+		expect(changes.remove).toContain("Needs Author");
+	});
+
 	it("removes Ready for Maintainer and sets Needs Author on failed validation", () => {
 		const changes = autoReviewLabelChanges({
 			labels: ["Submission", "Verified", "Ready for Maintainer"],
@@ -111,12 +124,21 @@ describe("reconcileReviewStatus", () => {
 		expect(status).toBe("changes_requested");
 	});
 
-	it("returns changes_requested even when changes were requested on an earlier commit", () => {
+	it("returns none when changes were requested on an earlier commit", () => {
 		const reviews = [
 			{ user: { login: "SSoggyTacoMan" }, state: "CHANGES_REQUESTED", commit_id: "olderSha", submitted_at: "2026-10-04T09:00:00Z" },
 		];
 		const status = reconcileReviewStatus({ reviews, reviewers, authorLogin: "author1", headSha });
-		expect(status).toBe("changes_requested");
+		expect(status).toBe("none");
+	});
+
+	it("returns approved when approval is on headSha and changes were requested on an earlier commit", () => {
+		const reviews = [
+			{ user: { login: "SSoggyTacoMan" }, state: "CHANGES_REQUESTED", commit_id: "olderSha", submitted_at: "2026-10-04T09:00:00Z" },
+			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: headSha, submitted_at: "2026-10-04T09:05:00Z" },
+		];
+		const status = reconcileReviewStatus({ reviews, reviewers, authorLogin: "author1", headSha });
+		expect(status).toBe("approved");
 	});
 
 	it("prioritizes changes_requested over approval from another reviewer", () => {
@@ -181,5 +203,160 @@ describe("reconcileReviewStatus", () => {
 
 	it("returns unknown when reviewers set is empty or undefined", () => {
 		expect(reconcileReviewStatus({ reviews: [], reviewers: null, authorLogin: "author1", headSha })).toBe("unknown");
+	});
+
+	it("preserves changes_requested across non-game commits when isCommitOutdated is false", () => {
+		const reviews = [
+			{ user: { login: "SSoggyTacoMan" }, state: "CHANGES_REQUESTED", commit_id: "mergeSha", submitted_at: "2026-10-04T09:00:00Z" },
+		];
+		const status = reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin: "author1",
+			headSha,
+			isCommitOutdated: (cid) => cid !== "mergeSha",
+		});
+		expect(status).toBe("changes_requested");
+	});
+
+	it("preserves approved across non-game commits when isCommitOutdated is false", () => {
+		const reviews = [
+			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: "mergeSha", submitted_at: "2026-10-04T09:00:00Z" },
+		];
+		const status = reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin: "author1",
+			headSha,
+			isCommitOutdated: (cid) => cid !== "mergeSha",
+		});
+		expect(status).toBe("approved");
+	});
+
+	it("resets changes_requested to none when isCommitOutdated is true", () => {
+		const reviews = [
+			{ user: { login: "SSoggyTacoMan" }, state: "CHANGES_REQUESTED", commit_id: "olderSha", submitted_at: "2026-10-04T09:00:00Z" },
+		];
+		const status = reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin: "author1",
+			headSha,
+			isCommitOutdated: () => true,
+		});
+		expect(status).toBe("none");
+	});
+
+	it("treats null or missing commit_id as outdated even with custom isCommitOutdated", () => {
+		const reviews = [
+			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: null, submitted_at: "2026-10-04T09:00:00Z" },
+		];
+		const status = reconcileReviewStatus({
+			reviews,
+			reviewers,
+			authorLogin: "author1",
+			headSha,
+			isCommitOutdated: () => false,
+		});
+		expect(status).toBe("none");
+	});
+});
+
+describe("getActiveReviews and getActiveReviewCommits", () => {
+	it("filters out non-reviewers, author, and non-actionable review states", () => {
+		const reviews = [
+			{ user: { login: "random" }, state: "APPROVED", commit_id: "sha1", submitted_at: "2026-10-04T09:00:00Z" },
+			{ user: { login: "author1" }, state: "APPROVED", commit_id: "sha1", submitted_at: "2026-10-04T09:00:00Z" },
+			{ user: { login: "SSoggyTacoMan" }, state: "COMMENTED", commit_id: "sha1", submitted_at: "2026-10-04T09:00:00Z" },
+			{ user: { login: "SSoggyTacoMan" }, state: "CHANGES_REQUESTED", commit_id: "sha2", submitted_at: "2026-10-04T10:00:00Z" },
+			{ user: { login: "LucasHT22" }, state: "APPROVED", commit_id: "sha3", submitted_at: "2026-10-04T11:00:00Z" },
+		];
+		const active = getActiveReviews({ reviews, reviewers: new Set(["ssoggytacoman", "lucasht22"]), authorLogin: "author1" });
+		expect(active).toHaveLength(2);
+		expect(active.map((r) => r.user.login)).toEqual(["SSoggyTacoMan", "LucasHT22"]);
+
+		const commits = getActiveReviewCommits({
+			reviews,
+			reviewers: new Set(["ssoggytacoman", "lucasht22"]),
+			authorLogin: "author1",
+			headSha: "sha3",
+		});
+		expect(commits).toEqual(["sha2"]);
+	});
+});
+
+describe("isReviewCommitOutdated", () => {
+	it("returns false when commitId matches headSha or either is missing", async () => {
+		expect(await isReviewCommitOutdated({ commitId: "abc", headSha: "abc" })).toBe(false);
+		expect(await isReviewCommitOutdated({ commitId: null, headSha: "abc" })).toBe(false);
+		expect(await isReviewCommitOutdated({ commitId: "abc", headSha: null })).toBe(false);
+	});
+
+	it("returns false when file blob SHA at commitId matches headSha", async () => {
+		const originalFetch = globalThis.fetch;
+		globalThis.fetch = vi.fn().mockResolvedValue({
+			ok: true,
+			status: 200,
+			text: async () => JSON.stringify({ sha: "blobSha1" }),
+		});
+
+		try {
+			const outdated = await isReviewCommitOutdated({
+				owner: "hackclub",
+				repo: "sprig",
+				token: "token",
+				prNumber: 123,
+				commitId: "sha1",
+				headSha: "sha2",
+				submissionFiles: [{ filename: "games/my-game.js", sha: "blobSha1" }],
+			});
+			expect(outdated).toBe(false);
+		} finally {
+			globalThis.fetch = originalFetch;
+		}
+	});
+
+	it("returns true when file blob SHA at commitId differs from headSha", async () => {
+		const originalFetch = globalThis.fetch;
+		globalThis.fetch = vi.fn().mockResolvedValue({
+			ok: true,
+			status: 200,
+			text: async () => JSON.stringify({ sha: "differentBlobSha" }),
+		});
+
+		try {
+			const outdated = await isReviewCommitOutdated({
+				owner: "hackclub",
+				repo: "sprig",
+				token: "token",
+				prNumber: 123,
+				commitId: "sha1",
+				headSha: "sha2",
+				submissionFiles: [{ filename: "games/my-game.js", sha: "blobSha1" }],
+			});
+			expect(outdated).toBe(true);
+		} finally {
+			globalThis.fetch = originalFetch;
+		}
+	});
+
+	it("returns true as safe fallback when contents request throws", async () => {
+		const originalFetch = globalThis.fetch;
+		globalThis.fetch = vi.fn().mockRejectedValue(new Error("Network error"));
+
+		try {
+			const outdated = await isReviewCommitOutdated({
+				owner: "hackclub",
+				repo: "sprig",
+				token: "token",
+				prNumber: 123,
+				commitId: "sha1",
+				headSha: "sha2",
+				submissionFiles: [{ filename: "games/my-game.js", sha: "blobSha1" }],
+			});
+			expect(outdated).toBe(true);
+		} finally {
+			globalThis.fetch = originalFetch;
+		}
 	});
 });
