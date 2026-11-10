@@ -101,6 +101,12 @@
 	gap: 14px;
 }
 
+.navActions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
 /* Logo */
 .logo a,
 .logo button {
@@ -467,6 +473,21 @@
 
 	.desktop {
 		display: none;
+	}
+}
+
+@media (max-width: 480px) {
+	.rightActions {
+		gap: 8px;
+		flex-wrap: wrap;
+		height: auto;
+		justify-content: center;
+		padding-bottom: 6px;
+	}
+
+	.navActions {
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 }
 

@@ -32,6 +32,7 @@ interface DesktopPlayerProps {
 	filename: string
 	isLoggedIn: boolean
 	hearted: boolean
+	embedded?: boolean
 }
 
 export default function DesktopPlayer(props: DesktopPlayerProps) {
@@ -156,7 +157,7 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 	});
 	
 	return (
-		<div className={styles.rootContainer}>
+		<div className={`${styles.rootContainer} ${props.embedded ? styles.embedded : ''}`}>
 		<div className={styles.root}>
 			<div ref={screenContainer} style={outputArea.current ? {
 				height: canvasScreenSize.value.height,
@@ -225,6 +226,7 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 					</button>
 				</div>
 			</div>
+			{!props.embedded && (
 			<div className={styles.meta} id="desktop-player-meta">
 				<div>
 					<div class={styles.title}>
@@ -297,7 +299,8 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 					</Button>
 				</div>
 				</div>
-				</div>
+			</div>
+			)}
 			</div>
 		</div>
 	)
