@@ -182,7 +182,7 @@ function step(dx, dy) {
   facing = { x: dx, y: dy };
 }
 
-// Auto-aim: the Scratch game aims at the mouse, here we aim at the nearest enemy.
+// Auto-aim
 function shoot() {
   if (cd > 0) {
     return;
@@ -349,7 +349,7 @@ function updateEnemy(e, blast) {
     thy = true;
   }
 
-  // boss + minecraft guy have hit points and a short damage cooldown
+  // boss + guy have hit points and a short damage cooldown
   if (big && e.cd <= 0 && e.hp > 1 && (tb || th || thy)) {
     e.hp = e.hp - 1;
     if (th && !inv) {
