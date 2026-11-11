@@ -3,6 +3,7 @@
 @author: Kristian dos Santos
 @tags: ['shooter']
 @addedOn: 2026-10-24
+@description: A custom game called Solar Odyssey built for Sprig.
 
 CONTROLS
   W A S D  move
