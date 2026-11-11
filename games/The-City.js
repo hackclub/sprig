@@ -1,10 +1,7 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
 @title: The City
 @author: Nicholas Garnsworthy
-@description: Build your city! Harvest wood and stone. Smelt stone into metal before finally selling it all to make money! Watch your citizens move and work. Move with WSAD; place and pick buildings with K and I.
+@description: Build your city! Harvest wood and stone. Smelt stone into metal before finally selling it all to make money! Watch your citizens move and work. Move with WSAD; place and pick buildings with K and I. The resources are listed in the order of wood, stone, metal, and then money. To win have over 1000 money!
 @tags: ['sandbox', 'building', 'agent simulation']
 @addedOn: 2026-11-09
 */
@@ -415,7 +412,7 @@ function place() {
   if (resources[3] >= cost) {
     [x, y] = screenToWorld(Math.floor(width() / 2), Math.floor(height() / 2))
     current = getGlobal(x, y)
-    if (current == ground)
+    if (current === ground || current === picked)
       return
     resources[3] += getPrice(current) * sellfactor
     setGlobal(x, y, picked)
@@ -441,7 +438,16 @@ ${resources.map(e=>Math.floor(e)).join(",")}`, {
         y: 15,
         color: color`3`
       })
+      break;
     }
+  }
+
+  if(resources[3] > 1000) {
+    addText(`You WIN!`, {
+      x: 12,
+      y: 15,
+      color: color`3`
+    })
   }
 }
 
