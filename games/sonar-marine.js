@@ -4,8 +4,8 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: sonar marine
 @description: Sonar Machine is a simple game where your objective is to move your submarine and get to the ore, but what follows you is an evil sea monster. In the deep darkness of the ocean, you can only see ore and the monster with your sonar gadget by pressing 'i' 
 @author: Ansh
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@tags: ['puzzle', 'sci-fi']
+@addedOn: 2026-11-11
 */
 
 
