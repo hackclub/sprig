@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "preact/hooks";
 import { loadThumbnailUrl } from "../lib/thumbnail";
-import { IoHeart } from "react-icons/io5";
+import HeartIcon from "./heart-icon";
 
 type GalleryGameProps = {
 	filename: string
@@ -57,7 +57,7 @@ export default function GalleryGame({ setFilter, filter, show, filename, title, 
 				<p class="author">by @{author}</p>
 				{likes !== undefined && (
 					<span class="game-likes" title={`${likes} ${likes === 1 ? "like" : "likes"}`}>
-						<IoHeart aria-hidden="true" />{likes}
+						<HeartIcon filled />{likes}
 					</span>
 				)}
 			</div>

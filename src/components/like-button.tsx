@@ -1,6 +1,6 @@
 import { useEffect } from 'preact/hooks'
 import { useSignal } from '@preact/signals'
-import { IoHeart, IoHeartOutline } from 'react-icons/io5'
+import HeartIcon from './heart-icon'
 import styles from './like-button.module.css'
 
 interface LikeButtonProps {
@@ -70,7 +70,7 @@ export default function LikeButton(props: LikeButtonProps) {
 			aria-label={label}
 			title={label}
 		>
-			{liked.value ? <IoHeart /> : <IoHeartOutline />}
+			<HeartIcon filled={liked.value} />
 			{count.value !== null && <span class={styles.count}>{count.value}</span>}
 		</button>
 	)

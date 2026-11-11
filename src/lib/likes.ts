@@ -4,11 +4,15 @@ const FIELD_USER = 'User ID'
 
 const ALL_COUNTS_TTL_MS = 60_000
 
+export class LikesError extends Error {
+	constructor(message: string, public reason: string) { super(message) }
+}
+
 const config = () => {
 	const token = process.env.AIRTABLE_TOKEN
 	const base = process.env.LIKES_AIRTABLE_BASE ?? process.env.STUCK_AIRTABLE_BASE
 	const table = process.env.LIKES_AIRTABLE_TABLE ?? 'Likes'
-	if (!token || !base) throw new Error('Likes: AIRTABLE_TOKEN and LIKES_AIRTABLE_BASE must be set')
+	if (!token || !base) throw new LikesError('Likes: AIRTABLE_TOKEN and LIKES_AIRTABLE_BASE must be set', 'MISSING_CONFIG')
 	return { token, url: `${API}/${base}/${encodeURIComponent(table)}` }
 }
 
@@ -30,7 +34,10 @@ async function airtable(path: string, init: RequestInit = {}): Promise<any> {
 		}
 	})
 	if (!res.ok) {
-		throw new Error(`Likes: Airtable ${init.method ?? 'GET'} failed (${res.status}): ${await res.text()}`)
+		const body = await res.text()
+		let type = `HTTP_${res.status}`
+		try { type = JSON.parse(body)?.error?.type ?? JSON.parse(body)?.error ?? type } catch {}
+		throw new LikesError(`Likes: Airtable ${init.method ?? 'GET'} failed (${res.status}): ${body}`, String(type))
 	}
 	return res.json()
 }

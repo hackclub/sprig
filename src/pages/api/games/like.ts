@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro'
 import { getFullSession } from '../../../lib/game-saving/account'
 import { getGalleryGames } from '../../../lib/game-saving/gallery'
-import { getGameLikes, likeGame, unlikeGame } from '../../../lib/likes'
+import { getGameLikes, likeGame, unlikeGame, LikesError } from '../../../lib/likes'
 
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), {
 	status,
@@ -19,7 +19,7 @@ export const GET: APIRoute = async ({ url, cookies }) => {
 		return json(await getGameLikes(filename, session?.user.id))
 	} catch (error) {
 		console.error(error)
-		return json({ error: 'Could not load likes' }, 502)
+		return json({ error: 'Could not load likes', reason: error instanceof LikesError ? error.reason : undefined }, 502)
 	}
 }
 
@@ -47,6 +47,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 		return json(result)
 	} catch (error) {
 		console.error(error)
-		return json({ error: 'Could not save like' }, 502)
+		return json({ error: 'Could not save like', reason: error instanceof LikesError ? error.reason : undefined }, 502)
 	}
 }
