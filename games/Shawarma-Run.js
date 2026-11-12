@@ -237,6 +237,22 @@ onInput("d", () => {
     getFirst(player).x += 1;
 });
 
+onInput("i", () => {
+  getFirst(player).y -= 1;
+});
+
+onInput("j", () => {
+  getFirst(player).x -= 1;
+});
+
+onInput("k", () => {
+  getFirst(player).y += 1;
+});
+
+onInput("l", () => {
+  getFirst(player).x += 1;
+});
+
 afterInput(() => {
   
 })
