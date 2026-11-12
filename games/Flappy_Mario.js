@@ -1,6 +1,6 @@
 /*
 @title: Flappy Mario
-@author: Arjun
+@author: Arjun Pai
 @description: Mario and Flappy Bird mashed into one game! Run and jump over blocks like Mario with WASD (A D to move, W to jump). Then Mario flies into the blue sky for 3 seconds and the game turns into Flappy Bird, where any button flaps. Then it's back to Mario, forever.
 @tags: ['arcade']
 @addedOn: 2026-10-19
