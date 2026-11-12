@@ -1,6 +1,6 @@
 /*
 @title: Neon Escape
-@description: Collect all crystals and avoid the red hazards!
+@description: Collect all crystals and avoid the red hazards! Now with 5 exciting levels!
 @author: Custom
 @tags: ['arcade', 'puzzle']
 @addedOn: 2026-06-06
@@ -127,6 +127,17 @@ const levels = [
     w.c.w...c...c.w.w
     w.w.w.w.w.w.w.w.w
     w.c.w.c.h.c.w.c.w
+    w.w.w.w.w.w.w.w.w
+    wpc...c...c...pcw
+    wwwwwwwwwwwwwwwww
+  `,
+  map`
+    wwwwwwwwwwwwwwwww
+    wp.h.c.h.c.h.c.hw
+    w.w.w.w.w.w.w.w.w
+    wc.h.c.h.c.h.c.pw
+    w.w.w.w.w.w.w.w.w
+    wc.h.c.h.c.h.c.cw
     w.w.w.w.w.w.w.w.w
     wpc...c...c...pcw
     wwwwwwwwwwwwwwwww
