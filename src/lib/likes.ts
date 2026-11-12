@@ -9,10 +9,10 @@ export class LikesError extends Error {
 }
 
 const config = () => {
-	const token = process.env.AIRTABLE_TOKEN
+	const token = process.env.LIKES_AIRTABLE_TOKEN ?? process.env.AIRTABLE_TOKEN
 	const base = process.env.LIKES_AIRTABLE_BASE ?? process.env.STUCK_AIRTABLE_BASE
 	const table = process.env.LIKES_AIRTABLE_TABLE ?? 'Likes'
-	if (!token || !base) throw new LikesError('Likes: AIRTABLE_TOKEN and LIKES_AIRTABLE_BASE must be set', 'MISSING_CONFIG')
+	if (!token || !base) throw new LikesError('Likes: an Airtable token and base must be set (LIKES_AIRTABLE_TOKEN / LIKES_AIRTABLE_BASE)', 'MISSING_CONFIG')
 	return { token, url: `${API}/${base}/${encodeURIComponent(table)}` }
 }
 
@@ -65,12 +65,15 @@ export async function getAllLikeCounts(): Promise<Record<string, number>> {
 	if (allCountsInFlight) return allCountsInFlight
 
 	allCountsInFlight = (async () => {
-		const records = await listAll(null, [FIELD_FILENAME])
-		const counts: Record<string, number> = {}
+		const records = await listAll(null, [FIELD_FILENAME, FIELD_USER])
+		const users: Record<string, Set<string>> = {}
 		for (const record of records) {
 			const filename = record.fields[FIELD_FILENAME]
-			if (filename) counts[filename] = (counts[filename] ?? 0) + 1
+			const user = record.fields[FIELD_USER]
+			if (filename && user) (users[filename] ??= new Set()).add(user)
 		}
+		const counts: Record<string, number> = {}
+		for (const [filename, set] of Object.entries(users)) counts[filename] = set.size
 		allCountsCache = { at: Date.now(), counts }
 		return counts
 	})().finally(() => { allCountsInFlight = null })
@@ -89,30 +92,31 @@ export interface GameLikes {
 
 export async function getGameLikes(filename: string, userId?: string | null): Promise<GameLikes> {
 	const records = await listAll(`{${FIELD_FILENAME}} = ${str(filename)}`, [FIELD_USER])
-	const count = records.length
+	const users = new Set(records.map(record => record.fields[FIELD_USER]).filter(Boolean))
+	const count = users.size
 	bumpCachedCount(filename, count)
-	return {
-		count,
-		liked: !!userId && records.some(record => record.fields[FIELD_USER] === userId)
-	}
+	return { count, liked: !!userId && users.has(userId) }
 }
 
+const findUserLikes = (filename: string, userId: string) => listAll(
+	`AND({${FIELD_FILENAME}} = ${str(filename)}, {${FIELD_USER}} = ${str(userId)})`,
+	[FIELD_FILENAME]
+)
+
 export async function likeGame(filename: string, userId: string): Promise<GameLikes> {
-	await airtable('', {
-		method: 'PATCH',
-		body: JSON.stringify({
-			performUpsert: { fieldsToMergeOn: [FIELD_FILENAME, FIELD_USER] },
-			records: [{ fields: { [FIELD_FILENAME]: filename, [FIELD_USER]: userId } }]
+	if ((await findUserLikes(filename, userId)).length === 0) {
+		await airtable('', {
+			method: 'POST',
+			body: JSON.stringify({
+				records: [{ fields: { [FIELD_FILENAME]: filename, [FIELD_USER]: userId } }]
+			})
 		})
-	})
+	}
 	return getGameLikes(filename, userId)
 }
 
 export async function unlikeGame(filename: string, userId: string): Promise<GameLikes> {
-	const records = await listAll(
-		`AND({${FIELD_FILENAME}} = ${str(filename)}, {${FIELD_USER}} = ${str(userId)})`,
-		[FIELD_FILENAME]
-	)
+	const records = await findUserLikes(filename, userId)
 	for (let i = 0; i < records.length; i += 10) {
 		const params = new URLSearchParams()
 		for (const record of records.slice(i, i + 10)) params.append('records[]', record.id)
