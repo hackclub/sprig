@@ -1,0 +1,40 @@
+.likeButton {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 0;
+	border: none;
+	background: none;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+	user-select: none;
+}
+
+.likeButton > svg {
+	height: 30px;
+	width: auto;
+	transition: transform 0.12s ease;
+}
+
+.likeButton:hover > svg {
+	transform: scale(1.1);
+}
+
+.likeButton:active > svg {
+	transform: scale(0.92);
+}
+
+.liked > svg {
+	color: #ef2828;
+}
+
+.loggedOut {
+	opacity: 0.7;
+}
+
+.count {
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	min-width: 1ch;
+}

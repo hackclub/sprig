@@ -1,9 +1,10 @@
 import {useEffect, useRef} from 'preact/hooks'
+import SandboxedGameFrame from './sandboxed-game-frame'
+import type { SandboxedGameControllerHandle } from '../../lib/engine/sandbox-controller'
 import styles from './desktop-player.module.css'
 import {
 	IoExpandOutline,
-	IoHeart,
-	IoHeartOutline, IoLink, IoLogoFacebook, IoLogoLinkedin,
+	IoLink, IoLogoFacebook, IoLogoLinkedin,
 	IoLogoTwitter,
 	IoOpen,
 	IoPlay,
@@ -21,9 +22,7 @@ import {exitFullscreen, fullscreenElement, requestFullscreen} from "../../lib/ut
 import Button from "../design-system/button";
 import {VscLoading} from "react-icons/vsc";
 import {upload, uploadState} from "../../lib/upload";
-import SandboxedGameFrame from "./sandboxed-game-frame";
-import type { SandboxedGameControllerHandle } from "../../lib/engine/sandbox-controller";
-import { logInfo } from "../popups-etc/help";
+import LikeButton from "../like-button";
 
 interface DesktopPlayerProps {
 	code: string
@@ -31,15 +30,17 @@ interface DesktopPlayerProps {
 	authorName: string
 	filename: string
 	isLoggedIn: boolean
-	hearted: boolean
+	// set false when the page renders its own LikeButton (or the game can't be liked)
+	showLike?: boolean
 }
 
 export default function DesktopPlayer(props: DesktopPlayerProps) {
+	// Game code is untrusted: it only ever runs inside the opaque-origin sandbox iframe
 	const player = useRef<SandboxedGameControllerHandle | null>(null)
+	const playerVersion = useSignal(0)
 	const outputArea = useRef<HTMLDivElement>(null);
 	const screenContainer = useRef<HTMLDivElement>(null);
 	const screenControls = useRef<HTMLDivElement>(null);
-	const playerVersion = useSignal(0);
 	
 	// acts a bit like a timer; if >0, shake game canvas
 	// activated when a game is run to show it's being run
@@ -47,6 +48,7 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 
 	const onStop = async () => {
 		if (cleanupRef.value) cleanupRef.value?.();
+		cleanupRef.value = undefined;
 	};
 
 	const canvasScreenSize = useSignal({
@@ -58,10 +60,9 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 		if (!player.current) return;
 		if (cleanupRef.value) cleanupRef.value?.();
 		errorLog.value = [];
-		logInfo.value = [];
 		player.current.run(props.code);
-
 		player.current.focus();
+
 		if (screenShake) {
 			screenShake.value++;
 		}
@@ -74,6 +75,7 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 		cleanupRef.value = () => player.current?.stop();
 	};
 
+	// (re)run when the code changes or the sandbox controller becomes available
 	useEffect(() => {
 		onRun()
 	}, [props.code, playerVersion.value])
@@ -102,30 +104,6 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 			requestFullscreen(screenContainer.current!);
 		}
 	};
-	
-	const hearted = useSignal(props.hearted)
-	
-	const upvoteGame = () => {
-		hearted.value = true
-		return fetch("/api/games/upvote", {
-			method: "POST",
-			body: JSON.stringify({
-				action: "upvote",
-				filename: props.filename
-			})
-		})
-	}
-	
-	const removeUpvote = () => {
-		hearted.value = false
-		return fetch("/api/games/upvote", {
-			method: "POST",
-			body: JSON.stringify({
-				action: "remove",
-				filename: props.filename
-			})
-		})
-	}
 	
 	const shareMenuOpen = useSignal(false)
 	const shareMenuRef = useRef<HTMLDivElement>(null);
@@ -173,6 +151,7 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 							width: (1.25 * canvasScreenSize.value.height),
 							maxWidth: "100%",
 						} : {}}
+						title={`${props.gameName} (Sprig game)`}
 						onController={(controller) => {
 							player.current = controller;
 							playerVersion.value++;
@@ -230,11 +209,9 @@ export default function DesktopPlayer(props: DesktopPlayerProps) {
 					<div class={styles.title}>
 					<h1>{props.gameName}</h1>
 					<div class={styles.titleButtons}>
-						<div class={`${styles.button} ${hearted.value && styles.hearted} ${props.isLoggedIn || styles.heartDisabled}`}
-							 onClick={() => {
-								 props.isLoggedIn && (hearted.value ? removeUpvote() : upvoteGame())
-							 }}
-						>{hearted.value ? <IoHeart/> : <IoHeartOutline/>}</div>
+						{props.showLike !== false && (
+							<LikeButton class={styles.button} filename={props.filename} isLoggedIn={props.isLoggedIn} />
+						)}
 						
 						<div ref={shareMenuRef} class={styles.shareButtonContainer}>
 							
