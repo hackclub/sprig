@@ -1,11 +1,10 @@
 /*
-  @title: Crate Pusher
-  @description: Push every crate onto a red target. 3 short levels.
-  @tags: ['puzzle']
-
-  W A S D  move and push crates
-  J        restart the level
-*/
+    @title: box pusher
+    @author: rufus
+    @description: push the boxes to the goal
+    @tags: ['puzzle']
+    @addedOn: 2026-11-14
+    */
 
 const player = "p"
 const crate = "c"
