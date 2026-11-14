@@ -1,13 +1,9 @@
-/*
 @title: Neon Vault
 @author: Riddhish
+@tags: ['puzzle', 'maze']
+@addedOn: 2026-11-14
+@description: Navigate through 5 neon maze stages, collect all gems, and dodge spikes to unlock the exit portal.
 */
-
-const player = "p"
-const wall = "w"
-const gem = "c"
-const portal = "g"
-const spike = "s"
 
 setLegend(
   [ player, bitmap`
