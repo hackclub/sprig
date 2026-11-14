@@ -1,7 +1,9 @@
 /*
 @title: 3D Maze
+@author: Joseph Redman
 @description: A pixel-level raycaster maze.
-@tags: ['maze', 'procedural', '3d', 'raycasting', 'raytracing']
+@tags: ['maze', 'puzzle']
+@addedOn: 2026-11-14
 
 Controls:
   W / S  walk forward / back
