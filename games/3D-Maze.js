@@ -4,7 +4,8 @@
 @description: A pixel-level raycaster maze.
 @tags: ['maze', 'puzzle']
 @addedOn: 2026-11-14
-
+*/
+/*
 Controls:
   W / S  walk forward / back
   A / D  turn left / right
