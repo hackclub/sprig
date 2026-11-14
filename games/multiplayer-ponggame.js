@@ -1,8 +1,8 @@
 
 /*
 @title: pong-2player
+@author: techcode-1245
 @description: Classic Pong
-@author:
 @tags: ['pong', '2player']
 @addedOn: 2026-11-14
 */
