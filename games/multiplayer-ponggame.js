@@ -1,3 +1,4 @@
+
 /*
 @title: pong-2player
 @description: Classic Pong
@@ -11,6 +12,7 @@ const rightPlayer = "q"
 const ball = "b"
 const center = "c"
 const wall = "w"
+const obstacle = "o"
 
 setLegend(
 
@@ -62,6 +64,24 @@ setLegend(
 ......3333......
 ................
 ................
+................
+................
+................
+................
+................`],
+
+  [obstacle, bitmap`
+................
+................
+................
+................
+......3333......
+.....333333.....
+....33333333....
+....33333333....
+....33333333....
+.....333333.....
+......3333......
 ................
 ................
 ................
@@ -189,7 +209,6 @@ onInput("w", () => {
     showMenu()
     return
   }
-
   movePaddle(leftPlayer, -1)
 })
 
@@ -221,10 +240,8 @@ function movePaddle(type, direction) {
   const paddle = getAll(type)
 
   if (paddle.length === 0) return
-
   const minY = Math.min(...paddle.map(s => s.y))
   const maxY = Math.max(...paddle.map(s => s.y))
-
   if (direction < 0 && minY > 1) {
     paddle.forEach(s => s.y -= 1)
   }
@@ -233,15 +250,13 @@ function movePaddle(type, direction) {
     paddle.forEach(s => s.y += 1)
   }
 }
-
-// right side controls
+// right side controls for the right player
 
 onInput("i", () => {
   if (gameStarted && gameMode === 2) {
     movePaddle(rightPlayer, -1)
   }
 })
-
 onInput("k", () => {
   if (gameStarted && gameMode === 2) {
     movePaddle(rightPlayer, 1)
@@ -261,6 +276,10 @@ let score2 = 0
 const winningScore = 5
 
 let ballSprite
+
+let speedLevel = 1
+let speedTimer = 0
+let obstacleTimer = 0
 
 function showScore() {
 
@@ -312,12 +331,57 @@ function checkWinner() {
 
 }
 
+function addObstacles() {
+
+  const x = Math.floor(Math.random() * 8) + 4
+  const y = Math.floor(Math.random() * 10) + 3
+
+  addSprite(x, y, obstacle)
+
+}
+function moveObstacles() {
+
+  const obstacles = getAll(obstacle)
+
+  obstacles.forEach(s => {
+    const directions = [
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+      [1, 1],
+      [-1, -1],
+      [1, -1],
+      [-1, 1]
+    ]
+    const direction = directions[
+      Math.floor(Math.random() * directions.length)
+    ]
+
+    const nextX = s.x + direction[0]
+    const nextY = s.y + direction[1]
+
+    if (
+      nextX >= 3 &&
+      nextX <= 12 &&
+      nextY >= 2 &&
+      nextY <= 13
+    ) {
+      s.x = nextX
+      s.y = nextY
+    }
+  })
+}
 function startGame() {
 
   gameStarted = true
 
   score1 = 0
   score2 = 0
+
+  speedLevel = 1
+  speedTimer = 0
+  obstacleTimer = 0
 
   clearText()
 
@@ -346,6 +410,8 @@ wwwwwwwwwwwwwwww
   dx = 1
   dy = 1
 
+  addObstacles()
+
   addSprite(ballX, ballY, ball)
   ballSprite = getFirst(ball)
 
@@ -353,9 +419,9 @@ wwwwwwwwwwwwwwww
 
 }
 
-// ball movement and collision stuff
+//  ball movement and collision stuff: do it today only
 
-setInterval(() => {
+function moveBall() {
 
   if (!gameStarted) return
 
@@ -379,9 +445,6 @@ setInterval(() => {
       dx = 1
     }
   }
-
-  // right paddle collision
-
   if (dx > 0 && nextX === 13) {
 
     const right = getAll(rightPlayer)
@@ -391,7 +454,18 @@ setInterval(() => {
     }
   }
 
-  // computer paddle in 1 player mode
+  const obstacles = getAll(obstacle)
+
+  if (obstacles.some(s => s.x === nextX && s.y === nextY)) {
+
+    dx *= -1
+    dy *= -1
+
+    nextX = ballX + dx
+    nextY = ballY + dy
+
+  }
+  // computer when in only 1 player game
 
   if (gameMode === 1) {
 
@@ -415,9 +489,7 @@ setInterval(() => {
 
   ballX = nextX
   ballY = nextY
-
-  // someone missed the ball!
-
+  // player missed the ball! (noob)
   if (ballX <= 0) {
 
     score2++
@@ -436,9 +508,7 @@ setInterval(() => {
       dy = 1
 
     }
-
   }
-
   if (ballX >= 15) {
 
     score1++
@@ -463,6 +533,49 @@ setInterval(() => {
   if (gameStarted) {
     ballSprite.x = ballX
     ballSprite.y = ballY
+  }
+
+}
+
+setInterval(() => {
+
+  if (!gameStarted) return
+
+  speedTimer++
+  obstacleTimer++
+  //  ball speedincreased every10 seconds
+
+  if (speedTimer >= 10) {
+
+    speedTimer = 0
+
+    if (speedLevel < 4) {
+      speedLevel++
+    }
+
+    clearText()
+    showScore()
+
+    addText(`SPEED ${speedLevel}`, {
+      x: 5,
+      y: 3,
+      color: color`3`
+    })
+
+  }
+  // random ball obstacle should change direction every few seconds
+
+  if (obstacleTimer >= 4) {
+    obstacleTimer = 0
+    moveObstacles()
+  }
+
+  for (let i = 0; i < speedLevel; i++) {
+
+    if (gameStarted) {
+      moveBall()
+    }
+
   }
 
 }, 180)
