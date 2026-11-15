@@ -15,6 +15,9 @@ const parede = "w";
 const lateral = "l";
 const lateralD = "d"
 
+let faseAtual = 0;
+let pontos = 0;
+
 setLegend(
   [jogador, bitmap`
 ................
@@ -50,7 +53,7 @@ setLegend(
 ................
 ................
 ................`],
-    [lateral, bitmap`
+  [lateral, bitmap`
 CCCCCCCCLCC4DD44
 CLCCCCCCCCC44444
 CCCCLLLCCCC4D444
@@ -67,7 +70,7 @@ CCCCLLCCCLCD4444
 CCCLLCCCCLL44DD4
 CCCCLCCLCCC44444
 CCCCCCCCCCC444D4`],
-      [lateralD, bitmap`
+  [lateralD, bitmap`
 44444CCCLCCCCCCC
 444D4CCCCCCCCCCC
 444D4LLCCCCCLLCC
@@ -84,7 +87,6 @@ CCCCCCCCCCC444D4`],
 4DD44CCCCLLCCCCL
 44DD4CCLCCCCLCCL
 44444CCCCCCLCCCC`],
-  
   [parede, bitmap`
 44444444444444D4
 44DD4444444444D4
@@ -103,32 +105,126 @@ CCCLLCCCCLLCCLCC
 CCCCLCCLCCCCCCCC
 CCCCCCCCCCCCCCCC`],
 );
+
 setSolids([jogador, parede, lateral, lateralD]);
 
-setMap(map`
-wwwwwwwwwwwwwcd
-l.cc....cd.cdcd
-l..wwww..d.ddcd
-l.c..c.c.d..dcd
-lc.wwww..d..dcd
-l.....c.cd.cdcd
-lp.c.c...dl.dcd
-wwww..wwww..dcd
-l.....c..dc.dcd
-l..c.......cdcd
-l..w....cd..dcd
-l..cc....dlc..d
-l..lclc..dc.d.d
-wwwwwwwwwwwwwwd`);
+const fases = [
+  map`
+    wwwwwwwwwwwwwww
+    w.............w
+    w.p..c....c...w
+    w.wwww........w
+    w....c...ww...w
+    w.............w
+    w..wwww...c...w
+    w.c...........w
+    w.....c.......w
+    w...........c.w
+    w.............w
+    wwwwwwwwwwwwwww`,
+  map`
+	wwwwwwwwwwwwwww
+	w.............w
+	w.p.c...w.....w
+	w..ww...w..c..w
+	w..w....w.....w
+	w..w..c...ww..w
+	w..wwww....w..w
+	w.c......c.w..w
+	w....wwww....ww
+	w..c.........ww
+	w...........c.w
+	wwwwwwwwwwwwwww`,
+  map`
+	wwwwwwwwwwwwwww
+	w.............w
+	w.p.c...w.....w
+	w..w...w..c...w
+	w..w....w.....w
+	w..w..c...ww..w
+	w..ww....w..w.w
+	w.c......c.w..w
+	w....ww....wwww
+	w..c.........ww
+	w...........c.w
+	wwwwwwwwwwwwwww`,
+  map`
+	wwwwwwwwwwwwwww
+	w.............w
+	w.p.c...w.....w
+	w..ww...w..c..w
+	w..w....w.....w
+	w..w..c...ww..w
+	w..wwww....w..w
+	w.c......c.w..w
+	w....wwww....ww
+	w..c.........ww
+	w...........c.w
+	wwwwwwwwwwwwwww`,
+  map`
+	wwwwwwwwwwwwwww
+	w.............w
+	w.p.c...w.....w
+	w..wwww.w..c..w
+	w..w....w.....w
+	w..w..cw..ww..w
+	w..wwwww...w..w
+	w.c...ww.c.w..w
+	w....wwww....ww
+	w..c.........ww
+	w....w.w..wwc.w
+	wwwwwwwwwwwwwww`,
+  map`
+	wwwwwwwwwwwwwww
+	w.............w
+	w.p.c...w.w.w.w
+	w..ww...w.wcw.w
+	w..w....w.www.w
+	w..w..c...ww..w
+	w..wwww....w..w
+	w.c.....wc.w..w
+	w..w.wwww....ww
+	w.wc.........ww
+	w..w........c.w
+	wwwwwwwwwwwwwww`,
+  map`
+	wwwwwwwwwwwwwww
+	w.....c.......w
+	w.p.c...w.....w
+	w..ww...w..w..w
+	w..ww...w.....w
+	w..wwwc...ww..w
+	w..wwwww...w..w
+	w.ww.....c.w..w
+	w..c.wwww....ww
+	w..wwwwwww...ww
+	w...wcc.....c.w
+	wwwwwwwwwwwwwww`,
+  map`
+	wwwwwwwwwwwwwww
+	wp....w....c..w
+	w.ww.ww.wwww..w
+	w.c..w...w....w
+	wwww.w.w.w.wwww
+	w....w.w...c..w
+	w.wwww.wwwwww.w
+	w.c....w......w
+	w.wwww.w.wwww.w
+	w....c..w...c.w
+	w.wwwwwwwwww..w
+	wwwwwwwwwwwwwww`
+];
 
-let pontos = 0;
-const total = getAll(moeda).length;
+function carregarFase() {
+  setMap(fases[faseAtual]);
 
-function mostrarPlacar() {
   clearText();
-  addText("coins: " + pontos + "/" + total, { x: 4, y: 15, color: color`9` });
+
+  addText("fase " + (faseAtual + 1), { x: 5, y: 1, color: color`9`});
+  addText("coins: " + getAll(moeda).length, { x: 3, y: 15, color: color`9`});
 }
-mostrarPlacar();
+
+carregarFase();
 
 onInput("w", () => { getFirst(jogador).y -= 1; });
 onInput("s", () => { getFirst(jogador).y += 1; });
@@ -142,14 +238,25 @@ afterInput(() => {
     for (const sprite of tile) {
       if (sprite.type === moeda) {
         sprite.remove();
-        pontos += 1;
+        pontos++;
       }
     }
   }
+  clearText();
 
-  mostrarPlacar();
+  addText("fase: " + (faseAtual + 1), { x: 4, y: 1, color: color`9`});
+  addText("coins: " + getAll(moeda).length, { x: 3, y: 15, color: color`9`});
 
   if (getAll(moeda).length === 0) {
-    addText("U WIN!", { x: 6, y: 7, color: color`0` });
+
+    if (faseAtual < fases.length - 1) {
+      faseAtual++;
+      carregarFase();
+    } else {
+      clearText();
+      
+      addText("U WIN!", { x: 5, y: 6, color: color`6`});
+      addText("score: " + pontos, { x: 5, y: 9, color: color`9`});
+    }
   }
 });
