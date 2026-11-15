@@ -1,10 +1,9 @@
-
 /*
 @title: pong-2player
-@author: techcode-1245
 @description: Classic Pong
+@author:
 @tags: ['pong', '2player']
-@addedOn: 2026-11-14
+@addedOn: 2026-11-15
 */
 
 const leftPlayer = "p"
@@ -259,12 +258,66 @@ let dy = 1
 
 let score1 = 0
 let score2 = 0
+const winningScore = 5
 
 let ballSprite
+
+function showScore() {
+
+  addText(`${score1}     ${score2}`, {
+    x: 6,
+    y: 1,
+    color: color`3`
+  })
+
+}
+
+function checkWinner() {
+
+  if (score1 >= winningScore) {
+
+    gameStarted = false
+    clearText()
+
+    addText("LEFT WINS!", {
+      x: 5,
+      y: 9,
+      color: color`3`
+    })
+
+    addText("RIGHT LOSES", {
+      x: 5,
+      y: 9,
+      color: color`3`
+    })
+
+  } else if (score2 >= winningScore) {
+
+    gameStarted = false
+    clearText()
+
+    addText("RIGHT WINS!", {
+      x: 5,
+      y: 9,
+      color: color`3`
+    })
+
+    addText("LEFT LOSES", {
+      x: 5,
+      y: 9,
+      color: color`3`
+    })
+
+  }
+
+}
 
 function startGame() {
 
   gameStarted = true
+
+  score1 = 0
+  score2 = 0
 
   clearText()
 
@@ -295,6 +348,8 @@ wwwwwwwwwwwwwwww
 
   addSprite(ballX, ballY, ball)
   ballSprite = getFirst(ball)
+
+  showScore()
 
 }
 
@@ -367,11 +422,20 @@ setInterval(() => {
 
     score2++
 
-    ballX = 8
-    ballY = 8
+    checkWinner()
 
-    dx = 1
-    dy = 1
+    if (gameStarted) {
+
+      clearText()
+      showScore()
+
+      ballX = 8
+      ballY = 8
+
+      dx = 1
+      dy = 1
+
+    }
 
   }
 
@@ -379,15 +443,26 @@ setInterval(() => {
 
     score1++
 
-    ballX = 8
-    ballY = 8
+    checkWinner()
 
-    dx = -1
-    dy = -1
+    if (gameStarted) {
+
+      clearText()
+      showScore()
+
+      ballX = 8
+      ballY = 8
+
+      dx = -1
+      dy = -1
+
+    }
 
   }
 
-  ballSprite.x = ballX
-  ballSprite.y = ballY
+  if (gameStarted) {
+    ballSprite.x = ballX
+    ballSprite.y = ballY
+  }
 
 }, 180)
