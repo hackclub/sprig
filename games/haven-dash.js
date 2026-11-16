@@ -1,3 +1,19 @@
+/*
+@title: haven dash
+@author: kj101dis
+@description: its a platformer game based on the haven
+@tags: ['platformer']
+@addedOn: 2026-11-15
+*/
+
+
+
+
+/* this is the sprig version of my haven game*/
+
+
+
+
 const player = "p";
 const playerL = "q";
 const heart = "h";
