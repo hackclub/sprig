@@ -1,3 +1,7 @@
+/* 
+@Title: MAze_CHOPer
+@Author: Daksh Sukhija
+*/
 
 const player      = "p"  
 const wall        = "w"  
