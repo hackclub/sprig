@@ -1,3 +1,6 @@
+/* this is the sprig version of my haven game*/
+
+
 /*
 @title: haven dash
 @author: kj101dis
@@ -382,7 +385,7 @@ function updateCamera() {
   if (vx > 12) cam = Math.floor(P.x - 12);
   if (vx < 7) cam = Math.ceil(P.x - 7);
   cam = Math.max(0, Math.min(W - VIEW_W, cam));
-  if (cam !== oldCam) dirty = true;   // scrolled: redraw the visible part of the level
+  if (cam !== oldCam) dirty = true;   
 }
 
 function drawPlayer() {
