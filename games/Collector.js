@@ -110,109 +110,109 @@ setSolids([jogador, parede, lateral, lateralD]);
 
 const fases = [
   map`
-    wwwwwwwwwwwwwww
-    w.............w
-    w.p..c....c...w
-    w.wwww........w
-    w....c...ww...w
-    w.............w
-    w..wwww...c...w
-    w.c...........w
-    w.....c.......w
-    w...........c.w
-    w.............w
-    wwwwwwwwwwwwwww`,
+  wwwwwwwwwwwwwww
+  w.............w
+  w.p..c....c...w
+  w.wwww........w
+  w....c...ww...w
+  w.............w
+  w..wwww...c...w
+  w.c...........w
+  w.....c.......w
+  w...........c.w
+  w.............w
+  wwwwwwwwwwwwwww`,
   map`
-	wwwwwwwwwwwwwww
-	w.............w
-	w.p.c...w.....w
-	w..ww...w..c..w
-	w..w....w.....w
-	w..w..c...ww..w
-	w..wwww....w..w
-	w.c......c.w..w
-	w....wwww....ww
-	w..c.........ww
-	w...........c.w
-	wwwwwwwwwwwwwww`,
+  wwwwwwwwwwwwwww
+  w.............w
+  w.p.c...w.....w
+  w..ww...w..c..w
+  w..w....w.....w
+  w..w..c...ww..w
+  w..wwww....w..w
+  w.c......c.w..w
+  w....wwww....ww
+  w..c.........ww
+  w...........c.w
+  wwwwwwwwwwwwwww`,
   map`
-	wwwwwwwwwwwwwww
-	w.............w
-	w.p.c...w.....w
-	w..w...w..c...w
-	w..w....w.....w
-	w..w..c...ww..w
-	w..ww....w..w.w
-	w.c......c.w..w
-	w....ww....wwww
-	w..c.........ww
-	w...........c.w
-	wwwwwwwwwwwwwww`,
+  wwwwwwwwwwwwwww
+  w.............w
+  w.p.c...w.....w
+  w..w...w..c...w
+  w..w....w.....w
+  w..w..c...ww..w
+  w..ww....w..w.w
+  w.c......c.w..w
+  w....ww....wwww
+  w..c.........ww
+  w...........c.w
+  wwwwwwwwwwwwwww`,
   map`
-	wwwwwwwwwwwwwww
-	w.............w
-	w.p.c...w.....w
-	w..ww...w..c..w
-	w..w....w.....w
-	w..w..c...ww..w
-	w..wwww....w..w
-	w.c......c.w..w
-	w....wwww....ww
-	w..c.........ww
-	w...........c.w
-	wwwwwwwwwwwwwww`,
+  wwwwwwwwwwwwwww
+  w.............w
+  w.p.c...w.....w
+  w..ww...w..c..w
+  w..w....w.....w
+  w..w..c...ww..w
+  w..wwww....w..w
+  w.c......c.w..w
+  w....wwww....ww
+  w..c.........ww
+  w...........c.w
+  wwwwwwwwwwwwwww`,
   map`
-	wwwwwwwwwwwwwww
-	w.............w
-	w.p.c...w.....w
-	w..wwww.w..c..w
-	w..w....w.....w
-	w..w..cw..ww..w
-	w..wwwww...w..w
-	w.c...ww.c.w..w
-	w....wwww....ww
-	w..c.........ww
-	w....w.w..wwc.w
-	wwwwwwwwwwwwwww`,
+  wwwwwwwwwwwwwww
+  w.............w
+  w.p.c...w.....w
+  w..wwww.w..c..w
+  w..w....w.....w
+  w..w..cw..ww..w
+  w..wwwww...w..w
+  w.c...ww.c.w..w
+  w....wwww....ww
+  w..c.........ww
+  w....w.w..wwc.w
+  wwwwwwwwwwwwwww`,
   map`
-	wwwwwwwwwwwwwww
-	w.............w
-	w.p.c...w.w.w.w
-	w..ww...w.wcw.w
-	w..w....w.www.w
-	w..w..c...ww..w
-	w..wwww....w..w
-	w.c.....wc.w..w
-	w..w.wwww....ww
-	w.wc.........ww
-	w..w........c.w
-	wwwwwwwwwwwwwww`,
+  wwwwwwwwwwwwwww
+  w.............w
+  w.p.c...w.w.w.w
+  w..ww...w.wcw.w
+  w..w....w.www.w
+  w..w..c...ww..w
+  w..wwww....w..w
+  w.c.....wc.w..w
+  w..w.wwww....ww
+  w.wc.........ww
+  w..w........c.w
+  wwwwwwwwwwwwwww`,
   map`
-	wwwwwwwwwwwwwww
-	w.....c.......w
-	w.p.c...w.....w
-	w..ww...w..w..w
-	w..ww...w.....w
-	w..wwwc...ww..w
-	w..wwwww...w..w
-	w.ww.....c.w..w
-	w..c.wwww....ww
-	w..wwwwwww...ww
-	w...wcc.....c.w
-	wwwwwwwwwwwwwww`,
+  wwwwwwwwwwwwwww
+  w.....c.......w
+  w.p.c...w.....w
+  w..ww...w..w..w
+  w..ww...w.....w
+  w..wwwc...ww..w
+  w..wwwww...w..w
+  w.ww.....c.w..w
+  w..c.wwww....ww
+  w..wwwwwww...ww
+  w...wcc.....c.w
+  wwwwwwwwwwwwwww`,
   map`
-	wwwwwwwwwwwwwww
-	wp....w....c..w
-	w.ww.ww.wwww..w
-	w.c..w...w....w
-	wwww.w.w.w.wwww
-	w....w.w...c..w
-	w.wwww.wwwwww.w
-	w.c....w......w
-	w.wwww.w.wwww.w
-	w....c..w...c.w
-	w.wwwwwwwwww..w
-	wwwwwwwwwwwwwww`
+  wwwwwwwwwwwwwww
+  wp....w....c..w
+  w.ww.ww.wwww..w
+  w.c..w...w....w
+  wwww.w.w.w.wwww
+  w....w.w...c..w
+  w.wwww.wwwwww.w
+  w.c....w......w
+  w.wwww.w.wwww.w
+  w....c..w...c.w
+  w.wwwwwwwwww..w
+  wwwwwwwwwwwwwww`
 ];
 
 function carregarFase() {
@@ -226,10 +226,10 @@ function carregarFase() {
 
 carregarFase();
 
-onInput("w", () => { getFirst(jogador).y -= 1; });
-onInput("s", () => { getFirst(jogador).y += 1; });
-onInput("a", () => { getFirst(jogador).x -= 1; });
-onInput("d", () => { getFirst(jogador).x += 1; });
+onInput("w", () => {const player = getFirst(jogador);if (player) player.y -= 1;});
+onInput("s", () => {const player = getFirst(jogador);if (player) player.y += 1;});
+onInput("a", () => {const player = getFirst(jogador);if (player) player.x -= 1;});
+onInput("d", () => {const player = getFirst(jogador);if (player) player.x += 1;});
 
 afterInput(() => {
   const encontros = tilesWith(jogador, moeda);
