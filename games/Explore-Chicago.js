@@ -1,6 +1,13 @@
 /*
 @title: Explore Chicago: The Deep Dish Mystery
 @author: Alex the Detective
+@description: Find the stolen Famous Deep Dish Pizza Recipe
+@tags: ['adventure', 'mystery', 'puzzle']
+@addedOn: 2026-11-16
+*/
+/*
+@title: Explore Chicago: The Deep Dish Mystery
+@author: Alex the Detective
 @tags: ['adventure', 'mystery', 'puzzle']
 */
 
