@@ -1,6 +1,9 @@
 /* 
 @Title: MAze_CHOPer
 @Author: Daksh Sukhija
+@description: A fast, three-level Pac-Man style maze game.
+@tags: ['runner', 'maze']
+@addedOn: 2026-11-16
 */
 
 const player      = "p"  
