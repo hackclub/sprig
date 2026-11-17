@@ -1,3 +1,11 @@
+/*
+@title: duck maze
+@author: zaibtheteckguy2
+@description: my game has 3 levels and a cute duck who likes apples
+@tags: ['maze']
+@addedOn: 2026-11-17
+*/
+
 const player = "p"
 const apple = "a"
 const wall = "w"
