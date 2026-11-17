@@ -158,6 +158,34 @@ p {
 	margin-top: 2px;
 }
 
+.game .game-meta-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-top: 2px;
+}
+
+.game .game-meta-row .author {
+	margin-top: 0;
+	min-width: 0;
+}
+
+.game .game-likes {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	flex-shrink: 0;
+	font-size: 0.9rem;
+	font-variant-numeric: tabular-nums;
+	color: var(--fg-muted-on-accent);
+}
+
+.game .game-likes svg {
+	width: 14px;
+	height: 14px;
+}
+
 .game .tags {
 	color: var(--fg-muted-on-accent);
 	margin-top: 2px;

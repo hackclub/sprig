@@ -10,6 +10,7 @@ import fs from 'fs'
 import path from 'path'
 import Button from '../../../components/design-system/button'
 import { IoShuffle } from 'react-icons/io5'
+import LikeButton from '../../../components/like-button'
 
 interface Props {
   game: GameMetadata;
@@ -71,6 +72,9 @@ if (type === 'document') {
     }
 }
 
+const likeable = type !== 'document'
+const isLoggedIn = !!session?.session.full
+
 const props: Props = {
     game,
     session
@@ -115,6 +119,13 @@ const props: Props = {
       font-weight: 600;
       color: var(--text);
       margin: 0;
+    }
+
+    .game-like {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 8px;
+      color: var(--text);
     }
 
     .game-author {
@@ -165,6 +176,7 @@ const props: Props = {
       overflow: hidden;
     }
 
+    .player-container :global(astro-island > div),
     :global(.rootContainer) {
       position: absolute !important;
       height: 100% !important;
@@ -201,6 +213,11 @@ const props: Props = {
         <div class="game-title-section">
           <h1 class="game-title">{props.game.title}</h1>
           <div class="game-author">by {props.game.author}</div>
+          {likeable && (
+            <div class="game-like">
+              <LikeButton client:load filename={props.game.filename} isLoggedIn={isLoggedIn} />
+            </div>
+          )}
         </div>
         <p class="game-description">{props.game.description}</p>
       </div>
@@ -217,10 +234,10 @@ const props: Props = {
         gameName={props.game.title}
         authorName={props.game.author}
         filename={props.game.filename}
-        isLoggedIn={!!props.session?.session.full}
-        hearted={false}
+        isLoggedIn={isLoggedIn}
+        showLike={false}
       />
     </div>
   </div>
 </body>
-</html> 
+</html>
