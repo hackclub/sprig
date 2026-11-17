@@ -4,6 +4,12 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      codemirror:
+        patterns:
+          - "@codemirror/*"
+          - "@lezer/*"
+          - "y-codemirror.next"
 
   - package-ecosystem: "npm"
     directory: "/engine"
