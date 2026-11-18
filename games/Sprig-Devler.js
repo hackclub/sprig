@@ -4,19 +4,6 @@
 @description: A fast multi-level arcade game.
 @tags: ['roguelike', 'strategy']
 @addedOn: 2026-11-18
-
-
-A turn-based roguelike. Enemies move ONLY when you do, so every step is a decision.
-
-  W A S D   move / bump into enemies to attack
-  J         DASH  - slash through enemies in the direction you face (1 energy)
-  L         PULSE - freeze nearby enemies for 3 turns (2 energy)
-  I         wait a turn
-  (J K L pick a boon on the upgrade screen)
-
-Collect every gem to open the exit portal. Gems and kills give energy.
-Frozen enemies take +1 damage. Spikes warn (yellow), then rise (grey) and hurt
-anyone standing on them - including monsters.
 */
 
 // ---------------------------------------------------------------- sprites
