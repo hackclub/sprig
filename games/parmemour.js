@@ -1,9 +1,9 @@
 /*
-@title: parmemour
+@title: Parmemour
 @description: A fun little platformer with nothing to hide...
 @author: xeo
-@tags: ['platformer', 'tag2']
-@addedOn: 2026-16-11
+@tags: ['platformer']
+@addedOn: 2026-11-18
 */
 
 //Tiles
