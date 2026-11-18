@@ -9,6 +9,7 @@
 // ---------------------------------------------------------------- sprites
 const player      = "p"
 const playerHurt  = "q"
+const echoS       = "x"
 const gem         = "g"
 const heart       = "e"
 const spikeD      = "1"   // lowered
@@ -25,7 +26,7 @@ const wall        = "w"
 const hud         = "h"
 const bg          = "b"
 
-const DYNAMIC = [player, playerHurt, gem, heart, spikeD, spikeW, spikeU,
+const DYNAMIC = [player, playerHurt, echoS, gem, heart, spikeD, spikeW, spikeU,
                  exitL, exitO, crawler, wisp, sentry, frozen, aim]
 
 setLegend(
@@ -63,6 +64,24 @@ setLegend(
 ...3333333333...
 ....33....33....
 ...000....000...
+................` ],
+
+  [ echoS, bitmap`
+................
+.....272727.....
+....27272727....
+...2727272727...
+...2700000072...
+...2702002072...
+...2700000072...
+....72727272....
+...7272727272...
+..727272727272..
+..272727272727..
+..727272727272..
+...2727272727...
+....27....27....
+................
 ................` ],
 
   [ gem, bitmap`
@@ -374,6 +393,11 @@ const sfxDie = tune`
 const sfxHeal = tune`
 100: E5~100,
 100: B5~100`
+const sfxRewind = tune`
+80: G5~80,
+80: E5~80,
+80: C5~80,
+120: G4~120`
 
 // ---------------------------------------------------------------- maps
 const W = 10
@@ -386,7 +410,7 @@ const titleMap = map`
 ..........
 ..........
 ..........
-.p.g.cvnl.
+.px.gcvnl.
 ..........`
 
 const blankMap = map`
@@ -417,13 +441,15 @@ const STATS = {
 }
 
 const BOONS = [
-  { label: "+1 MAX HP",      ok: () => maxHp < 8,     apply: () => { maxHp++; hp++ } },
-  { label: "DASH RANGE +1",  ok: () => dashRange < 5, apply: () => { dashRange++ } },
-  { label: "PULSE RANGE +1", ok: () => pulseR < 5,    apply: () => { pulseR++ } },
-  { label: "MAX ENERGY +2",  ok: () => maxEn < 9,     apply: () => { maxEn += 2; en = Math.min(maxEn, en + 2) } },
-  { label: "SHARPER BLADE",  ok: () => atk < 3,       apply: () => { atk++ } },
-  { label: "HEAL TO FULL",   ok: () => hp < maxHp,    apply: () => { hp = maxHp } },
-  { label: "REFILL ENERGY",  ok: () => en < maxEn,    apply: () => { en = maxEn } }
+  { label: "+1 MAX HP",      ok: () => maxHp < 8,        apply: () => { maxHp++; hp++ } },
+  { label: "DASH RANGE +1",  ok: () => dashRange < 5,    apply: () => { dashRange++ } },
+  { label: "PULSE RANGE +1", ok: () => pulseR < 5,       apply: () => { pulseR++ } },
+  { label: "MAX ENERGY +2",  ok: () => maxEn < 9,        apply: () => { maxEn += 2; en = Math.min(maxEn, en + 2) } },
+  { label: "SHARPER BLADE",  ok: () => atk < 3,          apply: () => { atk++ } },
+  { label: "HEAL TO FULL",   ok: () => hp < maxHp,       apply: () => { hp = maxHp } },
+  { label: "REFILL ENERGY",  ok: () => en < maxEn,       apply: () => { en = maxEn } },
+  { label: "+1 REWIND",      ok: () => maxRewinds < 6,   apply: () => { maxRewinds++; rewinds++ } },
+  { label: "DEEPER REWIND",  ok: () => rewindDepth < 5,  apply: () => { rewindDepth++ } }
 ]
 
 // ---------------------------------------------------------------- state
@@ -432,12 +458,20 @@ let floorNum = 1
 let score = 0
 let hiScore = 0
 let bestFloor = 0
+let turn = 0
 
 let hp = 3, maxHp = 3
 let en = 2, maxEn = 5
 let dashRange = 2
 let pulseR = 2
 let atk = 1
+
+// time powers
+let rewinds = 2
+let maxRewinds = 3
+let rewindDepth = 3
+let timeline = []         // [{ snap, action }] one entry per player turn
+let echo = null           // { x, y, face, script, step, done }
 
 let px = 1, py = 1
 let face = { dx: 1, dy: 0 }
@@ -453,7 +487,7 @@ let exitPos = { x: 1, y: 1 }
 let exitOpen = false
 let gemTotal = 0
 let gemsGot = 0
-let spikePhase = 0       // 0,1 lowered | 2 warning | 3 raised
+let spikePhase = 0        // 0,1 lowered | 2 warning | 3 raised
 
 let msg = ""
 let options = []
@@ -534,7 +568,6 @@ function generateFloor() {
       }
     }
 
-    // label connected floor regions
     const label = []
     for (let y = 0; y < H; y++) label.push(new Array(W).fill(-1))
     const sizes = []
@@ -574,7 +607,6 @@ function generateFloor() {
     return g
   }
 
-  // fallback: an open arena
   const g = []
   for (let y = 0; y < H; y++) {
     const row = []
@@ -610,7 +642,6 @@ function buildFloor() {
     solid.push(row)
   }
 
-  // player
   const start = takeCell(pool, () => true)
   px = start[0]
   py = start[1]
@@ -618,14 +649,12 @@ function buildFloor() {
   invuln = 0
   const dm = distMap(px, py)
 
-  // exit goes far away from the player
   let maxD = 0
   for (const c of pool) maxD = Math.max(maxD, dm[c[1]][c[0]])
   const ex = takeCell(pool, c => dm[c[1]][c[0]] >= maxD - 1) || takeCell(pool, () => true)
   exitPos = { x: ex[0], y: ex[1] }
   exitOpen = false
 
-  // gems
   gemTotal = Math.min(4 + Math.floor(floorNum / 2) + 1, 8)
   gemsGot = 0
   gems = []
@@ -635,14 +664,12 @@ function buildFloor() {
   }
   gemTotal = gems.length
 
-  // heart
   hearts = []
   if (floorNum >= 2 && Math.random() < 0.6) {
     const c = takeCell(pool, () => true)
     if (c) hearts.push({ x: c[0], y: c[1] })
   }
 
-  // enemies (kept away from the player)
   enemies = []
   const wanted = []
   const nCrawl = Math.min(1 + Math.floor((floorNum - 1) / 2), 4)
@@ -664,7 +691,6 @@ function buildFloor() {
     })
   }
 
-  // spikes
   spikes = []
   spikePhase = 0
   const nSpikes = floorNum >= 2 ? Math.min(floorNum + 1, 7) : 0
@@ -682,11 +708,13 @@ function drawHud() {
   addText("EN " + en + "/" + maxEn, { x: 7, y: 0, color: color`7` })
   addText("FLR" + floorNum, { x: 14, y: 0, color: color`6` })
   addText("GEM " + gemsGot + "/" + gemTotal, { x: 0, y: 1, color: color`5` })
-  addText("SC " + score, { x: 11, y: 1, color: color`2` })
+  addText("RW" + rewinds, { x: 9, y: 1, color: rewinds > 0 ? color`8` : color`L` })
+  addText("S" + score, { x: 14, y: 1, color: color`2` })
 
+  const canRewind = rewinds > 0 && timeline.length > 0
   addText("J:DASH", { x: 0, y: 14, color: en >= DASH_COST ? color`2` : color`L` })
   addText("L:PULSE", { x: 7, y: 14, color: en >= PULSE_COST ? color`2` : color`L` })
-  addText("I:WAIT", { x: 14, y: 14, color: color`2` })
+  addText("K:RWD", { x: 15, y: 14, color: canRewind ? color`8` : color`L` })
 
   if (msg) {
     const x = Math.max(0, Math.floor((20 - msg.length) / 2))
@@ -704,11 +732,11 @@ function render() {
   for (const h of hearts) addSprite(h.x, h.y, heart)
   for (const e of enemies) addSprite(e.x, e.y, e.stun > 0 ? frozen : e.type)
 
-  // aiming marker on the tile you are facing
   const ax = px + face.dx
   const ay = py + face.dy
   if (!solid[ay][ax]) addSprite(ax, ay, aim)
 
+  if (echo) addSprite(echo.x, echo.y, echoS)
   addSprite(px, py, hurtFlash ? playerHurt : player)
   drawHud()
 }
@@ -775,7 +803,6 @@ function randomStep(e) {
 }
 
 function sentryAct(e) {
-  // line of sight to the player -> charge
   let alert = false
   if (e.x === px || e.y === py) {
     const sx = Math.sign(px - e.x)
@@ -825,14 +852,12 @@ function enemyAct(e, pd) {
     return
   }
 
-  // adjacent: attack instead of moving
   if (Math.abs(e.x - px) + Math.abs(e.y - py) === 1) {
     hurt(STATS[e.type].dmg)
     return
   }
 
   if (e.type === crawler) {
-    // crawlers are relentless but skip every third turn
     if (turn % 3 === 0) return
     const d = bestStepToward(e, pd)
     if (d) {
@@ -840,7 +865,6 @@ function enemyAct(e, pd) {
       e.y += d.dy
     }
   } else if (e.type === wisp) {
-    // erratic flyer, immune to spikes
     const d = Math.random() < 0.5 ? bestStepToward(e, pd) : randomStep(e)
     if (d) {
       e.x += d.dx
@@ -851,13 +875,165 @@ function enemyAct(e, pd) {
   }
 }
 
+// ---------------------------------------------------------------- time: snapshots, rewind, echo
+function snapshot() {
+  return {
+    px: px, py: py,
+    face: { dx: face.dx, dy: face.dy },
+    hp: hp, en: en, invuln: invuln, score: score,
+    spikePhase: spikePhase, exitOpen: exitOpen, gemsGot: gemsGot, turn: turn,
+    enemies: enemies.map(e => Object.assign({}, e)),
+    gems: gems.map(g => Object.assign({}, g)),
+    hearts: hearts.map(h => Object.assign({}, h)),
+    echo: echo ? copyEcho(echo) : null
+  }
+}
+
+function copyEcho(c) {
+  return Object.assign({}, c, {
+    face: { dx: c.face.dx, dy: c.face.dy },
+    script: c.script.slice()
+  })
+}
+
+function restore(s) {
+  px = s.px
+  py = s.py
+  face = { dx: s.face.dx, dy: s.face.dy }
+  hp = s.hp
+  en = s.en
+  invuln = s.invuln
+  score = s.score
+  spikePhase = s.spikePhase
+  exitOpen = s.exitOpen
+  gemsGot = s.gemsGot
+  turn = s.turn
+  enemies = s.enemies.map(e => Object.assign({}, e))
+  gems = s.gems.map(g => Object.assign({}, g))
+  hearts = s.hearts.map(h => Object.assign({}, h))
+  echo = s.echo ? copyEcho(s.echo) : null
+}
+
+// every turn-using action records a snapshot (the world BEFORE it happened)
+// plus a description of the action, which an echo can replay later
+function beginAction(action) {
+  msg = ""
+  timeline.push({ snap: snapshot(), action: action })
+  if (timeline.length > 8) timeline.shift()
+}
+
+function doRewind(auto) {
+  const n = Math.min(rewindDepth, timeline.length)
+  const popped = timeline.splice(timeline.length - n, n)
+  restore(popped[0].snap)
+  rewinds--
+  const script = popped.map(h => h.action)
+  echo = { x: px, y: py, face: { dx: face.dx, dy: face.dy }, script: script, step: 0, done: false }
+  playTune(sfxRewind)
+  msg = auto ? "TIME SAVES YOU!" : "REWIND! ECHO x" + n
+  render()
+}
+
+function rewind() {
+  if (state !== "play") return
+  if (rewinds <= 0) {
+    msg = "NO REWINDS"
+    render()
+    return
+  }
+  if (timeline.length === 0) {
+    msg = "NOTHING TO UNDO"
+    render()
+    return
+  }
+  doRewind(false)
+}
+
+// ---- dash helpers (shared by the player and the echo)
+function dashPath(x, y, f, range) {
+  const path = []
+  let cx = x
+  let cy = y
+  for (let i = 0; i < range; i++) {
+    const nx = cx + f.dx
+    const ny = cy + f.dy
+    if (solid[ny][nx]) break
+    path.push([nx, ny])
+    cx = nx
+    cy = ny
+  }
+  return path
+}
+
+// slash everything on the path, collect loot, return index of landing tile (-1 = none)
+function slashAndLand(path) {
+  for (const t of path) {
+    const e = enemyAt(t[0], t[1])
+    if (e) strike(e, atk + (e.stun > 0 ? 1 : 0))
+  }
+  let land = -1
+  for (let i = path.length - 1; i >= 0; i--) {
+    if (!enemyAt(path[i][0], path[i][1])) {
+      land = i
+      break
+    }
+  }
+  for (let i = 0; i <= land; i++) pickupsAt(path[i][0], path[i][1])
+  return land
+}
+
+// the echo performs ONE recorded action per player turn - for free, and it
+// cannot be hurt. Gems it grabs and enemies it kills count for you.
+function echoAct() {
+  if (!echo) return
+  if (echo.done) {
+    echo = null
+    return
+  }
+  const a = echo.script[echo.step]
+  echo.step++
+
+  if (a) {
+    if (a.t === "move") {
+      echo.face = { dx: a.dx, dy: a.dy }
+      const nx = echo.x + a.dx
+      const ny = echo.y + a.dy
+      if (!solid[ny][nx]) {
+        const e = enemyAt(nx, ny)
+        if (e) {
+          strike(e, atk + (e.stun > 0 ? 1 : 0))
+        } else {
+          echo.x = nx
+          echo.y = ny
+          pickupsAt(nx, ny)
+        }
+      }
+    } else if (a.t === "dash") {
+      const f = { dx: a.dx, dy: a.dy }
+      echo.face = f
+      const path = dashPath(echo.x, echo.y, f, a.range)
+      if (path.length > 0) {
+        const land = slashAndLand(path)
+        if (land >= 0) {
+          echo.x = path[land][0]
+          echo.y = path[land][1]
+        }
+      }
+    } else if (a.t === "pulse") {
+      for (const e of enemies) {
+        if (Math.abs(e.x - echo.x) + Math.abs(e.y - echo.y) <= a.r) e.stun = 4
+      }
+    }
+  }
+
+  if (echo.step >= echo.script.length) echo.done = true
+}
+
 // ---------------------------------------------------------------- turn engine
-let turn = 0
-
-function beginAction() { msg = "" }
-
 function endTurn() {
   turn++
+  echoAct()
+
   const raised = spikePhase === 3
 
   // spikes bite whoever ends the turn on them while raised
@@ -879,6 +1055,11 @@ function endTurn() {
   if (invuln > 0) invuln--
 
   if (hp <= 0) {
+    // time itself refuses to let you die while you have rewinds left
+    if (rewinds > 0 && timeline.length > 0) {
+      doRewind(true)
+      return
+    }
     gameOver()
     return
   }
@@ -919,15 +1100,17 @@ function checkExit() {
 // ---------------------------------------------------------------- player actions
 function tryMove(dx, dy) {
   if (state !== "play") return
-  beginAction()
   face = { dx: dx, dy: dy }
   const nx = px + dx
   const ny = py + dy
 
   if (solid[ny][nx]) {   // bumping a wall costs nothing, it just turns you
+    msg = ""
     render()
     return
   }
+
+  beginAction({ t: "move", dx: dx, dy: dy })
 
   const e = enemyAt(nx, ny)
   if (e) {
@@ -950,49 +1133,24 @@ function dash() {
     render()
     return
   }
-
-  const path = []
-  let cx = px
-  let cy = py
-  for (let i = 0; i < dashRange; i++) {
-    const nx = cx + face.dx
-    const ny = cy + face.dy
-    if (solid[ny][nx]) break
-    path.push([nx, ny])
-    cx = nx
-    cy = ny
-  }
+  const path = dashPath(px, py, face, dashRange)
   if (path.length === 0) {
     msg = "BLOCKED"
     render()
     return
   }
 
-  beginAction()
+  beginAction({ t: "dash", dx: face.dx, dy: face.dy, range: dashRange })
   en -= DASH_COST
   playTune(sfxDash)
 
-  // slash everything on the way
-  for (const t of path) {
-    const e = enemyAt(t[0], t[1])
-    if (e) strike(e, atk + (e.stun > 0 ? 1 : 0))
+  const land = slashAndLand(path)
+  if (land >= 0) {
+    px = path[land][0]
+    py = path[land][1]
   }
 
-  // land on the furthest free tile, grabbing loot along the way
-  let landIndex = -1
-  for (let i = path.length - 1; i >= 0; i--) {
-    if (!enemyAt(path[i][0], path[i][1])) {
-      landIndex = i
-      break
-    }
-  }
-  for (let i = 0; i <= landIndex; i++) pickupsAt(path[i][0], path[i][1])
-  if (landIndex >= 0) {
-    px = path[landIndex][0]
-    py = path[landIndex][1]
-  }
-
-  invuln = 1   // you are untouchable for this turn
+  invuln = 1   // untouchable for this turn
   checkExit()
   if (state === "play") endTurn()
 }
@@ -1010,7 +1168,7 @@ function pulse() {
     render()
     return
   }
-  beginAction()
+  beginAction({ t: "pulse", r: pulseR })
   en -= PULSE_COST
   for (const e of targets) e.stun = 4
   playTune(sfxPulse)
@@ -1020,7 +1178,7 @@ function pulse() {
 
 function waitTurn() {
   if (state !== "play") return
-  beginAction()
+  beginAction({ t: "wait" })
   say("...")
   endTurn()
 }
@@ -1031,6 +1189,8 @@ function startFloor() {
   state = "play"
   msg = "FLOOR " + floorNum
   turn = 0
+  timeline = []
+  echo = null
   render()
 }
 
@@ -1045,6 +1205,9 @@ function newRun() {
   dashRange = 2
   pulseR = 2
   atk = 1
+  rewinds = 2
+  maxRewinds = 3
+  rewindDepth = 3
   startFloor()
 }
 
@@ -1065,6 +1228,7 @@ function floorComplete() {
   clearText()
   addText("FLOOR " + floorNum + " CLEAR!", { x: 3, y: 1, color: color`6` })
   addText("BONUS +" + bonus, { x: 5, y: 3, color: color`5` })
+  addText("+1 REWIND CHARGE", { x: 2, y: 4, color: color`8` })
   addText("CHOOSE A BOON", { x: 3, y: 6, color: color`2` })
   const keys = ["J", "K", "L"]
   for (let i = 0; i < options.length; i++) {
@@ -1075,6 +1239,7 @@ function floorComplete() {
 function pick(i) {
   if (state !== "upgrade" || locked() || !options[i]) return
   options[i].apply()
+  rewinds = Math.min(maxRewinds, rewinds + 1)
   floorNum++
   startFloor()
 }
@@ -1086,7 +1251,7 @@ function gameOver() {
   lockUntil = Date.now() + 800
   setMap(blankMap)
   clearText()
-  addText("YOU FELL", { x: 6, y: 2, color: color`3` })
+  addText("TIME RAN OUT", { x: 4, y: 2, color: color`3` })
   addText("DEPTH  " + floorNum, { x: 5, y: 5, color: color`6` })
   addText("SCORE  " + score, { x: 5, y: 7, color: color`2` })
   addText("BEST   " + hiScore, { x: 5, y: 9, color: color`5` })
@@ -1100,13 +1265,13 @@ function showTitle() {
   let on = true
   const draw = () => {
     clearText()
-    addText("SPRIG DELVER", { x: 4, y: 1, color: color`6` })
+    addText("ECHO DELVER", { x: 4, y: 1, color: color`6` })
     addText("ENEMIES MOVE WHEN", { x: 1, y: 3, color: color`3` })
     addText("YOU DO. THINK!", { x: 3, y: 4, color: color`3` })
     addText("WASD MOVE + ATTACK", { x: 1, y: 6, color: color`2` })
-    addText("J DASH  L PULSE", { x: 2, y: 7, color: color`2` })
-    addText("I WAIT", { x: 7, y: 8, color: color`2` })
-    addText("GRAB GEMS, FIND EXIT", { x: 0, y: 10, color: color`5` })
+    addText("J DASH   L PULSE", { x: 2, y: 7, color: color`2` })
+    addText("K REWIND: AN ECHO", { x: 1, y: 9, color: color`8` })
+    addText("REPLAYS YOUR MOVES", { x: 1, y: 10, color: color`8` })
     if (on) addText("PRESS J", { x: 6, y: 14, color: color`6` })
     if (hiScore > 0) addText("BEST " + hiScore, { x: 5, y: 15, color: color`7` })
   }
@@ -1129,7 +1294,10 @@ onInput("j", () => {
   else if (state === "upgrade") pick(0)
   else if ((state === "title" || state === "over") && !locked()) newRun()
 })
-onInput("k", () => pick(1))
+onInput("k", () => {
+  if (state === "play") rewind()
+  else if (state === "upgrade") pick(1)
+})
 onInput("l", () => {
   if (state === "play") pulse()
   else if (state === "upgrade") pick(2)
