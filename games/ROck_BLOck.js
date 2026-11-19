@@ -1,3 +1,9 @@
+/*
+@title: ROck_BLOck
+@author: dsukhijapublic-ingeneous
+@tags: ['pacman','arcade']
+@addedOn: 2026-11-19
+*/
 const player = "p"
 const wall = "w"
 const hud = "h"
