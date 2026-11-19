@@ -1,11 +1,9 @@
 /*
-
-@title: Escape the Garden
-@description: You are trapped in a garden! Move boxes and find the exit to escape!
+@title: Escape_the_Garden
 @author: Leo Kim
+@description: You are trapped in a garden! Move boxes and find the exit to escape!
 @tags: ['Puzzle', 'Escape']
 @addedOn: 2026-11-19
-j is reset button; resets levels.
 */
 
 const player = "p"
