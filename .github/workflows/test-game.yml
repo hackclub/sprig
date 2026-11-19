@@ -8,6 +8,8 @@ on:
   pull_request:
     paths:
       - 'games/**.js'
+      - 'engine/**'
+      - 'tests/**'
 
 permissions:
   contents: read
@@ -38,18 +40,23 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v47
         with:
-          files: |
-            games/**.js
+          files_yaml: |
+            games:
+              - 'games/**.js'
+            engine:
+              - 'engine/**'
+              - 'tests/**'
           json: true
           escape_json: false
           safe_output: false
 
       - name: Log Changed Files
         env:
-          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          CHANGED_GAMES: ${{ steps.changed-files.outputs.games_all_changed_files }}
+          ENGINE_CHANGED: ${{ steps.changed-files.outputs.engine_any_changed }}
         run: |
-          echo "Changed Files:"
-          echo "$CHANGED_FILES"
+          echo "Changed Games: $CHANGED_GAMES"
+          echo "Engine Changed: $ENGINE_CHANGED"
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -62,15 +69,20 @@ jobs:
 
       - name: Check Games
         env:
-          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          GAMES_CHANGED: ${{ steps.changed-files.outputs.games_any_changed }}
+          ENGINE_CHANGED: ${{ steps.changed-files.outputs.engine_any_changed }}
+          CHANGED_GAMES: ${{ steps.changed-files.outputs.games_all_changed_files }}
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          if [ -n "$CHANGED_FILES" ] && [ "$CHANGED_FILES" != "[]" ]; then
-            mapfile -t files < <(bun -e 'for (const f of JSON.parse(process.env.CHANGED_FILES)) console.log(f)')
+          if [ "$GAMES_CHANGED" = "true" ] && [ -n "$CHANGED_GAMES" ] && [ "$CHANGED_GAMES" != "[]" ]; then
+            mapfile -t files < <(bun -e 'for (const f of JSON.parse(process.env.CHANGED_GAMES)) console.log(f)')
             bun run tests/sprigfuzzy_workflow.js "${files[@]}"
+          elif [ "$ENGINE_CHANGED" = "true" ]; then
+            echo "Running smoke tests on core games (engine/tests changed)"
+            bun run tests/sprigfuzzy_workflow.js games/sokoban.js games/maze.js games/15_puzzle.js games/2048.js
           elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             echo "Running all games (workflow_dispatch)"
             bun run tests/sprigfuzzy_workflow.js
           else
-            echo "No game files changed, skipping"
+            echo "No game or engine files changed, skipping"
           fi

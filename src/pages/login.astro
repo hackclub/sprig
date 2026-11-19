@@ -4,7 +4,19 @@ import { getSession } from '../lib/game-saving/account'
 import Login from '../components/big-interactive-pages/login'
 import StandardHead from '../components/standard-head.astro'
 
-const to = Astro.url.searchParams.get('to') ?? '/~'
+const safeRedirect = (raw: string | null): string => {
+	if (!raw) return '/~'
+	if (!raw.startsWith('/') || raw.startsWith('//') || raw.startsWith('/\\')) return '/~'
+	try {
+		const url = new URL(raw, Astro.url.origin)
+		if (url.origin !== Astro.url.origin) return '/~'
+		return url.pathname + url.search + url.hash
+	} catch {
+		return '/~'
+	}
+}
+
+const to = safeRedirect(Astro.url.searchParams.get('to'))
 const session = await getSession(Astro.cookies)
 if (session?.session.full) return Astro.redirect(to, 302)
 const email = Astro.url.searchParams.get('email') ?? session?.user.email ?? ''

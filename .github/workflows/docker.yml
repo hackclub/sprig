@@ -6,6 +6,10 @@ on: # This workflow should run on...
       - 'main'
   workflow_dispatch: # or when manually triggered
   pull_request:
+    paths-ignore:
+      - 'games/**'
+      - 'docs/**'
+      - '*.md'
 
 permissions:
   contents: read
