@@ -6,6 +6,18 @@
 @addedOn: 2026-11-18
 */
 
+/*
+Hey! Welcome to my project!
+Just a fair warning, Parmemour is NOT an easy game. Every level IS possible yet I'm yet to beat it without cheating in lives.
+A full playthrough of all the main levels took me 6 minutes with cheated in lives, but if you're amazing at platformers you could do it in less than a minute.
+
+
+A lot of the variables are simply for declaring, and are edited inside of the multiple functions they reside in
+There's probably a better way to do that, I'm just not that good at JS :sob:
+*/
+//I mean the game is *technically* endless, but it feels like a stretch to put it in the tags
+
+
 //Tiles
 const player = "p"
 const horizontalWall = "h"
@@ -37,16 +49,18 @@ let delayDuration = 35;
 let justDied = false;
 
 //Lives
-let lives = 3;
+let lives = 5;
 
+//Fun?
+let noFun = false;
 
 //Music
-const melody = tune`
+let melody = tune`
 200: D5^200,
 200,
 200: B4^200,
 200: B4^200,
-200,
+200: F4~200,
 200: D5^200,
 200: G4^200,
 600,
@@ -72,6 +86,36 @@ const melody = tune`
 200: B4~200,
 200: C5~200,
 200: D5~200`;
+let brokenMusic = tune`
+500: A4~500,
+500,
+500: G4~500,
+500: G4~500,
+500,
+500: A4~500,
+500,
+500: F4~500,
+1000,
+500: A4-500 + F4/500 + D4^500,
+500,
+500: G4-500 + E4/500 + C4^500,
+500: C4^500 + E4/500 + G4-500,
+500,
+500: D4^500 + F4/500 + A4-500,
+500: F4^500,
+1500,
+500: A4/500,
+500: F4/500,
+500,
+500: A4/500 + F4/500,
+500: F4~500,
+500: A4/500 + F4/500,
+500: F4~500,
+500: A4/500 + F4/500,
+500: F4~500,
+500: A4/500 + F4~500,
+500: G4~500,
+500: A4~500`;
 let playback = playTune(melody, Infinity)
 const completeSong = tune`
 85.95988538681948: E5~85.95988538681948,
@@ -110,16 +154,18 @@ const gameOverSong = tune`
 4318.181818181818`;
 //Stops the main track from being played multiple times concurrently
 let awaitingRestart = false;
-//Game State
+
+//Game State - Used for end text animation
 let endGame = false;
 
 
 
 async function restartBackgroundMusic(x)
 {
+  //Stops the restarting code from being reran concurrently
   if(awaitingRestart) return;
   awaitingRestart = true;
-  //Delay is ued for allowing the song before to finish
+  //Delay is used for allowing the song before to finish
   await sleep(x)
   playback = playTune(melody, Infinity)
   awaitingRestart = false;
@@ -264,6 +310,15 @@ p...ff..fff....e
 fsfsssssssssssse`,
   map`
 ...............e
+...............e
+...............e
+.....s..f..s...e
+.....f.........e
+..sff.f......f.e
+p..............e
+ff.sssssssssssse`,
+   map`
+...............e
 .s.....s....ss.e
 ff....hhh..f.v.e
 ...v.........v.e
@@ -272,32 +327,23 @@ ff....hhh..f.v.e
 .............v.e
 p...sshhsssssv.e`,
   map`
-...............e
-...............e
-...............e
-.....s..f..s...e
-.....f.........e
-..sff.f......f.e
-p..............e
-ff.sssssssssssse`,
-  map`
 p.........v....e
-..........v....v
-.s....fs.s....fv
-.........f.....v
+..........v...fv
+.s....fs.s.....v
+.........f...h.v
 f.f............v
-.........s...f.v
+.........s...h.v
 ........f.ff...v
 sssssssssssssssv`,
   map`
 ...........v...e
-..hh.........f.v
-.............s.v
+..hh...........v
+..............fv
 ..hh.sf..s.s...v
 ..........f..f..
 ..hh............
-p...............
-hhhh...sssssssss`,
+ps..............
+hhhhssssssssssss`,
   map`
 p...............
 ................
@@ -322,6 +368,7 @@ p...............`
 //Randomly generated level :3
 function getGlitchLevel()
 {
+  //Ok I bet I could've idk used a loop and appended them all together but that seemed like a lot of work so instead you get this beautiful monstrosity
   return map`
 p...............
 f${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}${getRandomChar()}
@@ -338,6 +385,7 @@ setPushables({
   [ player ]: []
 })
 
+//Inputs check whether the delay is active OR if the player has just died
 onInput("s", () => {
   if(inputDelay)return;
   if(onGround)return;
@@ -362,6 +410,7 @@ onInput("w", () => {
   input();
   }
 
+  //Cheats check for input delay too becuase it seems to be really easy to double click buttons
   onInput("j", () => {
   //Reset button
   if(inputDelay)return;
@@ -372,12 +421,14 @@ onInput("w", () => {
     if(inputDelay)return;
     level += 1;
     levelWriter();
+    noFun = true;
     setMap(levels[level])
         input();
 })
       onInput("l", () => {
     if(inputDelay)return;
     lives += 1;
+    noFun = true;
     livesWriter();
     input();
         
@@ -396,20 +447,26 @@ afterInput(() =>
   if(getFirst(player).x === 15)
   {
 
-
     level += 1;
     if(level + 1 === levels.length)
     {
       endWriter();
     }
+    
+    //Glitched level check
     if(level >= levels.length || level < 0)
   {
+    if(noFun){return;}
     setMap(getGlitchLevel())
     if(level < 0)
     {
       level += -2
     }else{
       level = -2;
+      playback.end()
+      playback = playTune(brokenMusic, Infinity);
+      melody = brokenMusic;
+      restartBackgroundMusic(1)
     }
     levelWriter();
     return;
@@ -453,7 +510,7 @@ async function playerDeath()
   lives += -1;
   //Gameover
   if(lives === 0){
-    lives = 3;
+    lives = 5;
     level = 0;
     time = 0;
     setMap(levels[level])
@@ -465,6 +522,7 @@ async function playerDeath()
     playTune(deathSong, 1);
     restartBackgroundMusic(1500);
   }
+  //Glitch level code
     if(level >= levels.length || level < 0)
     {
       setMap(getGlitchLevel())
@@ -497,12 +555,15 @@ async function periodic(){
     await sleep(100)
     //Loop counting and time
     internalLoopCounter = internalLoopCounter + 1;
+    //Stops the timer if the game is over
+    //Wait, should I have called it a stopwatch instead? Oops. I'm not changing it o.0
     if(!endGame)
     {
       time = time + 1;
     }
 
-    //Stops loop performance stopping
+    //Stops loop performance auto stopping thingy
+    //Let me run loops 2000 times in peace >:(
     if(internalLoopCounter == 2000)
     {
       isLooping = false;
@@ -552,8 +613,9 @@ function timeKeeper(){
 
 async function endWriter()
 {
+  //Writes the "END" text at the end of the game and changes the color 4 times a sec
    endGame = true;
-  while(endGame)
+  while(endGame && !(noFun))
   {
     addText("End", { 
     x: 14,
@@ -583,7 +645,7 @@ levelWriter();
 function livesWriter()
 {
     //Writes the lives (out of three)
-    addText("Lives " + lives + "/3", { 
+    addText("Lives " + lives + "/5", { 
   x: 10,
   y: 14,
   color: color`7`
@@ -634,6 +696,8 @@ async function input()
   inputDelay = false;
 }
 
+
+//Used for all the waiting
 async function sleep(ms)
 {
     return new Promise((resolve)=>setTimeout(resolve, ms));
