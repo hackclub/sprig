@@ -4,7 +4,7 @@
 @description: You are trapped in a garden! Move boxes and find the exit to escape!
 @author: Leo Kim
 @tags: ['Puzzle', 'Escape']
-@addedOn: 2026-11-18
+@addedOn: 2026-11-19
 j is reset button; resets levels.
 */
 
