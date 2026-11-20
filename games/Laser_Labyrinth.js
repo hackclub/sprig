@@ -1,9 +1,9 @@
-
 /*
 @title: Laser Labyrinth
 @description: Dodge lasers, rotate mirrors, and solve 8 puzzles!
 @author: Rushil W.
 @tags: ['puzzle', 'laser', 'maze']
+@addedOn: 2026-11-20
 */
 
 const player = "p"
