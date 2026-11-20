@@ -1,12 +1,12 @@
 /*
 First time? Check out the tutorial game:
 https://sprig.hackclub.com/gallery/getting_started
-
-@title: Best game
-@description: 
-@author: 
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+/*
+@title: Climb-a-thing?
+@author: chahatesh
+@description: So essentially you have a few platforms, you gotta jump onto them and make it to the end of the game.
+@tags: ['platformer', 'puzzle']
+@addedOn: 2026-11-20
 */
 
 const player = "p"
@@ -109,7 +109,6 @@ bbbb...b..
 
 onInput("d", () => {
   const p = getFirst(player)
-  // Check if tile to the right is empty (not a solid wall) before moving
   if (p && getTile(p.x + 1, p.y).length === 0) {
     p.x += 1
   }
@@ -117,7 +116,6 @@ onInput("d", () => {
 
 onInput("a", () => {
   const p = getFirst(player)
-  // Check if tile to the left is empty before moving
   if (p && getTile(p.x - 1, p.y).length === 0) {
     p.x -= 1
   }
@@ -140,23 +138,18 @@ onInput("w", () => {
 })
 
 afterInput(() => {
-  // count the number of tiles with goals
+
   const targetNumber = tilesWith(win).length;
-  
-  // count the number of tiles with goals and boxes
+
   const numberCovered = tilesWith(win, player).length;
 
-  // if the number of goals is the same as the number of goals covered
-  // all goals are covered and we can go to the next level
+
   if (numberCovered === targetNumber) {
-    // increase the current level number
+
     level = level + 1;
 
     const currentLevel = levels[level];
 
-    // make sure the level exists and if so set the map
-    // otherwise, we have finished the last level, there is no level
-    // after the last level
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
