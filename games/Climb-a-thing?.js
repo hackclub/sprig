@@ -1,7 +1,4 @@
-/*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-/*
+*/
 @title: Climb-a-thing?
 @author: chahatesh
 @description: So essentially you have a few platforms, you gotta jump onto them and make it to the end of the game.
