@@ -1,4 +1,7 @@
-*/
+/*
+First time? Check out the tutorial game:
+https://sprig.hackclub.com/gallery/getting_started
+
 @title: Climb-a-thing?
 @author: chahatesh
 @description: So essentially you have a few platforms, you gotta jump onto them and make it to the end of the game.
@@ -106,6 +109,7 @@ bbbb...b..
 
 onInput("d", () => {
   const p = getFirst(player)
+
   if (p && getTile(p.x + 1, p.y).length === 0) {
     p.x += 1
   }
@@ -113,6 +117,7 @@ onInput("d", () => {
 
 onInput("a", () => {
   const p = getFirst(player)
+
   if (p && getTile(p.x - 1, p.y).length === 0) {
     p.x -= 1
   }
@@ -137,9 +142,8 @@ onInput("w", () => {
 afterInput(() => {
 
   const targetNumber = tilesWith(win).length;
-
+  
   const numberCovered = tilesWith(win, player).length;
-
 
   if (numberCovered === targetNumber) {
 
