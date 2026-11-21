@@ -1,7 +1,7 @@
 /*
 @title: 2 Player Games
 @description: An iPod-style menu of 8 two-player games: Ping Pong, Golf, Sumo Battle, Pool, Tic Tac Toe, Air Hockey, Racers and Tug of War. Play a friend on one screen, or hold it sideways and play a bot.
-@author:
+@author: Anirudh Suresh
 @tags: ['multiplayer', 'collection', 'sports']
 @addedOn: 2026-11-20
 */
