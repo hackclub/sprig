@@ -618,10 +618,10 @@ let msgSticky = false    // clear the message on the next move
 const memories = [
   {
     x: 12, y: 2, found: false, seen: false,   // mirror
-    title: "THE WINDOW",
+    title: "THE WAITING",
     lines: [
-      "You remember this",
-      "window.",
+      "You remember waiting",
+      "here, by the glass.",
       "Every evening, you",
       "waited for someone",
       "to come home."
