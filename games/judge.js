@@ -5,7 +5,7 @@ https://sprig.hackclub.com/gallery/getting_started
 @title: judge
 @description: press a or d to pick whether the left or right number is greater, press s to reset
 @author: armaanwithadouble-a
-@tags: ['tag1', 'tag2']
+@tags: ['math', 'fast']
 @addedOn: 2026-11-20
 */
 
