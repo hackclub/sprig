@@ -1,6 +1,7 @@
 /*
 @title: Star Run
-@author: your-name
+@author: Pranav V.M
+@description Collect all the stars without getting touched by the space monsters
 @tags: ['action']
 @addedOn: 2026-11-22
 */
