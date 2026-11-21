@@ -3,8 +3,10 @@
 @description: A man trapped in his memories.
 @author: Hlieb
 @tags: ['story', 'exploration', 'puzzle']
-@addedOn: 2027-21-11
+@addedOn: 2026-11-21
+*/
 
+/*
 SOULRUN
 
 CONTROLS:
@@ -26,6 +28,11 @@ return to the body, and choose.
 
 A = Forget
 D = Accept
+
+Forgetting results in the bad ending.
+Accepting starts the farewell: walk through the maze with
+your real body and touch each sparkling object one last time.
+Then the exit opens.
 */
 
 // ==========================================
