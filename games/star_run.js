@@ -1,7 +1,7 @@
 /*
 @title: Star Run
 @author: Pranav V.M
-@description Collect all the stars without getting touched by the space monsters
+@description Players dodge the monsters and collect the stars to win the game!
 @tags: ['action']
 @addedOn: 2026-11-22
 */
