@@ -1,7 +1,10 @@
 /*
 @title: Heart Platformer
+@author: kj101dis
+@description: this is a simpler version of haven dash from kj101dis.itch.io/haven-dash
 @tags: ['platformer']
 @addedOn: 2026-11-21
+
 */
 const player = "p"
 const playerLeft = "q"
