@@ -1,10 +1,10 @@
 
 /*
-@title: ʕ•ᴥ•ʔ apple
-@description:
+@title: apple-in-basket
 @author: kithu
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@description: Collect small apples and big apples to get points.
+@tags: ['puzzle']
+@addedOn: 2026-11-21
 */
 
 const player = "p"
