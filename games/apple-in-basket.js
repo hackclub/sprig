@@ -7,10 +7,11 @@
 @addedOn: 2026-11-21
 */
 
+
 const player = "p"
 const apple1 = "a"
 const apple2 = "b"
-const green= "green"
+const green = "green"
 
 setLegend(
   [player, bitmap`
@@ -29,7 +30,8 @@ setLegend(
 ................
 ................
 ................
-................`], [apple1, bitmap`
+................`],
+  [apple1, bitmap`
 ................
 ................
 ................
@@ -45,7 +47,8 @@ setLegend(
 ................
 ................
 ................
-................`], [apple2, bitmap`
+................`],
+  [apple2, bitmap`
 ................
 ................
 ................
@@ -61,12 +64,15 @@ setLegend(
 ................
 ................
 ................
-................`] 
+................`]
 )
+
 setSolids([player])
 
 let gameOver = false
 let score = 0
+let timeLeft = 10
+
 const levels = [
   map`
 abaaa
@@ -82,31 +88,82 @@ setPushables({
   [player]: []
 })
 
+function updateText() {
+  clearText()
+
+  addText("Score: " + score, {
+    x: 1,
+    y: 1,
+    color: color`3`
+  })
+
+  addText("Time: " + timeLeft, {
+    x: 1,
+    y: 0,
+    color: color`6`
+  })
+}
+
+updateText()
+
+setInterval(() => {
+  if (!gameOver) {
+    timeLeft -= 1
+
+    if (timeLeft <= 0) {
+      timeLeft = 0
+      gameOver = true
+      clearText()
+
+      addText("GAME OVER Oof!", {
+        x: 3,
+        y: 5,
+        color: color`3`
+      })
+
+      addText("Score: " + score, {
+        x: 3,
+        y: 7,
+        color: color`3`
+      })
+    } else {
+      updateText()
+    }
+  }
+}, 1000)
+
 // Moving up
 onInput("w", () => {
   if (!gameOver && getFirst(player).y > 0) {
     getFirst(player).y -= 1
   }
 })
+
 // Moving left
 onInput("a", () => {
   if (!gameOver && getFirst(player).x > 0) {
     getFirst(player).x -= 1
   }
 })
+
 // Moving right
 onInput("d", () => {
   if (!gameOver && getFirst(player).x < 4) {
     getFirst(player).x += 1
   }
 })
+
 // Moving down
 onInput("s", () => {
   if (!gameOver && getFirst(player).y < 4) {
     getFirst(player).y += 1
   }
 })
+
+// Collect apples
 afterInput(() => {
+  if (gameOver) return
+
   const playerSprite = getFirst(player)
   const sprites = getTile(playerSprite.x, playerSprite.y)
 
@@ -116,10 +173,25 @@ afterInput(() => {
       score += 1
     }
   }
-  clearText()
-  addText("Score: " + score, {
-    x: 1,
-    y: 1,
-    color: color`3`
-  })
+
+  // Update display
+  updateText()
+
+  // Winner screen
+  if (score == 24) {
+    gameOver = true
+    clearText()
+
+    addText("WINNER!", {
+      x: 1,
+      y: 1,
+      color: color`6`
+    })
+
+    addText("Score: " + score, {
+      x: 2,
+      y: 3,
+      color: color`3`
+    })
+  }
 })
