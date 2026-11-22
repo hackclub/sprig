@@ -146,6 +146,28 @@ wtp.d....w
 w...w....w
 wt..w....w
 wwwwwwwwww
+wwwwwwwwww`],
+  // level 4: the pad next to the door is for you. Send two echoes to the
+  // top and bottom pads, then walk onto the pad by the door and go through.
+  [2, map`
+wwwwwwwwww
+wt..w...ew
+w.w.w....w
+wp.td....w
+w.w.w....w
+wt..w....w
+wwwwwwwwww
+wwwwwwwwww`],
+  // level 5: one echo has a longer way to go, so you have to wait (K)
+  // on your pad until it gets to the top right pad.
+  [3, map`
+wwwwwwwwww
+wt.tw....w
+w...w..e.w
+wp.td....w
+w.w.w....w
+wt..w....w
+wwwwwwwwww
 wwwwwwwwww`]
 ];
 
