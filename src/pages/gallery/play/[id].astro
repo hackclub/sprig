@@ -9,7 +9,7 @@ import DesktopPlayer from '../../../components/big-interactive-pages/desktop-pla
 import fs from 'fs'
 import path from 'path'
 import Button from '../../../components/design-system/button'
-import { IoShuffle } from 'react-icons/io5'
+import { IoShuffle, IoCode } from 'react-icons/io5'
 
 interface Props {
   game: GameMetadata;
@@ -160,37 +160,18 @@ const props: Props = {
       display: flex;
       flex-direction: column;
       width: 100%;
-      height: 800px;
+      min-height: 0;
       position: relative;
-      overflow: hidden;
-    }
-
-    :global(.rootContainer) {
-      position: absolute !important;
-      height: 100% !important;
-      width: 100% !important;
-      top: 0 !important;
-      left: 0 !important;
-      overflow: hidden !important;
-    }
-
-    /* Hide the metadata panel */
-    :global(#desktop-player-meta) {
-      display: none !important;
-    }
-
-    :global(.screen) {
-      aspect-ratio: 1.25;
-      border: 2px solid var(--accent);
-      background: #000000;
-      image-rendering: pixelated;
-      max-height: 70vh;
-      width: auto;
     }
   </style>
 </head>
 <body>
   <MainNavbar session={props.session}>
+    {type !== 'document' && (
+      <a href={`/gallery/${props.game.filename}`}>
+        <Button icon={IoCode}>View Code</Button>
+      </a>
+    )}
     <a href={`/~/new-game?remix=${props.game.filename}`}>
       <Button icon={IoShuffle}>Remix Game</Button>
     </a>
@@ -219,6 +200,7 @@ const props: Props = {
         filename={props.game.filename}
         isLoggedIn={!!props.session?.session.full}
         hearted={false}
+        embedded={true}
       />
     </div>
   </div>

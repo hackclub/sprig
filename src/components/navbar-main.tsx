@@ -57,7 +57,7 @@ export default function MainNavbar(props: MainNavbarProps) {
 								<IoLogoGithub />
 							</a>
 						</li>
-						<li>
+						<li class={styles.navActions}>
 							{props.children || (
 								<a href="/~/new-game">
 									<Button icon={IoAdd}>New Game</Button>
@@ -86,10 +86,12 @@ export default function MainNavbar(props: MainNavbarProps) {
 						<li class={styles.plainLink}>
 							<a href="/login">Log In</a>
 						</li>
-						<li>
-							<a href="/editor">
-								<Button>Open Editor</Button>
-							</a>
+						<li class={styles.navActions}>
+							{props.children || (
+								<a href="/editor">
+									<Button>Open Editor</Button>
+								</a>
+							)}
 						</li>
 					</>
 				)}
