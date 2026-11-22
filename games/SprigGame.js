@@ -176,48 +176,95 @@ pw.....
 
 let currentLevel = 0
 let hasWon = false
+let gameOver = false
 let playback = null
+let timeLeft = 25
 
 setMap(levels[currentLevel])
 
+function updateTimerDisplay() {
+  clearText();
+  if (!hasWon && !gameOver) {
+    addText(`Time: ${timeLeft}`, { x: 1, y: 0, color: color`2` });
+
+    if (currentLevel === levels.length - 1) {
+      addText("Almost there", { x: 4, y: 15, color: color`2` });
+    }
+  }
+}
+
+updateTimerDisplay();
+
+const timerInterval = setInterval(() => {
+  if (hasWon || gameOver) return;
+
+  timeLeft -= 1;
+
+  if (timeLeft <= 0) {
+    gameOver = true;
+    clearText();
+    addText("Time's up!", { x: 3, y: 6, color: color`3` });
+    addText("Game Over", { x: 3, y: 8, color: color`3` });
+    addText("Press J to retry", { x: 1, y: 10, color: color`3` });
+  } else {
+    updateTimerDisplay();
+  }
+}, 1000);
+
 onInput("s", () => {
+  if (gameOver || hasWon) return;
   getFirst(player).y += 1
   playTune(myTune);
 })
 
 onInput("w", () => {
+  if (gameOver || hasWon) return;
   getFirst(player).y -= 1
   playTune(myTune);
 })
 
 onInput("a", () => {
+  if (gameOver || hasWon) return;
   getFirst(player).x -= 1
   playTune(myTune);
 })
 
 onInput("d", () => {
+  if (gameOver || hasWon) return;
   getFirst(player).x += 1
   playTune(myTune);
 })
 
-// Reset current level if the player presses 'j'
+// Reset game/level if the player presses 'j'
 onInput("j", () => {
   clearText();
-  hasWon = false;
   if (playback) playback.end();
+
+  if (gameOver || hasWon) {
+    currentLevel = 0;
+    timeLeft = 25;
+    gameOver = false;
+    hasWon = false;
+  }
+
   setMap(levels[currentLevel]);
+  updateTimerDisplay();
 })
 
 afterInput(() => {
+  if (gameOver || hasWon) return;
+
   // Touching the portal ('d') loads the next level
   if (tilesWith(player, portal).length > 0) {
     currentLevel += 1;
     setMap(levels[currentLevel]);
+    updateTimerDisplay();
   }
   
   // Touching the goal ('g') on Level 3 wins the game
   if (tilesWith(player, goal).length > 0 && !hasWon) {
     hasWon = true;
+    clearText();
     playback = playTune(melody, 4);
     addText("Congrats! You", { x: 1, y: 6, color: color`3` });
     addText("reached your", { x: 1, y: 8, color: color`3` });
