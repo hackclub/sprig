@@ -10,7 +10,8 @@ enum SortOrder {
 	TUTORIALS_AND_CHRONOLOGICAL,
 	CHRONOLOGICAL,
 	ASCENDING,
-	DESCENDING
+	DESCENDING,
+	MOST_LIKED
 }
 type GalleryGameMetadata = GameMetadata & { show: boolean };
 type Filter = {
@@ -23,6 +24,14 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 	const [gamesState, setGamesState] = useState<GalleryGameMetadata[]>([]);
 	const [filter, setFilter] = useState<Filter>({ query: "", sort: SortOrder.TUTORIALS_AND_CHRONOLOGICAL, tags: [] })
 	const [tagCount, setTagCount] = useState<{ [tags: string]: number }>({})
+	const [likeCounts, setLikeCounts] = useState<{ [filename: string]: number } | null>(null)
+
+	useEffect(() => {
+		fetch("/api/games/likes")
+			.then(res => res.ok ? res.json() : {})
+			.then(counts => setLikeCounts(counts))
+			.catch(() => setLikeCounts({}))
+	}, []);
 
 	useEffect(() => {
 		const lowerCaseQuery = filter.query.toLowerCase();
@@ -55,7 +64,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 
 		countTags(_games)
 		sortGames(gamesState, SortOrder.TUTORIALS_AND_CHRONOLOGICAL);
-	}, [filter]);
+	}, [filter, likeCounts]);
 
 	function sortGames(games: GameMetadata[], order: SortOrder): GameMetadata[] {
 
@@ -79,6 +88,13 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 			}
 			case SortOrder.DESCENDING: {
 				games.sort((a, b) => b.lowerCaseTitle > a.lowerCaseTitle ? 1 : -1);
+				break;
+			}
+			case SortOrder.MOST_LIKED: {
+				const likesOf = (game: GameMetadata) => likeCounts?.[game.filename] ?? 0;
+				games.sort((a, b) =>
+					likesOf(b) - likesOf(a) || Date.parse(b.addedOn) - Date.parse(a.addedOn)
+				);
 				break;
 			}
 		}
@@ -138,6 +154,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 								<option value="TUTORIALS_AND_CHRONOLOGICAL">Default</option>
 								<option value="ASCENDING">A-Z</option>
 								<option value="DESCENDING">Z-A</option>
+								<option value="MOST_LIKED">Most liked</option>
 							</select>
 
 							<IoCaretDown aria-hidden="true" />
@@ -193,6 +210,7 @@ export default function Gallery({ games, tags }: { games: GameMetadata[], tags: 
 						author={game.author}
 						tags={game.tags}
 						isNew={game.isNew!}
+						likes={likeCounts ? likeCounts[game.filename] ?? 0 : undefined}
 						setFilter={setFilter} filter={filter} />
 				))}
 			</div>
