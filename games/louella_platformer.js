@@ -1,9 +1,8 @@
 
 /*
 @title: louella_platformer
-@description: 
+@description: The wind princess Louella is search of her robin companion, Noella, who has flown away. She embarks a perilous journey to find her robin. Help her reach Noella by pushing the boulders, avoiding the spikes, and navigating the obstacles!
 @author: xiaoran_y
-@illustrator: katharine_b
 @tags: ['platformer', 'adventure']
 @addedOn: 2026-11-09
 */
