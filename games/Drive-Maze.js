@@ -1,4 +1,10 @@
-/* @title: Drive Maze @author: AdithyaPowerhouse15 @description: This game is done by me, Adithya Ganesh, for a HackClub project. @tags: ['music', 'maze'] @addedOn: 2026-11-24 */
+/*
+@title: Drive Maze
+@author: AdithyaPowerhouse15
+@description: This game is done by me, Adithya Ganesh, for a HackClub project.
+@tags: ['music', 'maze']
+@addedOn: 2026-11-24
+*/
 // 1. Pick single letters for our car, walls, and finish line
 const car = "c";
 const wall = "w";
