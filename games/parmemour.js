@@ -8,14 +8,13 @@
 
 /*
 Hey! Welcome to my project!
-Just a fair warning, Parmemour is NOT an easy game. Every level IS possible yet I'm yet to beat it without cheating in lives.
+Just a fair warning, Parmemour is NOT an easy game. Every level IS possible but it took hours of practicing before I could beat all of them in one playthrough without cheats.
 A full playthrough of all the main levels took me 6 minutes with cheated in lives, but if you're amazing at platformers you could do it in less than a minute.
+If you include the 'secrets' the game is technically endless, but due to the lack of content within it I won't be putting endless in the tags.
 
-
-A lot of the variables are simply for declaring, and are edited inside of the multiple functions they reside in
+A lot of the variables up here are simply for declaring, and are edited inside of the multiple functions they reside in
 There's probably a better way to do that, I'm just not that good at JS :sob:
 */
-//I mean the game is *technically* endless, but it feels like a stretch to put it in the tags
 
 
 //Tiles
