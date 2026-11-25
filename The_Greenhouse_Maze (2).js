@@ -1,10 +1,7 @@
 
 /* 
 @title: the_greenhouse_maze
-@description: A maze where you try to navigate through a greenhouse and get to the garden shed. 
-You can't go through walls or push plants to reach your destination - but you can push potted plants and soil bags 
-out of your way. Avoid tools, they'll make you restart. And flowers can help you teleport when you're stuck.
-Good luck!
+@description: A game where you try to navigate through various obstacles in a garden maze to get to a greenhouse shed. 
 @author: Kavya G
 @tags: [maze, greenhouse, gardening]
 @addedOn: 2026-11-24
