@@ -1,14 +1,12 @@
 
-/*
-First time? Tutorial:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: Maze Escape
-@description: A three-level duck adventure. Collect dots, find keys and escape!
-@author: YOUR_SPRIG_USERNAME
+ /*
+@title: Quackbound: Three Maze Trials
+@author: Abdulla_salmani
+@description: A three-level pixel-art duck adventure. Collect 16 dots, discover hidden keys and explore three challenging mazes.
 @tags: ['puzzle']
 @addedOn: 2026-11-24
 */
+
 
 // ==========================================
 // 1. GAME SPRITES
