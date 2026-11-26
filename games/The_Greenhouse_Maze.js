@@ -3,7 +3,7 @@
 @title: The_Greenhouse_Maze
 @description: A game where you try to navigate through various obstacles in a garden maze and get to a greenhouse shed. 
 @author: Kavya G
-@tags: [maze, greenhouse, gardening]
+@tags: ['maze', 'greenhouse', 'gardening', 'puzzle']
 @addedOn: 2026-11-24
 */
 
