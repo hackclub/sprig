@@ -1,7 +1,7 @@
 /*
 @title: hungry animals 
 @author: zaibtheteckguy2
-@description: my game has infinite levels and a cute animals who like bread
+@description: my game has infinite levels and cute animals who like bread
 @tags: ['maze']
 @addedOn: 2026-11-17
 */
@@ -9,7 +9,7 @@
 const duck = "p"
 const cat = "c"
 const ghost = "g"
-const apple = "a"
+const bread = "b"
 const wall = "w"
 const troll = "t"
 
@@ -55,7 +55,7 @@ setLegend(
 ...0222222220...
 ...0220220220...
 ...0220220220...
-...0222222220...
+...022222220....
 ...0822222280...
 ...0222222220...
 ...0222222220...
@@ -65,22 +65,22 @@ setLegend(
 ................
 ................
 ................` ],
-  [apple, bitmap`
+  [bread, bitmap`
 ................
 ................
 ................
+....00000000....
+...0777777770...
+..076676676670..
+..077777777770..
+...0666666660...
+...0666666660...
+...0666666660...
+...0666666660...
+....00000000....
 ................
 ................
-.........000....
-........00990...
-........0C990...
-......0099C90...
-......0C99990...
-....0099C990....
-...09C999900....
-...099C9900.....
-...099990.......
-....0000........
+................
 ................` ],
   [wall, bitmap`
 0000000000000000
@@ -123,27 +123,110 @@ setSolids([ duck, cat, ghost, wall, troll ])
 let chars = [duck, cat, ghost]
 let names = ["duck", "cat", "ghost"]
 let pick = 0
-let inMenu = true
+let screen = "menu"
 let level = 1
+let timer = 20
+let rerolls = 3
 let blocked = false
+let extraBlocks = 0
+let dirX = 0
+let dirY = 0
+let prevX = 1
+let prevY = 1
+let msg = ""
+
+function drawText() {
+  if (screen != "play") return
+  clearText()
+  addText("lv:" + level + " t:" + timer + " i:" + rerolls, { x: 0, y: 0, color: color`7` })
+  if (msg != "") {
+    addText(msg, { x: 0, y: 10, color: color`3` })
+  }
+}
 
 function showMenu() {
-inMenu = true
-setMap(map`
+  screen = "menu"
+  setMap(map`
 .....
 .....
 ..p..
 .....
 .....`)
-getFirst(duck).type = chars[pick]
-clearText()
-addText("pick: " + names[pick], { x: 5, y: 4, color: color`7` })
-addText("w/s: change  d: play", { x: 0, y: 12, color: color`3` })
+  getFirst(duck).type = chars[pick]
+  clearText()
+  addText("pick: " + names[pick], { x: 5, y: 3, color: color`7` })
+  addText("w/s:char d:play", { x: 2, y: 11, color: color`3` })
+  addText("i:new map (3x)", { x: 3, y: 13, color: color`6` })
 }
 
-function newLevel() {
+function gameOver() {
+  screen = "over"
+  setMap(map`
+.....
+.....
+..p..
+.....
+.....`)
+  getFirst(duck).type = chars[pick]
+  clearText()
+  addText("time up!", { x: 6, y: 3, color: color`3` })
+  addText("score: " + (level - 1), { x: 5, y: 5, color: color`7` })
+  addText("d: play again", { x: 3, y: 12, color: color`6` })
+}
+
+function hasPath(sx, sy, gx, gy, bx, by) {
+let w = 15
+let h = 11
+let seen = []
+for (let y = 0; y < h; y++) {
+seen[y] = []
+for (let x = 0; x < w; x++) {
+  seen[y][x] = false
+ }
+}
+
+let q = [[sx, sy]]
+seen[sy][sx] = true
+
+while (q.length > 0) {
+  let cur = q.shift()
+  let cx = cur[0]
+  let cy = cur[1]
+
+  if (cx == gx && cy == gy) return true
+
+  let dirs = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+  for (let i = 0; i < 4; i++) {
+    let nx = cx + dirs[i][0]
+    let ny = cy + dirs[i][1]
+    if (nx >= 0 && nx < w && ny >= 0 && ny < h && !seen[ny][nx]) {
+      if (nx == bx && ny == by) continue
+      let t = getTile(nx, ny)
+      let hit = false
+      for (let k = 0; k < t.length; k++) {
+        if (t[k].type == wall || t[k].type == troll) {
+          hit = true
+        }
+      }
+      if (!hit) {
+        seen[ny][nx] = true
+         q.push([nx, ny])
+      }
+     }
+  }
+}
+return false
+}
+
+function newLevel(resetTime) {
+  if (resetTime) {
+    timer = Math.max(8, 22 - level * 2)
+}
 blocked = false
-clearText()
+extraBlocks = 0
+prevX = 1
+prevY = 1
+msg = ""
 let w = 15
 let h = 11
 let grid = []
@@ -151,128 +234,179 @@ for (let y = 0; y < h; y++) {
 grid[y] = []
 for (let x = 0; x < w; x++) {
 grid[y][x] = "w"
-}
+  }
 }
 
 function carve(x, y) {
-grid[y][x] = "."
-let dirs = [[0, -2], [0, 2], [-2, 0], [2, 0]]
-for (let i = 0; i < 4; i++) {
-let r = Math.floor(Math.random() * 4)
-let temp = dirs[i]
-dirs[i] = dirs[r]
-dirs[r] = temp
-}
+  grid[y][x] = "."
+  let dirs = [[0, -2], [0, 2], [-2, 0], [2, 0]]
+  for (let i = 0; i < 4; i++) {
+    let r = Math.floor(Math.random() * 4)
+    let temp = dirs[i]
+     dirs[i] = dirs[r]
+    dirs[r] = temp
+  }
 
-for (let i = 0; i < 4; i++) {
-let nx = x + dirs[i][0]
-let ny = y + dirs[i][1]
-if (nx > 0 && nx < w - 1 && ny > 0 && ny < h - 1) {
-if (grid[ny][nx] == "w") {
-grid[y + dirs[i][1] / 2][x + dirs[i][0] / 2] = "."
-carve(nx, ny)
-}
-}
-}
+  for (let i = 0; i < 4; i++) {
+  let nx = x + dirs[i][0]
+  let ny = y + dirs[i][1]
+  if (nx > 0 && nx < w - 1 && ny > 0 && ny < h - 1) {
+  if (grid[ny][nx] == "w") {
+  grid[y + dirs[i][1] / 2][x + dirs[i][0] / 2] = "."
+  carve(nx, ny)
+    }
+   }
+  }
 }
 
 carve(1, 1)
 
-for (let i = 0; i < 10; i++) {
-let rx = 2 + Math.floor(Math.random() * (w - 4))
-let ry = 2 + Math.floor(Math.random() * (h - 4))
-grid[ry][rx] = "."
+for (let i = 0; i < 14; i++) {
+  let rx = 2 + Math.floor(Math.random() * (w - 4))
+    let ry = 2 + Math.floor(Math.random() * (h - 4))
+  grid[ry][rx] = "."
 }
 
 grid[h - 3][w - 2] = "."
 grid[h - 2][w - 3] = "."
 grid[h - 2][w - 2] = "."
+grid[h - 3][w - 3] = "."
+grid[h - 2][w - 4] = "."
+grid[h - 4][w - 2] = "."
 
-let mapText = ""
-for (let y = 0; y < h; y++) {
-for (let x = 0; x < w; x++) {
-mapText += grid[y][x]
-}
-mapText += "\n"
+  let mapText = ""
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      mapText += grid[y][x]
+    }
+    mapText += "\n"
+  }
+
+  setMap(mapText)
+  addSprite(1, 1, chars[pick])
+  addSprite(w - 2, h - 2, bread)
+  drawText()
 }
 
-setMap(mapText)
-addSprite(1, 1, chars[pick])
-addSprite(w - 2, h - 2, apple)
-addText("lvl " + level, { x: 1, y: 0, color: color`7` })
-}
+setInterval(() => {
+  if (screen == "play") {
+    timer -= 1
+    if (timer <= 0) {
+      gameOver()
+    } else {
+      drawText()
+    }
+  }
+}, 1000)
 
 onInput("d", () => {
-if (inMenu) {
-inMenu = false
-newLevel()
-} else {
-getFirst(chars[pick]).x += 1
-}
+  if (screen == "menu") {
+    screen = "play"
+    level = 1
+    rerolls = 3
+    newLevel(true)
+  } else if (screen == "over") {
+    showMenu()
+  } else {
+    let p = getFirst(chars[pick])
+    prevX = p.x
+    prevY = p.y
+    dirX = 1
+    dirY = 0
+    p.x += 1
+  }
 })
 
 onInput("a", () => {
-if (!inMenu) {
-getFirst(chars[pick]).x -= 1
-}
+  if (screen == "play") {
+    let p = getFirst(chars[pick])
+    prevX = p.x
+    prevY = p.y
+    dirX = -1
+    dirY = 0
+    p.x -= 1
+  }
 })
 
 onInput("w", () => {
-if (inMenu) {
-pick -= 1
-if (pick < 0) pick = 2
-showMenu()
-} else {
-getFirst(chars[pick]).y -= 1
-}
+  if (screen == "menu") {
+    pick -= 1
+    if (pick < 0) pick = 2
+    showMenu()
+  } else if (screen == "play") {
+    let p = getFirst(chars[pick])
+    prevX = p.x
+    prevY = p.y
+    dirX = 0
+    dirY = -1
+    p.y -= 1
+  }
 })
 
 onInput("s", () => {
-if (inMenu) {
-pick += 1
-if (pick > 2) pick = 0
-showMenu()
-} else {
-getFirst(chars[pick]).y += 1
-}
+  if (screen == "menu") {
+    pick += 1
+    if (pick > 2) pick = 0
+    showMenu()
+  } else if (screen == "play") {
+    let p = getFirst(chars[pick])
+    prevX = p.x
+    prevY = p.y
+    dirX = 0
+    dirY = 1
+    p.y += 1
+  }
+})
+
+onInput("i", () => {
+  if (screen == "play" && rerolls > 0) {
+    rerolls -= 1
+    newLevel(false)
+    msg = "new maze (" + rerolls + " left)"
+    drawText()
+  }
 })
 
 afterInput(() => {
-if (inMenu) return
+  if (screen != "play") return
 
-let p = getFirst(chars[pick])
-let a = getFirst(apple)
-if (!p || !a) return
+  let p = getFirst(chars[pick])
+  let b = getFirst(bread)
+  if (!p || !b) return
 
-let dx = a.x - p.x
-let dy = a.y - p.y
+  let moved = (p.x != prevX || p.y != prevY)
+  if (!moved) return
 
-if (Math.abs(dx) + Math.abs(dy) == 2 && !blocked) {
-let bx = p.x
-let by = p.y
-if (dx > 0) bx += 1
-if (dx < 0) bx -= 1
-if (dy > 0) by += 1
-if (dy < 0) by -= 1
+  let dx = b.x - p.x
+  let dy = b.y - p.y
 
-let open = 0
-if (getTile(a.x + 1, a.y).length == 0) open += 1
-if (getTile(a.x - 1, a.y).length == 0) open += 1
-if (getTile(a.x, a.y + 1).length == 0) open += 1
-if (getTile(a.x, a.y - 1).length == 0) open += 1
+  if (Math.abs(dx) + Math.abs(dy) == 2 && (dx == 0 || dy == 0) && !blocked) {
+    let bx = p.x + Math.sign(dx)
+    let by = p.y + Math.sign(dy)
 
-if (getTile(bx, by).length == 0 && open >= 2) {
-addSprite(bx, by, troll)
-blocked = true
-clearText()
-addText("haha go around", { x: 1, y: 0, color: color`3` })
+    if (getTile(bx, by).length == 0 && hasPath(p.x, p.y, b.x, b.y, bx, by)) {
+      addSprite(bx, by, troll)
+      blocked = true
+      msg = "sorry, go around"
+      drawText()
+  }
+} else if (extraBlocks < 2 && Math.random() < 0.25) {
+  let tx = p.x + dirX
+  let ty = p.y + dirY
+    if (tx > 0 && tx < 14 && ty > 0 && ty < 10) {
+      if (getTile(tx, ty).length == 0 && hasPath(p.x, p.y, b.x, b.y, tx, ty)) {
+        addSprite(tx, ty, troll)
+        extraBlocks += 1
+        msg = "sorry!"
+        drawText()
+    }
+  }
 }
-}
 
-if (tilesWith(chars[pick], apple).length > 0) {
-level += 1
-newLevel()
-}
+  if (tilesWith(chars[pick], bread).length > 0) {
+    level += 1
+    newLevel(true)
+  }
 })
 
 showMenu()
