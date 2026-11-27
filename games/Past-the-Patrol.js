@@ -1,3 +1,11 @@
+/*
+@title: Past the Patrol
+@author: Nivedh Govil
+@description: You are a thief, and 4 guards which move laterally, are following you.
+@tags: ['music', 'puzzle']
+@addedOn: 2026-11-27
+*/
+
 const player = "p";
 const guard1 = "f";
 const guard2 = "g";
