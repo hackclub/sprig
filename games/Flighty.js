@@ -1,9 +1,9 @@
 /*
 @title: Flighty
+@author: AdityaJainDXB
 @description: A 2D take on the Notch Apple flight sim. Take off, fly, land on the far runway.
-@author:
-@tags: ['tag1', 'tag2']
-@addedOn: 2025-00-00
+@tags: ['simulation', 'arcade']
+@addedOn: 2026-11-28
 */
 
 const player = "p"
